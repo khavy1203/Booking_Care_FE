@@ -1,0 +1,39 @@
+{
+    "homeheader":{
+        "specialty": "Chuyên khoa",
+        "search-doctor": "Tìm bác sĩ theo chuyên khoa",
+        "health-facilities": "Cơ sở y tế",
+        "select-clinic": "Chọn bệnh viện phòng khám",
+        "doctor": "Bác sĩ",
+        "select-doctor":"Chọn bác sĩ giỏi",
+        "fee": "Gói khám",
+        "general-examination":"Khám sức khỏe tổng quát",
+        "support": "Hỗ trợ",
+        "welcome": "Xin chào"
+    },
+    "banner":{
+        "title1":"NỀN TẢNG Y TẾ",
+        "title2":"CHĂM SÓC SỨC KHỎE TOÀN DIỆN",
+        "specialist-examination":"Khám chuyên khoa",
+        "general-examination": "Khám tổng quát",
+        "telemedicine":"Khám từ xa",
+        "medical-test": "Xét nghiệm y học",
+        "mental-health": "Sức khỏe tinh thần",
+        "dental-examination": "Khám nha khoa"
+    },
+    "menu": {
+        "admin":{
+            "manage-user": "Người dùng",
+            "manage-doctor":"Quản lý bác sĩ",
+            "manage-admin":"Quản lý admin",
+            "crud": "CRUD user",
+            "crud-redux": "CRUD redux",
+            "clinic": "Phòng khám",
+            "manage-clinic": "Quản lý phòng khám",
+            "specialty":"Chuyên khoa",
+            "manage-specialty": "Quản lý chuyên khoa",
+            "handbook": "Cẩm nang",
+            "manage-handbook": "Quản lý cẩm nang"
+        }
+    }
+}

@@ -12,7 +12,7 @@
         "welcome": "Welcome"
     },
     "banner":{
-        "title1":"MEDICAL BACKGROUND",
+        "title1":"MEDICAL PLATFORM",
         "title2":"COMPREHENSIVE HEALTH CARE",
         "specialist-examination":"Specialist examination",
         "general-examination": "General examination",
@@ -35,5 +35,23 @@
             "handbook": "Handbook",
             "manage-handbook": "Manage handbook"
         }
+    },
+    "manage-user":{
+        "add": "Add a new user",
+        "email": "Email",
+        "password": "Password",
+        "first-name": "First name",
+        "last-name": "Last name",
+        "phone-number": "Phone number",
+        "address": "Address",
+        "gender": "Gender",
+        "position": "Position",
+        "role": "Role",
+        "save": "Save user",
+        "image": "Avatar"
+    },
+    "homepage": {
+        "outstanding-doctor": "Outstanding Doctor of the Week",
+        "more-info": "More info"
     }
 }

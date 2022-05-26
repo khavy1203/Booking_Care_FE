@@ -3,7 +3,11 @@ const handleloginApi = (userEmail, userPassword) => {
   //gọi server nodejs
   return axios.post("/api/login", { email: userEmail, password: userPassword });
 };
-
+const handleRegisterUser = async (email, phone, username, password) => {
+  return await axios.post('/api/v1/register', {
+    email, phone, username, password
+  });
+}
 const getAllUsers = (inputId) => {
   return axios.get(`/api/get-all-users?id=${inputId}`);
 };
@@ -18,4 +22,4 @@ const deleteUserService = (userId) => {
   });
 };
 
-export { handleloginApi, getAllUsers, createNewUserService, deleteUserService };
+export { handleloginApi, getAllUsers, createNewUserService, deleteUserService, handleRegisterUser };

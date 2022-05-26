@@ -12,6 +12,7 @@ import { path } from "../utils";
 import Home from "../routes/Home";
 // import Login from "../routes/Login";
 import Login from "./Auth/Login";
+import Register from "./Auth/Register";
 import System from "../routes/System";
 // import { CustomToastCloseButton } from "../components/CustomToast";
 // import ConfirmModal from "../components/ConfirmModal";
@@ -52,6 +53,10 @@ class App extends Component {
                   <Route
                     path={path.LOGIN}
                     component={userIsNotAuthenticated(Login)}
+                  />
+                  <Route
+                    path={path.REGISTER}
+                    component={userIsNotAuthenticated(Register)}
                   />
                   {/* video bài 36 chưa làm đăng nhập vì chưa có api nên cmt lại Rout dưới */}
                   {/* <Route

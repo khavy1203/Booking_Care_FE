@@ -18,4 +18,15 @@ const deleteUserService = (userId) => {
   });
 };
 
-export { handleloginApi, getAllUsers, createNewUserService, deleteUserService };
+//video 83: api lấy profile bác sĩ
+const getProfileDoctorById = (doctorId) => {
+  return axios.get(`/api/get-profile-doctor-by-id?doctorId=${doctorId}`);
+};
+
+export {
+  handleloginApi,
+  getAllUsers,
+  createNewUserService,
+  deleteUserService,
+  getProfileDoctorById,
+};

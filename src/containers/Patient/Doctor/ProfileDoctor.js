@@ -7,7 +7,7 @@ import "./ProfileDoctor.scss";
 import { getProfileDoctorById } from "../../../services/userService";
 import { _ } from "lodash";
 import { LANGUAGES } from "../../../utils";
-
+import { Link } from "react-router-dom";
 class ProfileDoctor extends Component {
   constructor(props) {
     super(props);
@@ -45,13 +45,15 @@ class ProfileDoctor extends Component {
   }
 
   render() {
-    // let {dataProfile} = this.state
+    // let {dataProfile, isShowLinkDetail, isShowPrice} = this.state
     // let nameVi='', nameEn='';
     // if(dataProfile && dataProfile.positionData){
     //     nameVi = `${dataProfile.positionData.valueVi}, ${dataProfile.lastName}`
     //     nameEn = `${dataProfile.positionData.valueEn}, ${dataProfile.FirstName}`
 
     // }
+    let { isShowLinkDetail, isShowPrice, doctorId } = this.props;
+
     return (
       <div className="profile-doctor-container">
         <div className="intro-doctor">
@@ -59,9 +61,22 @@ class ProfileDoctor extends Component {
           <div className="content-right">
             <div className="up">Phó giáo sư nguyen van a</div>
             <div className="down">
-              <span>Duis excepteur tempor dolor nulla esse laborum sit.</span>
+              <span>
+                Fugiat nulla ut ipsum cillum esse ullamco in est in eiusmod.
+                Nostrud ad est minim aliqua irure sit aliqua. Cillum est cillum
+                proident ullamco minim aliquip cupidatat anim voluptate sint
+                cillum proident sit. Incididunt sit fugiat sint dolor
+                adipisicing. Fugiat est commodo amet enim tempor esse pariatur
+                quis nostrud velit in tempor elit. Ad fugiat adipisicing eu aute
+                eiusmod aute voluptate culpa aute ullamco. Voluptate aliquip
+                duis veniam enim proident est Lorem in culpa incididunt pariatur
+                ipsum amet. Tempor anim laboris reprehenderit proident. Mollit
+                labore in do ea quis reprehenderit ea Lorem ex. Aute elit fugiat
+                est officia minim incididunt sunt.
+              </span>
             </div>
           </div>
+
           {/* <div
           className="content-left"
           style={{
@@ -83,6 +98,14 @@ class ProfileDoctor extends Component {
           </div>
         </div> */}
         </div>
+        {isShowLinkDetail === true && (
+          <div className="view-detail-doctor">
+            <Link to={`/detail-doctor/${doctorId}`}>Xem thêm</Link>
+          </div>
+        )}
+        {isShowPrice === true && (
+          <div className="price">Giá khám 500.000VND</div>
+        )}
       </div>
     );
   }

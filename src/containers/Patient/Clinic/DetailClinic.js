@@ -2,13 +2,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { FormattedMessage } from "react-intl";
-import "./DetailSpecialty.scss";
+import "./DetailClinic.scss";
 import HomeHeader from "../../HomePage/HomeHeader";
 import DoctorSchedule from "../Doctor/DoctorSchedule";
 import DoctorExtraInfo from "../Doctor/DoctorExtraInfo";
 import ProfileDoctor from "../Doctor/ProfileDoctor";
 
-class DetailSpecialty extends Component {
+class DetailClinic extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -31,7 +31,7 @@ class DetailSpecialty extends Component {
         <HomeHeader />
         <div className="detail-specialty-body">
           <div className="description-specialty">
-            <div>Mô tả chuyên khoa</div>
+            <div>Mô tả Phòng khám</div>
             Ullamco qui exercitation amet veniam. Aute tempor tempor nulla
             commodo dolor voluptate nostrud ex. Exercitation aliqua Lorem ipsum
             reprehenderit ad amet fugiat non dolore culpa eiusmod reprehenderit
@@ -97,4 +97,4 @@ const mapDispatchToProps = (dispatch) => {
   return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DetailSpecialty);
+export default connect(mapStateToProps, mapDispatchToProps)(DetailClinic);

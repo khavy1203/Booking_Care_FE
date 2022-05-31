@@ -74,12 +74,20 @@ class BookingModal extends Component {
 
             <div className="doctor-info">
               {/* Mở cmt khi lấy dc doctorId trong dataTime*/}
-              {/* <ProfileDoctor doctorId={doctorId} /> */}
+              {/* <ProfileDoctor doctorId={doctorId} isShowDescriptionDoctor={false}
+                dataTime={dataTime}
+                isShowLinkDetail={true}
+                isShowPrice={false} /> */}
 
               {/* Sài tạm */}
-              <ProfileDoctor doctorId={111} isShowDescriptionDoctor={false} />
+              <ProfileDoctor
+                doctorId={111}
+                isShowDescriptionDoctor={false}
+                isShowLinkDetail={false}
+                isShowPrice={true}
+              />
             </div>
-            <div className="price">Giá khám 500.000VND</div>
+
             <div className="row">
               <div className="col-6 form-group">
                 <label>Họ tên</label>

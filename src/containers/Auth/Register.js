@@ -4,6 +4,7 @@ import { push } from "connected-react-router";
 import './Register.scss';
 import * as actions from "../../store/actions";
 import { toast } from 'react-toastify';
+import { handleRegisterUser } from '../../services/userService';//src\services\userService.js
 // import { FormattedMessage } from "react-intl";
 class Register extends Component {
     // constructor để khai báo states
@@ -39,7 +40,7 @@ class Register extends Component {
         this.setState({ objCheckInput: { ...this.state.defaultValidInput } })
         if (!this.state.email) {
             toast.warn("Please enter an email address");
-            this.setState({ objCheckInput: "khongnhandcgi" });
+            this.setState({ ...this.state.defaultValidInput, isInvalidEmail: false });
             return false;
         }
         var re = /\S+@\S+\.\S+/;
@@ -102,13 +103,32 @@ class Register extends Component {
         // console.log(event.target.value);
     };
 
-
+    redirectToLogin = () => {
+        const { navigate } = this.props;
+        const redirectPath = '/login';
+        navigate(`${redirectPath}`);
+    }
     handleRegister = async () => {
-        this.checkValidation();
+
+        if (this.checkValidation()) {
+            let createUser = await handleRegisterUser(
+                this.state.email,
+                this.state.phone,
+                this.state.username,
+                this.state.password
+            );
+            if (+createUser.EC === 0) {
+                toast.success(createUser.EM);
+                this.redirectToLogin();
+            }
+            else {
+                toast.warn(createUser.EM);
+            }
+        }
     };
 
     handleHaveAccount() {
-
+        this.redirectToLogin();
     };
 
     render() {

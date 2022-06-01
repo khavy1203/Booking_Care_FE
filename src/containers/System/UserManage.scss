@@ -1,90 +1,27 @@
-#customers {
-  font-family: Arial, Helvetica, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
-
-#customers td,
-#customers th {
-  border: 1px solid #ddd;
-  padding: 8px;
-}
-
-#customers tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-#customers tr:hover {
-  background-color: #ddd;
-}
-
-#customers th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: left;
-  background-color: #04aa6d;
-  color: white;
-}
-
-.btn-edit,
-.btn-delete {
-  width: 50px;
-  border: none;
-  outline: none;
-  background: transparent;
-}
-
-.btn-edit {
-  color: orange;
-
-  &:hover {
-    background: transparent !important;
-    color: grey !important;
-  }
-}
-
-.btn-delete {
-  color: red;
-
-  &:hover {
-    background: transparent !important;
-    color: grey !important;
-  }
-}
-
-.modal-user-container {
-  .modal-content {
-    .modal-header {
-      button {
-        background-color: transparent;
-        color: white;
-        border: none;
-        font-size: 27px;
-      }
+.modal-user {
+    .content-body {
+        .red {
+            border: none;
+            color: red,
+        }
     }
-  }
+}
 
-  .modal-user-body {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-
-    .input-container {
-      display: flex;
-      flex-direction: column;
-      width: 49%;
-
-      &.max-width-input {
-        width: 100%;
-      }
-
-      input {
-        border-radius: 3px;
-        height: 30px;
-        border: 1px solid grey;
-        outline: none;
-        padding: 0 10px;
-      }
+.container {
+    .manage-user-container {
+        i {
+            margin: 10px;
+        }
+        .user-body {
+            i {
+                margin: 0;
+                padding: 0;
+            }
+            .fa-pencil-square {}
+            button {
+                border: 0px;
+                border-radius: 50%;
+            }
+        }
     }
-  }
 }

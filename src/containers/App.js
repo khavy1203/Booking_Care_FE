@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 import { ConnectedRouter as Router } from "connected-react-router";
 import { history } from "../redux";
+import { ToastContainer } from 'react-toastify';
 // import { ToastContainer } from "react-toastify";
 import {
   userIsAuthenticated,
@@ -19,6 +20,7 @@ import System from "../routes/System";
 import HomePage from "./HomePage/HomePage";
 import CustomScrollbars from "../components/CustomScrollbars";
 import DetailDoctor from "./Patient/Doctor/DetailDoctor";
+
 
 class App extends Component {
   handlePersistorState = () => {
@@ -86,6 +88,17 @@ class App extends Component {
             /> */}
           </div>
         </Router>
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </Fragment>
     );
   }

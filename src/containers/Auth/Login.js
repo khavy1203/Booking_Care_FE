@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
+import { toast } from 'react-toastify';
 
 import * as actions from "../../store/actions";
 
 import "./Login.scss";
 // import { FormattedMessage } from "react-intl";
-import { handleloginApi } from "../../services/userService";
+import { handleLoginApi } from "../../services/userService";
 class Login extends Component {
   // constructor để khai báo states
   constructor(props) {
@@ -15,7 +16,14 @@ class Login extends Component {
       username: "",
       password: "",
       isShowPassword: false,
-      errMessage: "",
+      objectInputable: {
+        isInvalidAccount: true,
+        isInvaliPassword: true,
+      },
+      defaultValidInput: {
+        isInvalidAccount: true,
+        isInvalidPassword: true,
+      }
     };
   }
 
@@ -25,30 +33,38 @@ class Login extends Component {
   };
   handleOnChangePassword = (event) => {
     this.setState({ password: event.target.value });
-    // console.log(event.target.value);
   };
   handleLogin = async () => {
-    this.setState({ errMessage: "" });
-    try {
-      let data = await handleloginApi(this.state.username, this.state.password);
-      if (data && data.errCode !== 0) {
-        this.setState({ errMessage: data.message });
-      }
-      if (data && data.errCode === 0) {
-        this.props.userloginSuccess(data.user);
-        console.log("login success");
-      }
-      // console.log('login page', result.data)
-    } catch (error) {
-      // console.log('login page', error, error.response, error.response.data);
-      if (error.response) {
-        if (error.response.data) {
-          this.setState({
-            errMessage: error.response.data.message,
-          });
-        }
-      }
+
+    if (!this.state.username) {
+      toast.warn("Please enter an account");
+      this.setState({ objectInputable: { ...this.state.defaultValidInput, isInvaliPassword: false } });
+      return false;
     }
+    if (!this.state.password) {
+      toast.warn("Please enter an password");
+      this.setState({ objectInputable: { ...this.state.defaultValidInput, isInvalidAccount: false } });
+      return false;
+    }
+    let response = await handleLoginApi(this.state.username, this.state.password);
+    if (response && +response.EC === 0) {
+      //success
+      let groupWithRoles = response.DT.groupWithRoles;
+      let email = response.DT.email;
+      let username = response.DT.username;
+      let token = response.DT.access_token;
+      let data = {
+        isAuthenticated: true,
+        token,
+        account: { groupWithRoles, email, username }
+      }
+      this.props.userloginSuccess(data);
+    }
+    if (response && +response.EC !== 0) {
+      //fail
+      toast.warn(response.EM);
+    }
+    return true;
   };
   handleTogglePassword = () => {
     this.setState({ isShowPassword: !this.state.isShowPassword });
@@ -104,8 +120,8 @@ class Login extends Component {
             <div className="col-12">
               <button
                 className="btn-login"
-                onClick={(event) => {
-                  this.handleLogin(event);
+                onClick={() => {
+                  this.handleLogin();
                 }}
               >
                 Login

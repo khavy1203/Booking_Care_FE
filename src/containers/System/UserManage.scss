@@ -1,0 +1,27 @@
+.modal-user {
+    .content-body {
+        .red {
+            border: none;
+            color: red,
+        }
+    }
+}
+
+.container {
+    .manage-user-container {
+        i {
+            margin: 10px;
+        }
+        .user-body {
+            i {
+                margin: 0;
+                padding: 0;
+            }
+            .fa-pencil-square {}
+            button {
+                border: 0px;
+                border-radius: 50%;
+            }
+        }
+    }
+}

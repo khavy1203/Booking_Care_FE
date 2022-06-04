@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 import { ConnectedRouter as Router } from "connected-react-router";
 import { history } from "../redux";
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer } from "react-toastify";
 // import { ToastContainer } from "react-toastify";
 import {
   userIsAuthenticated,
@@ -20,7 +20,9 @@ import System from "../routes/System";
 import HomePage from "./HomePage/HomePage";
 import CustomScrollbars from "../components/CustomScrollbars";
 import DetailDoctor from "./Patient/Doctor/DetailDoctor";
-
+import Doctor from "../routes/Doctor";
+import DetailSpecialty from "./Patient/Specialty/DetailSpecialty";
+import DetailClinic from "./Patient/Clinic/DetailClinic";
 
 class App extends Component {
   handlePersistorState = () => {
@@ -67,9 +69,16 @@ class App extends Component {
                   /> */}
                   {/* tạm thời bỏ userIsAuthenticated để làm giao diện */}
                   <Route path={path.SYSTEM} component={System} />
+                  <Route path={"/doctor/"} component={Doctor} />
+
                   <Route path={path.HOMEPAGE} component={HomePage} />
                   {/* <Route path={"users/:id"} component={DetailDoctor} /> */}
                   <Route path={path.DETAIL_DOCTOR} component={DetailDoctor} />
+                  <Route
+                    path={path.DETAIL_SPECIALTY}
+                    component={DetailSpecialty}
+                  />
+                  <Route path={path.DETAIL_CLINIC} component={DetailClinic} />
                 </Switch>
               </CustomScrollbars>
             </div>

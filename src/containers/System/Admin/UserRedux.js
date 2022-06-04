@@ -5,6 +5,7 @@ import "./UserRedux.scss";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css"; // This only needs to be imported once in your app
 import TableManageUser from "./TableManageUser";
+import { CommonUtils } from "../../../utils";
 
 class UserRedux extends Component {
   constructor(props) {
@@ -12,18 +13,21 @@ class UserRedux extends Component {
     this.state = {
       previewImgURL: "",
       isOpen: false,
+      avatar: "",
     };
   }
   componentDidMount() {}
 
   //
-  handleOnchangImage = (event) => {
-    let data = event.target.files;
+  handleOnchangImage = async (event) => {
+    let data = event.target.files; //list các file
     let file = data[0];
     if (file) {
+      let base64 = await CommonUtils.getBase64(file);
       let objectUrl = URL.createObjectURL(file); //tạo url để xem ảnh
       this.setState({
         previewImgURL: objectUrl,
+        avatar: base64,
       });
     }
   };

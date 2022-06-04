@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 import * as actions from "../../store/actions";
 
@@ -23,7 +23,7 @@ class Login extends Component {
       defaultValidInput: {
         isInvalidAccount: true,
         isInvalidPassword: true,
-      }
+      },
     };
   }
 
@@ -35,18 +35,30 @@ class Login extends Component {
     this.setState({ password: event.target.value });
   };
   handleLogin = async () => {
-
     if (!this.state.username) {
       toast.warn("Please enter an account");
-      this.setState({ objectInputable: { ...this.state.defaultValidInput, isInvaliPassword: false } });
+      this.setState({
+        objectInputable: {
+          ...this.state.defaultValidInput,
+          isInvaliPassword: false,
+        },
+      });
       return false;
     }
     if (!this.state.password) {
       toast.warn("Please enter an password");
-      this.setState({ objectInputable: { ...this.state.defaultValidInput, isInvalidAccount: false } });
+      this.setState({
+        objectInputable: {
+          ...this.state.defaultValidInput,
+          isInvalidAccount: false,
+        },
+      });
       return false;
     }
-    let response = await handleLoginApi(this.state.username, this.state.password);
+    let response = await handleLoginApi(
+      this.state.username,
+      this.state.password
+    );
     if (response && +response.EC === 0) {
       //success
       let groupWithRoles = response.DT.groupWithRoles;
@@ -56,8 +68,8 @@ class Login extends Component {
       let data = {
         isAuthenticated: true,
         token,
-        account: { groupWithRoles, email, username }
-      }
+        account: { groupWithRoles, email, username },
+      };
       this.props.userloginSuccess(data);
     }
     if (response && +response.EC !== 0) {

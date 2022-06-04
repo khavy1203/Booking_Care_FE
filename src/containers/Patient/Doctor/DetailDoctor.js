@@ -1,13 +1,18 @@
+//Component trang chi tiết bác sĩ
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import HomeHeader from "../../HomePage/HomeHeader";
 import "./DetailDoctor.scss";
 import DoctorSchedule from "./DoctorSchedule";
+import DoctorExtraInfo from "./DoctorExtraInfo";
 
 class DetailDoctor extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      detailDoctor: {},
+      currentDoctorId: -1,
+    };
   }
   componentDidMount() {
     //điều kiện để ứng dụng ko bao giờ chết
@@ -37,9 +42,11 @@ class DetailDoctor extends Component {
           </div>
           <div className="schedule-doctor">
             <div className="content-left">
-              <DoctorSchedule />
+              <DoctorSchedule doctorIdFromParent={this.state.curentDoctorId} />
             </div>
-            <div className="content-right"></div>
+            <div className="content-right">
+              <DoctorExtraInfo doctorIdFromParent={this.state.curentDoctorId} />
+            </div>
           </div>
           <div className="detail-info-doctor">
             {/* dangerouslySetInnerHTML={{

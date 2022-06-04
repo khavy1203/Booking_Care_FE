@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import * as actions from "../../store/actions";
 import Navigator from "../../components/Navigator";
-import { adminMenu } from "./menuApp";
+import { adminMenu, doctorMenu } from "./menuApp";
 import "./Header.scss";
 import { LANGUAGES } from "../../utils";
 import { FormattedMessage } from "react-intl";
@@ -12,6 +12,8 @@ class Header extends Component {
   handleChangeLanguage = (language) => {
     this.props.changeLanguageAppRedux(language);
   };
+
+  componentDidMount() {}
 
   render() {
     const { processLogout, language } = this.props;

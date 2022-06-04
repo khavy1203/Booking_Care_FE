@@ -7,6 +7,7 @@ import MdEditor from "react-markdown-editor-lite";
 // import style manually
 import "react-markdown-editor-lite/lib/index.css";
 import Select from "react-select";
+import { FormattedMessage } from "react-intl";
 
 const options = [
   { value: "chocolate", label: "Chocolate" },
@@ -20,10 +21,24 @@ class ManageDoctor extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      //save to Mardown table
       contentMarkdown: "",
       contentHMTL: "",
       selectedOption: "",
       description: "",
+      listDoctors: [],
+      hasOldData: false,
+
+      //save to doctor_info table
+      listPrice: [],
+      listPayment: [],
+      listProvince: [],
+      selectedPrice: [],
+      seletedPayment: [],
+      seletedProvince: [],
+      nameClinic: "",
+      addressClinic: "",
+      note: "",
     };
   }
   // Finish!
@@ -38,7 +53,7 @@ class ManageDoctor extends Component {
     console.log("check state", this.state);
   };
 
-  handleChange = (selectedOption) => {
+  handleChangeSelect = (selectedOption) => {
     this.setState({ selectedOption }, () =>
       console.log(`Option selected:`, this.state.selectedOption)
     );
@@ -51,21 +66,26 @@ class ManageDoctor extends Component {
     // let arrUsers = this.state.arrUsers;
     return (
       <div className="manage-doctor-container">
-        <div className="manage-doctor-title">Thêm thông tin bác sĩ</div>
+        <div className="manage-doctor-title">
+          <FormattedMessage id="admin.manage-doctor.title" />
+        </div>
         <div className="more-info">
           <div className="content-left form-group">
-            <label>Chọn bác sĩ</label>
+            <label>
+              <FormattedMessage id="admin.manage-doctor.select-doctor" />
+            </label>
             <Select
               value={this.state.selectedOption}
-              onChange={this.handleChange}
+              onChange={this.handleChangeSelect}
               options={options}
             />
           </div>
           <div className="content-right">
-            <label>Thông tin giới thiệu:</label>
+            <label>
+              <FormattedMessage id="admin.manage-doctor.intro" />
+            </label>
             <textarea
               className="form-control"
-              rows="4"
               onChange={(event) => this.handleOnchangeDesc(event)}
               value={this.state.description}
             >
@@ -73,6 +93,67 @@ class ManageDoctor extends Component {
             </textarea>
           </div>
         </div>
+        <div className="more-info-extra row">
+          <div className="col-4 form-group">
+            <label>Chọn giá</label>
+            {/* <input className="form-control" /> */}
+            <Select
+              value={this.state.selectedOption}
+              onChange={this.handleChangeSelect}
+              options={options}
+              placeholder={"Chọn bác sĩ"}
+            />
+          </div>
+          <div className="col-4 form-group">
+            <label>Chọn phương thức thanh toán</label>
+            <input className="form-control" />
+          </div>
+          <div className="col-4 form-group">
+            <label>Chọn tỉnh thành</label>
+            <input className="form-control" />
+          </div>
+
+          <div className="col-4 form-group">
+            <label>Tên phòng khám</label>
+            <input className="form-control" />
+          </div>
+          <div className="col-4 form-group">
+            <label>Địa chỉ phòng khám</label>
+            <input className="form-control" />
+          </div>
+          <div className="col-4 form-group">
+            <label>Note</label>
+            <input className="form-control" />
+          </div>
+        </div>
+
+        {/* video 92 */}
+        <div className="row">
+          <div className="col-4 form-group">
+            <label>
+              <FormattedMessage id={"admin.manage-doctor.specialty"} />
+            </label>
+            <Select
+              value={this.state.selectedOption}
+              onChange={this.handleChangeSelect}
+              options={options}
+              placeholder={"Chọn chuyên khoa"}
+            />
+          </div>
+          <div className="col-4 form-group">
+            <label>
+              <FormattedMessage id={"admin.manage-doctor.select-clinic"} />
+            </label>
+            <Select
+              value={this.state.selectedOption}
+              onChange={this.handleChangeSelect}
+              options={options}
+              placeholder={"Chọn phòng khám"}
+            />
+          </div>
+        </div>
+        {/* video 92 */}
+
         <div className="manage-doctor-editor">
           <MdEditor
             style={{ height: "500px" }}
@@ -80,13 +161,22 @@ class ManageDoctor extends Component {
             onChange={this.handleEditorChange}
           />
         </div>
+
         <button
-          className="save-content-doctor"
           onClick={() => {
             this.handleSaveContentmarkdown();
           }}
+          className={true ? "save-content-doctor" : "create-content-doctor"}
         >
-          Lưu thông tin
+          {true ? (
+            <span>
+              <FormattedMessage id="admin.manage-doctor.save" />
+            </span>
+          ) : (
+            <span>
+              <FormattedMessage id="admin.manage-doctor.add" />
+            </span>
+          )}
         </button>
       </div>
     );

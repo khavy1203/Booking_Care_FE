@@ -11,11 +11,15 @@ import { Button, Modal } from "react-bootstrap";
 import "./UserManage.scss";
 import { toast } from "react-toastify";
 import _ from "lodash";
+import { CommonUtils } from "../../utils";
 
 class ModalUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      //Huyên
+      imageBase64: "",
+      //
       email: "",
       phone: "",
       username: "",
@@ -27,6 +31,9 @@ class ModalUser extends Component {
       userData: {},
       validInput: {},
       defaultUserData: {
+        //Huyên
+        imageBase64: "",
+        //
         email: "",
         phone: "",
         username: "",
@@ -68,11 +75,13 @@ class ModalUser extends Component {
       }
     }
   }
+
   handleOnchangeInput = (value, name) => {
     let _userData = _.cloneDeep(this.state.userData);
     _userData[name] = value;
     this.setState({ userData: _userData });
   };
+
   getGroups = async () => {
     let res = await fetchGroup();
     if (res && +res.EC === 0) {
@@ -106,6 +115,7 @@ class ModalUser extends Component {
     }
     return check;
   };
+
   handleConfirmUser = async () => {
     let check = this.checkValidateInput();
     // console.log("check validate input>>> ", check)
@@ -117,6 +127,8 @@ class ModalUser extends Component {
         this.props.action === "CREATE"
           ? await createNewUser(this.state.userData)
           : await updateCurrentUser(this.state.userData);
+      console.log("data before", this.state.userData);
+      console.log("modal user", res);
       if (+res.EC === 0) {
         toast.success(res.EM);
 
@@ -146,9 +158,23 @@ class ModalUser extends Component {
       }
     }
   };
+
+  //Huyên: hàm chuyển file ảnh sang chuỗi base64
+  handleOnchangImage = async (event) => {
+    let data = event.target.files; //list các file
+    let file = data[0];
+    if (file) {
+      let base64 = await CommonUtils.getBase64(file);
+      this.setState({
+        imageBase64: base64,
+        userData: { ...this.state.userData, image: this.state.imageBase64 },
+      });
+    }
+    // console.log(this.state.userData);
+  };
+
   render() {
     let { action } = this.props;
-    console.log();
     return (
       <Modal
         size="lg"
@@ -297,6 +323,18 @@ class ModalUser extends Component {
                     );
                   })}
               </select>
+            </div>
+
+            {/*  */}
+            <div className="col-4 form-groupId">
+              <label>Ảnh đại diện</label>
+              <input
+                className="form-control-file"
+                type="file"
+                onChange={(event) => {
+                  this.handleOnchangImage(event);
+                }}
+              />
             </div>
           </div>
         </Modal.Body>

@@ -4,7 +4,9 @@ require("dotenv").config();
 // import config from "./config";
 
 const instance = axios.create({
-  baseURL: "http://localhost:8080",
+  // baseURL: "http://localhost:8080",
+  //Huyên: port tui bị trùng 8080 nên sài đỡ 5000
+  baseURL: "http://localhost:5000",
   //   withCredentials: true,
 });
 instance.defaults.withCredentials = true; // thêm cái này để sever có thể đọc được cookie còn mặc định tham số này sẽ ẩn để đảm bảo bảo mật cho người dùng

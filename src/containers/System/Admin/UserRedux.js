@@ -18,7 +18,6 @@ class UserRedux extends Component {
   }
   componentDidMount() {}
 
-  //
   handleOnchangImage = async (event) => {
     let data = event.target.files; //list các file
     let file = data[0];

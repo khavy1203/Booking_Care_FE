@@ -6,6 +6,8 @@ import "./ManageSpecialty.scss";
 import MarkdownIt from "markdown-it";
 import MdEditor from "react-markdown-editor-lite";
 import { CommonUtils } from "../../../utils";
+import { createNewSpecialty } from "../../../services/specialtyService";
+import { toast } from "react-toastify";
 
 const mdParser = new MarkdownIt(/* Markdown-it options */);
 
@@ -13,10 +15,15 @@ class ManageSpecialty extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
       imageBase64: "",
-      descriptionHTML: "",
-      descriptionMarkdown: "",
+
+      nameVI: "",
+      descriptionHTML_VI: "",
+      descriptionMarkdown_VI: "",
+
+      nameEN: "",
+      descriptionHTML_EN: "",
+      descriptionMarkdown_EN: "",
     };
   }
   componentDidMount() {}
@@ -34,10 +41,17 @@ class ManageSpecialty extends Component {
     });
   };
 
-  handleEditorChange = ({ html, text }) => {
+  handleEditorChangeVI = ({ html, text }) => {
     this.setState({
-      descriptionMarkdown: text,
-      descriptionHMTL: html,
+      descriptionMarkdown_VI: text,
+      descriptionHTML_VI: html,
+    });
+  };
+
+  handleEditorChangeEN = ({ html, text }) => {
+    this.setState({
+      descriptionMarkdown_EN: text,
+      descriptionHTML_EN: html,
     });
   };
 
@@ -52,7 +66,18 @@ class ManageSpecialty extends Component {
     }
   };
 
-  handleSaveNewSpecialty = () => {
+  handleSaveNewSpecialty = async () => {
+    try {
+      let res = await createNewSpecialty(this.state);
+      if (res && res.errCode === 0) {
+        toast.success("add new specialty succeeds!!!");
+      } else {
+        toast.error("Something wrongs...");
+        console.log("Specialty, check result", res);
+      }
+    } catch (error) {
+      console.log(error);
+    }
     console.log("checkstate specialty", this.state);
   };
 
@@ -61,18 +86,29 @@ class ManageSpecialty extends Component {
       <div className="manage-specialty-container">
         <div className="ms-title">Quản lý chuyên khoa</div>
         <div className="add-new-specialty row">
-          <div className="col-6 form-group">
-            <label>Tên chuyên khoa</label>
+          <div className="col-4 form-group">
+            <label>Tên chuyên khoa (VI)</label>
             <input
               className="form-control"
               type="text"
               value={this.state.name}
               onChange={(event) => {
-                this.handleOnchangeInput(event, "name");
+                this.handleOnchangeInput(event, "nameVI");
               }}
             />
           </div>
-          <div className="col-6 form-group">
+          <div className="col-4 form-group">
+            <label>Tên chuyên khoa (EN)</label>
+            <input
+              className="form-control"
+              type="text"
+              value={this.state.name}
+              onChange={(event) => {
+                this.handleOnchangeInput(event, "nameEN");
+              }}
+            />
+          </div>
+          <div className="col-4 form-group">
             <label>Ảnh chuyên khoa</label>
             <input
               className="form-control-file"
@@ -82,12 +118,22 @@ class ManageSpecialty extends Component {
               }}
             />
           </div>
-          <div className="col-12">
+          <div className="col-12 form-group">
+            <label>Mô tả (VI)</label>
             <MdEditor
               style={{ height: "300px" }}
               renderHTML={(text) => mdParser.render(text)}
-              onChange={this.handleEditorChange}
-              value={this.state.descriptionMarkdown}
+              onChange={this.handleEditorChangeVI}
+              value={this.state.descriptionMarkdown_VI}
+            />
+          </div>
+          <div className="col-12 form-group">
+            <label>Mô tả (EN)</label>
+            <MdEditor
+              style={{ height: "300px" }}
+              renderHTML={(text) => mdParser.render(text)}
+              onChange={this.handleEditorChangeEN}
+              value={this.state.descriptionMarkdown_EN}
             />
           </div>
           <div className="col-12">

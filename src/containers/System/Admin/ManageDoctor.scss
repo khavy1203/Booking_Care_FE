@@ -1,5 +1,5 @@
 .manage-doctor-container {
-  padding: 5px;
+  padding: 0 15px;
 
   .manage-doctor-title {
     text-align: center;
@@ -7,9 +7,6 @@
     font-size: 20px;
     text-transform: uppercase;
     font-weight: 600;
-  }
-
-  .manage-doctor-editor {
   }
 
   .save-content-doctor {
@@ -27,16 +24,16 @@
     }
   }
 
-  .more-info {
-    display: flex;
-    gap: 15px;
-    padding-bottom: 15px;
+  // .more-info {
+  //   display: flex;
+  //   gap: 15px;
+  //   padding-bottom: 15px;
 
-    .content-left {
-      width: 40%;
-    }
-    .content-right {
-      width: 60%;
-    }
-  }
+  //   .content-left {
+  //     width: 40%;
+  //   }
+  //   .content-right {
+  //     width: 60%;
+  //   }
+  // }
 }

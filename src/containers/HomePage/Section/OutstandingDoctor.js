@@ -3,15 +3,44 @@ import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import Slider from "react-slick";
 import { FormattedMessage } from "react-intl";
-
+import { fetchTopDoctorHome } from "../../../services/doctorService";
+import { LANGUAGES } from "../../../utils";
 class OutstandingDoctor extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      arrDoctors: [],
+    };
+  }
+
+  componentDidMount() {
+    this.getTopDoctor(10);
+  }
+
+  getTopDoctor = async (limit) => {
+    try {
+      let res = await fetchTopDoctorHome(limit);
+      if (res && +res.EC === 0) {
+        this.setState({
+          arrDoctors: res.DT,
+        });
+      } else {
+        console.log(res.EM);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   handleViewDetailDoctor = (doctor) => {
-    doctor = { id: 1 };
     if (this.props.history) {
       this.props.history.push(`/detail-doctor/${doctor.id}`);
     }
   };
+
   render() {
+    let { arrDoctors } = this.state;
+    let { language } = this.props;
     return (
       <div className="section-share section-outstanding-doctor">
         <div className="section-container">
@@ -25,78 +54,44 @@ class OutstandingDoctor extends Component {
           </div>
           <div className="section-body">
             <Slider {...this.props.settings}>
-              {/* nhớ truyền item vào handleViewDetailDoctor*/}
-              <div
-                className="section-customize"
-                onClick={() => {
-                  this.handleViewDetailDoctor();
-                }}
-              >
-                <div className="customize-border">
-                  <div className="outer-bg">
-                    <div className="bg-image section-outstanding-doctor"></div>
-                  </div>
-                  <div className="position text-center">
-                    <div className="">Giáo sư, Tiến sĩ 1111</div>
-                    <div className="">Cơ xương khớp</div>
-                  </div>
-                </div>
-              </div>
-              <div className="section-customize">
-                <div className="customize-border">
-                  <div className="outer-bg">
-                    <div className="bg-image section-outstanding-doctor"></div>
-                  </div>
-                  <div className="position text-center">
-                    <div className="">Giáo sư, Tiến sĩ</div>
-                    <div className="">Cơ xương khớp</div>
-                  </div>
-                </div>
-              </div>
-              <div className="section-customize">
-                <div className="customize-border">
-                  <div className="outer-bg">
-                    <div className="bg-image section-outstanding-doctor"></div>
-                  </div>
-                  <div className="position text-center">
-                    <div className="">Giáo sư, Tiến sĩ</div>
-                    <div className="">Cơ xương khớp</div>
-                  </div>
-                </div>
-              </div>
-              <div className="section-customize">
-                <div className="customize-border">
-                  <div className="outer-bg">
-                    <div className="bg-image section-outstanding-doctor"></div>
-                  </div>
-                  <div className="position text-center">
-                    <div className="">Giáo sư, Tiến sĩ</div>
-                    <div className="">Cơ xương khớp</div>
-                  </div>
-                </div>
-              </div>
-              <div className="section-customize">
-                <div className="customize-border">
-                  <div className="outer-bg">
-                    <div className="bg-image section-outstanding-doctor"></div>
-                  </div>
-                  <div className="position text-center">
-                    <div className="">Giáo sư, Tiến sĩ</div>
-                    <div className="">Cơ xương khớp</div>
-                  </div>
-                </div>
-              </div>
-              <div className="section-customize">
-                <div className="customize-border">
-                  <div className="outer-bg">
-                    <div className="bg-image section-outstanding-doctor"></div>
-                  </div>
-                  <div className="position text-center">
-                    <div className="">Giáo sư, Tiến sĩ</div>
-                    <div className="">Cơ xương khớp</div>
-                  </div>
-                </div>
-              </div>
+              {arrDoctors &&
+                arrDoctors.length > 0 &&
+                arrDoctors.map((item, index) => {
+                  let imageBase64 = "";
+                  //ảnh lưu xuống DB đã encode sang base64
+                  //nên phải decode để có ảnh
+                  if (item.image) {
+                    imageBase64 = new Buffer(item.image, "base64").toString(
+                      "binary"
+                    );
+                  }
+                  let nameVi = `Bác sĩ ${item.username}`;
+                  let nameEn = `Doctor ${item.username}`;
+                  return (
+                    <div
+                      key={index}
+                      className="section-customize"
+                      onClick={() => {
+                        this.handleViewDetailDoctor(item);
+                      }}
+                    >
+                      <div className="customize-border">
+                        <div className="outer-bg">
+                          <div
+                            className="bg-image section-outstanding-doctor"
+                            style={{ backgroundImage: `url(${imageBase64})` }}
+                          ></div>
+                        </div>
+                        <div className="position text-center">
+                          <div className="outstanding-doctor-text">
+                            {language === LANGUAGES.VI ? nameVi : nameEn}
+                          </div>
+                          <div>Cơ xương khớp</div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
             </Slider>
           </div>
         </div>
@@ -108,6 +103,7 @@ class OutstandingDoctor extends Component {
 const mapStateToProps = (state) => {
   return {
     isLoggedIn: state.user.isLoggedIn,
+    language: state.app.language,
   };
 };
 

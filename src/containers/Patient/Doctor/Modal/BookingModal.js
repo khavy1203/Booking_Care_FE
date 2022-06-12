@@ -53,7 +53,7 @@ class BookingModal extends Component {
     //Lấy doctorId trong dataTime. Mở cmt khi có dataTime
     // let doctorId = dataTime && !_.isEmpty(dataTime) ? dataTime.doctorId : "";
 
-    console.log("check state booking modal", this.state);
+    // console.log("check state booking modal", this.state);
     return (
       <Modal
         isOpen={isOpenModal}

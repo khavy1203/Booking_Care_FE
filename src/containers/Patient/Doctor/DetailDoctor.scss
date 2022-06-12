@@ -8,8 +8,9 @@
     .content-left {
       width: 120px;
       height: 120px;
-      background: url("../../../assets/outstandingDoctor/anh-dai-dien-bs.jpg")
-        center center no-repeat;
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: contain;
       border-radius: 50%;
       margin: 10px 20px;
     }

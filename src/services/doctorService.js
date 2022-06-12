@@ -4,4 +4,8 @@ const fetchTopDoctorHome = (limit) => {
   return axios.get(`/api/v1/top-doctor-home?limit=${limit}`);
 };
 
-export { fetchTopDoctorHome };
+const fetchInfoDoctor = (doctorId) => {
+  return axios.get(`/api/v1/doctor-detail/${doctorId}`);
+};
+
+export { fetchTopDoctorHome, fetchInfoDoctor };

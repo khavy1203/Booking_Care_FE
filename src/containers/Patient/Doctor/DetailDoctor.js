@@ -5,36 +5,82 @@ import HomeHeader from "../../HomePage/HomeHeader";
 import "./DetailDoctor.scss";
 import DoctorSchedule from "./DoctorSchedule";
 import DoctorExtraInfo from "./DoctorExtraInfo";
-
+import { fetchInfoDoctor } from "../../../services/doctorService";
+import { fetchSchedule } from "../../../services/scheduleService";
+import { LANGUAGES } from "../../../utils";
 class DetailDoctor extends Component {
   constructor(props) {
     super(props);
     this.state = {
       detailDoctor: {},
+      schedule: [],
       currentDoctorId: -1,
     };
   }
-  componentDidMount() {
+  async componentDidMount() {
     //điều kiện để ứng dụng ko bao giờ chết
     if (
       this.props.match &&
       this.props.match.params &&
       this.props.match.params.id
     ) {
+      let id = this.props.match.params.id;
+      this.loadInfoDoctor(id);
+      this.loadSchedule(id);
     }
   }
-  componentDidUpdate() {}
+
+  loadInfoDoctor = async (id) => {
+    try {
+      let res = await fetchInfoDoctor(id);
+      if (res && +res.EC === 0) {
+        this.setState({ detailDoctor: res.DT });
+      } else {
+        console.log(res.EM);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  loadSchedule = async (id) => {
+    try {
+      let res = await fetchSchedule(id);
+      console.log(res);
+      if (res && +res.EC === 0) {
+        this.setState({ schedule: res.DT });
+      } else {
+        console.log(res.EM);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  componentDidUpdate(prevProps, prevState, snapshot) {}
 
   render() {
-    // console.log(this.props.match.params.id);
+    let { detailDoctor } = this.state;
+    let { language } = this.props;
+    let nameVi = `Bác sĩ ${detailDoctor.username}`;
+    let nameEn = `Doctor ${detailDoctor.username}`;
     return (
       <Fragment>
         <HomeHeader isShowBanner={false} />
         <div className="doctor-detail-container">
           <div className="intro-doctor">
-            <div className="content-left"></div>
+            <div
+              className="content-left"
+              style={{
+                backgroundImage: `url(${
+                  detailDoctor && detailDoctor.image ? detailDoctor.image : ""
+                })`,
+              }}
+            ></div>
             <div className="content-right">
-              <div className="up">Phó giáo sư nguyen van a</div>
+              <div className="up">
+                {language === LANGUAGES.VI ? nameVi : nameEn}
+              </div>
               <div className="down">
                 <span>Duis excepteur tempor dolor nulla esse laborum sit.</span>
               </div>
@@ -85,7 +131,9 @@ class DetailDoctor extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {};
+  return {
+    language: state.app.language,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {

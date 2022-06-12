@@ -70,6 +70,19 @@ class ManageSchedule extends Component {
     }
   };
 
+  resetInput = () => {
+    let { times } = this.state;
+    if (times && times.length > 0) {
+      times = times.map((item) => {
+        item.isSelected = false;
+        return item;
+      });
+      this.setState({
+        times: times,
+      });
+    }
+  };
+
   handleSaveSchedule = async () => {
     let { times, currentDate, maxNumber } = this.state;
     let { userInfo } = this.props;
@@ -122,8 +135,10 @@ class ManageSchedule extends Component {
         let res = await createNewSchedule(result);
         if (res && +res.EC === 0) {
           toast.success(res.EM);
+          this.resetInput();
         } else {
           toast.error(res.EM);
+          this.resetInput();
         }
         // console.log("response", res);
       } else {

@@ -87,6 +87,7 @@ class UserManage extends Component {
   handleModalUserClose = () => {
     this.setState({ isShowModalDelete: false });
     this.setState({ isShowModalUser: false });
+    this.setState({ isShowModalUser: false });
   };
   handUpdateUser = (item) => {
     this.setState({ actionModalUser: "UPDATE" });

@@ -36,7 +36,6 @@
 
 .btn-edit {
   color: orange;
-
   &:hover {
     background: transparent !important;
     color: grey !important;
@@ -45,7 +44,6 @@
 
 .btn-delete {
   color: red;
-
   &:hover {
     background: transparent !important;
     color: grey !important;
@@ -63,21 +61,17 @@
       }
     }
   }
-
   .modal-user-body {
     display: flex;
     gap: 15px;
     flex-wrap: wrap;
-
     .input-container {
       display: flex;
       flex-direction: column;
       width: 49%;
-
       &.max-width-input {
         width: 100%;
       }
-
       input {
         border-radius: 3px;
         height: 30px;
@@ -85,6 +79,16 @@
         outline: none;
         padding: 0 10px;
       }
+    }
+  }
+}
+
+// css cho modalUser
+.modal-user {
+  .content-body {
+    .red {
+      border: none;
+      color: red;
     }
   }
 }

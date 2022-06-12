@@ -27,6 +27,12 @@ class Login extends Component {
     };
   }
 
+  loginGoogle = async () => {
+    window.open("http://localhost:5000/api/v1/google", "_self");
+  };
+  loginGithub = async () => {
+    window.open("http://localhost:5000/api/v1/github", "_self");
+  };
   handleOnChangeUsername = (event) => {
     this.setState({ username: event.target.value });
     // console.log(event.target.value);
@@ -146,8 +152,14 @@ class Login extends Component {
               <span className="text-other-login">Or Login with:</span>
             </div>
             <div className="col-12 social-login">
-              <i className="fab fa-google-plus-g google"></i>
-              <i className="fab fa-facebook-f facebook"></i>
+              <i
+                className="fab fa-google-plus-g google"
+                onClick={() => this.loginGoogle()}
+              ></i>
+              <i
+                className="fa fa-github github"
+                onClick={() => this.loginGithub()}
+              ></i>
             </div>
           </div>
         </div>

@@ -23,6 +23,7 @@ import DetailDoctor from "./Patient/Doctor/DetailDoctor";
 import Doctor from "../routes/Doctor";
 import DetailSpecialty from "./Patient/Specialty/DetailSpecialty";
 import DetailClinic from "./Patient/Clinic/DetailClinic";
+// import ManageGroupRole from "./System/GroupRole/ManageGroupRole";//thêm quản lý group role
 
 class App extends Component {
   handlePersistorState = () => {

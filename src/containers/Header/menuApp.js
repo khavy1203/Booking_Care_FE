@@ -47,6 +47,17 @@ export const adminMenu = [
       { name: "menu.admin.manage-handbook", link: "/system/manage-handbook" },
     ],
   },
+
+  //quản lý group role
+  {
+    name: "menu.admin.group-role",
+    menus: [
+      {
+        name: "menu.admin.manage-group-role",
+        link: "/system/manage-grouprole",
+      },
+    ],
+  },
 ];
 
 export const doctorMenu = [

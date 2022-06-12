@@ -1,11 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+
+import { push } from "connected-react-router";
 import * as actions from "../../store/actions";
 import Navigator from "../../components/Navigator";
 import { adminMenu } from "./menuApp";
 import "./Header.scss";
 import { LANGUAGES } from "../../utils";
 import { FormattedMessage } from "react-intl";
+import { logoutUser } from "../../services/userService";
+import { toast } from "react-toastify";
 
 class Header extends Component {
   handleChangeLanguage = (language) => {
@@ -14,9 +18,23 @@ class Header extends Component {
 
   componentDidMount() {}
 
+  //logout user
+  processLogout = async () => {
+    let data = await logoutUser();
+
+    if (data && +data.EC === 0) {
+      localStorage.removeItem("persist:user");
+      toast.success("logout succeeds");
+      const { navigate } = this.props;
+      const redirectPath = "/home";
+      navigate(`${redirectPath}`);
+    } else {
+      toast.error(data.EM);
+    }
+  };
   render() {
     const { processLogout, language } = this.props;
-    // console.log(language);
+
     return (
       <div className="header-container">
         {/* thanh navigator */}
@@ -51,7 +69,7 @@ class Header extends Component {
           {/* nút logout */}
           <div
             className="btn btn-logout"
-            onClick={processLogout}
+            onClick={() => this.processLogout()}
             title="Log out"
           >
             <i className="fas fa-sign-out-alt"></i>
@@ -71,6 +89,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    navigate: (path) => dispatch(push(path)),
     processLogout: () => dispatch(actions.processLogout()),
     changeLanguageAppRedux: (language) => {
       dispatch(actions.changeLanguageApp(language));

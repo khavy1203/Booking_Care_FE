@@ -22,20 +22,22 @@
         "dental-examination": "dental examination"
     },
     "menu": {
-        "admin":{
+        "admin": {
             "manage-user": "User system",
-            "manage-doctor":"Manage doctors",
-            "manage-admin":"Manage admins",
+            "manage-doctor": "Manage doctors",
+            "manage-admin": "Manage admins",
             "crud": "CRUD user",
             "crud-redux": "CRUD redux",
             "clinic": "Clinics",
             "manage-clinic": "Manage clinics",
-            "specialty":"Specialties",
+            "specialty": "Specialties",
             "manage-specialty": "Manage specialties",
             "handbook": "Handbook",
-            "manage-handbook": "Manage handbook"
+            "manage-handbook": "Manage handbook",
+            "manage-group-role": "Manage group roles",
+            "group-role": "Group role"
         },
-        "doctor":{
+        "doctor": {
             "manage-schedule": "Manage Doctor's schedule",
             "manage-patient": "Manage Doctor's patient"
 
@@ -66,15 +68,15 @@
         "choose-date": "Choose date",
         "save": "Save info"
     },
-    "patient":{
-        "detail-doctor":{
+    "patient": {
+        "detail-doctor": {
             "schedule": "Schedule",
-            "no-schedule": "The doctor does not have an appointment during this time, please choose another time!"
-            ,"choose": "Choose",
+            "no-schedule": "The doctor does not have an appointment during this time, please choose another time!",
+            "choose": "Choose",
             "book-free": " and book (free)"
         }
     },
-    "admin":{
+    "admin": {
         "manage-doctor": {
             "title": "Create more information doctors",
             "select-doctor": "Select doctor",

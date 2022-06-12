@@ -60,8 +60,13 @@ class ModalUser extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.dataModalUpdate !== this.props.dataModalUpdate) {
+    if (
+      prevProps.action !== this.props.action ||
+      prevProps.dataModalUpdate !== this.props.dataModalUpdate
+    ) {
+      //điều kiện update khi action thay đổi hoặc dữ liệu đổ vào modalupadate thay đổi
       if (this.props.action === "UPDATE") {
+        //action cho update
         this.setState({
           userData: {
             ...this.props.dataModalUpdate,
@@ -72,9 +77,25 @@ class ModalUser extends Component {
                 : "",
           },
         });
+      } else {
+        this.setUserDataDefault();
       }
     }
   }
+
+  setUserDataDefault = () => {
+    this.setState({
+      userData: {
+        ...this.state.defaultUserData,
+        groupId:
+          this.state.userGroups && this.state.userGroups.length > 0
+            ? this.state.userGroups[0].id
+            : "",
+        genderId: 1,
+        //gán lại giá trị khi đã update thành công
+      },
+    });
+  };
 
   handleOnchangeInput = (value, name) => {
     let _userData = _.cloneDeep(this.state.userData);
@@ -127,23 +148,12 @@ class ModalUser extends Component {
         this.props.action === "CREATE"
           ? await createNewUser(this.state.userData)
           : await updateCurrentUser(this.state.userData);
-      console.log("data before", this.state.userData);
-      console.log("modal user", res);
       if (+res.EC === 0) {
         toast.success(res.EM);
 
         this.props.fetchUser();
-        this.setState({
-          userData: {
-            ...this.state.defaultUserData,
-            groupId:
-              this.state.userGroups && this.state.userGroups.length > 0
-                ? this.state.userGroups[0].id
-                : "",
-            genderId: 1,
-            //gán lại giá trị khi đã update thành công
-          },
-        });
+        //set userData về giá trị mặc định
+        this.setUserDataDefault();
 
         this.props.handleModalUserClose();
 
@@ -221,7 +231,6 @@ class ModalUser extends Component {
                     ? "form-control"
                     : "form-control is-invalid"
                 }
-                readOnly={action === "UPDATE" ? true : false}
                 type="text"
                 value={this.state.userData.phone}
                 onChange={(event) =>

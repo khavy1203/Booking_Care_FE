@@ -1,46 +1,48 @@
 {
-    "homeheader":{
+    "homeheader": {
         "specialty": "Chuyên khoa",
         "search-doctor": "Tìm bác sĩ theo chuyên khoa",
         "health-facilities": "Cơ sở y tế",
         "select-clinic": "Chọn bệnh viện phòng khám",
         "doctor": "Bác sĩ",
-        "select-doctor":"Chọn bác sĩ giỏi",
+        "select-doctor": "Chọn bác sĩ giỏi",
         "fee": "Gói khám",
-        "general-examination":"Khám sức khỏe tổng quát",
+        "general-examination": "Khám sức khỏe tổng quát",
         "support": "Hỗ trợ",
         "welcome": "Xin chào"
     },
-    "banner":{
-        "title1":"NỀN TẢNG Y TẾ",
-        "title2":"CHĂM SÓC SỨC KHỎE TOÀN DIỆN",
-        "specialist-examination":"Khám chuyên khoa",
+    "banner": {
+        "title1": "NỀN TẢNG Y TẾ",
+        "title2": "CHĂM SÓC SỨC KHỎE TOÀN DIỆN",
+        "specialist-examination": "Khám chuyên khoa",
         "general-examination": "Khám tổng quát",
-        "telemedicine":"Khám từ xa",
+        "telemedicine": "Khám từ xa",
         "medical-test": "Xét nghiệm y học",
         "mental-health": "Sức khỏe tinh thần",
         "dental-examination": "Khám nha khoa"
     },
     "menu": {
-        "admin":{
+        "admin": {
             "manage-user": "Người dùng",
-            "manage-doctor":"Quản lý bác sĩ",
-            "manage-admin":"Quản lý admin",
+            "manage-doctor": "Quản lý bác sĩ",
+            "manage-admin": "Quản lý admin",
             "crud": "CRUD user",
             "crud-redux": "CRUD redux",
             "clinic": "Phòng khám",
             "manage-clinic": "Quản lý phòng khám",
-            "specialty":"Chuyên khoa",
+            "specialty": "Chuyên khoa",
             "manage-specialty": "Quản lý chuyên khoa",
             "handbook": "Cẩm nang",
-            "manage-handbook": "Quản lý cẩm nang"
+            "manage-handbook": "Quản lý cẩm nang",
+            "manage-group-role": "Quản lý nhóm quyền",
+            "group-role": "Nhóm quyền"
         },
-        "doctor":{
+        "doctor": {
             "manage-schedule": "Quản lý kế hoạch khám bệnh",
             "manage-patient": "Quản lý bệnh nhân"
         }
     },
-    "manage-user":{
+    "manage-user": {
         "add": "Thêm mới người dùng",
         "email": "Email",
         "password": "Mật khẩu",
@@ -59,21 +61,21 @@
         "more-info": "Xem thêm",
         "specialty-popular": "Chuyên khoa phổ biến"
     },
-    "manage-schedule":{
+    "manage-schedule": {
         "title": "Quản lý kế hoạch khám bệnh của bác sĩ",
         "choose-doctor": "Chọn bác sĩ",
         "choose-date": "Chọn ngày",
         "save": "Lưu thông tin"
     },
-    "patient":{
-        "detail-doctor":{
+    "patient": {
+        "detail-doctor": {
             "schedule": "Lịch khám",
-            "no-schedule": "Bác sĩ không có lịch hẹn trong thời gian này, vui lòng chọn thời gian khác!"
-            ,"choose": "Chọn",
+            "no-schedule": "Bác sĩ không có lịch hẹn trong thời gian này, vui lòng chọn thời gian khác!",
+            "choose": "Chọn",
             "book-free": " và đặt (miễn phí)"
         }
     },
-    "admin":{
+    "admin": {
         "manage-doctor": {
             "title": "Thêm thông tin bác sĩ",
             "select-doctor": "Chọn bác sĩ",

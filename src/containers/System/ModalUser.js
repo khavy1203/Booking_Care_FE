@@ -17,9 +17,6 @@ class ModalUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      //Huyên
-      imageBase64: "",
-      //
       email: "",
       phone: "",
       username: "",
@@ -31,15 +28,12 @@ class ModalUser extends Component {
       userData: {},
       validInput: {},
       defaultUserData: {
-        //Huyên
-        imageBase64: "",
-        //
         email: "",
         phone: "",
         username: "",
         password: "",
         address: "",
-        genderId: "",
+        genderId: 1,
         groupId: "",
       },
       validInputDefault: {
@@ -173,14 +167,16 @@ class ModalUser extends Component {
   handleOnchangImage = async (event) => {
     let data = event.target.files; //list các file
     let file = data[0];
+
     if (file) {
       let base64 = await CommonUtils.getBase64(file);
+
       this.setState({
-        imageBase64: base64,
-        userData: { ...this.state.userData, image: this.state.imageBase64 },
+        userData: { ...this.state.userData, image: base64 },
       });
+      console.log(this.state);
     }
-    // console.log(this.state.userData);
+    console.log(this.state.userData);
   };
 
   render() {

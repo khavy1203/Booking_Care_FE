@@ -17,8 +17,8 @@ class BookingModal extends Component {
       phoneNumber: "",
       email: "",
       address: "",
-      reason: "",
-      birthday: "",
+      // reason: "",
+      // birthday: "",
       gender: "",
       doctorId: "",
     };
@@ -46,14 +46,14 @@ class BookingModal extends Component {
   };
 
   render() {
-    //Mở cmt khi có dataTime
-    // let { isOpenModal, closeBookingModal, dataTime } = this.props;
-    let { isOpenModal, closeBookingModal } = this.props;
-
-    //Lấy doctorId trong dataTime. Mở cmt khi có dataTime
-    // let doctorId = dataTime && !_.isEmpty(dataTime) ? dataTime.doctorId : "";
-
-    // console.log("check state booking modal", this.state);
+    let {
+      isOpenModal,
+      closeBookingModal,
+      dataTime,
+      doctorIdFromDoctorSchedule,
+    } = this.props;
+    let doctorId = doctorIdFromDoctorSchedule ? doctorIdFromDoctorSchedule : "";
+    console.log("booking modal, dataTime", dataTime);
     return (
       <Modal
         isOpen={isOpenModal}
@@ -70,8 +70,6 @@ class BookingModal extends Component {
             </span>
           </div>
           <div className="booking-modal-body">
-            {/* {JSON.stringify(dataTime)} */}
-
             <div className="doctor-info">
               {/* Mở cmt khi lấy dc doctorId trong dataTime*/}
               {/* <ProfileDoctor doctorId={doctorId} isShowDescriptionDoctor={false}
@@ -81,7 +79,8 @@ class BookingModal extends Component {
 
               {/* Sài tạm */}
               <ProfileDoctor
-                doctorId={111}
+                doctorId={doctorId}
+                dataTime={dataTime}
                 isShowDescriptionDoctor={false}
                 isShowLinkDetail={false}
                 isShowPrice={true}
@@ -133,7 +132,7 @@ class BookingModal extends Component {
                   }}
                 />
               </div>
-              <div className="col-12 form-group">
+              {/* <div className="col-12 form-group">
                 <label>Lý do khám</label>
                 <input
                   type="text"
@@ -151,7 +150,7 @@ class BookingModal extends Component {
                   onChange={this.handleOnchangeDatePicker}
                   value={this.state.birthday}
                 />
-              </div>
+              </div> */}
               <div className="col-6 form-group">
                 <label>Giới tính</label>
                 <input className="form-control" />

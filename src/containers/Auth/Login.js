@@ -52,7 +52,7 @@ class Login extends Component {
       return false;
     }
     if (!this.state.password) {
-      toast.warn("Please enter an password");
+      toast.warn("Please enter password");
       this.setState({
         objectInputable: {
           ...this.state.defaultValidInput,

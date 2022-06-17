@@ -5,7 +5,11 @@ const fetchTopDoctorHome = (limit) => {
 };
 
 const fetchInfoDoctor = (doctorId) => {
-  return axios.get(`/api/v1/doctor-detail/${doctorId}`);
+  return axios.get(`/api/v1/doctor-detail?id=${doctorId}`);
 };
 
-export { fetchTopDoctorHome, fetchInfoDoctor };
+const fetchInfoDoctorModal = (doctorId) => {
+  return axios.get(`/api/v1/doctor-modal?id=${doctorId}`);
+};
+
+export { fetchTopDoctorHome, fetchInfoDoctor, fetchInfoDoctorModal };

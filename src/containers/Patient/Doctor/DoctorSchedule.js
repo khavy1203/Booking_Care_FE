@@ -6,6 +6,8 @@ import localization from "moment/locale/vi";
 import { LANGUAGES } from "../../../utils";
 import { FormattedMessage } from "react-intl";
 import BookingModal from "./Modal/BookingModal";
+import { fetchSchedule } from "../../../services/scheduleService";
+import { dateFormat } from "../../../utils";
 
 class DoctorSchedule extends Component {
   constructor(props) {
@@ -18,12 +20,13 @@ class DoctorSchedule extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     let { language } = this.props;
     let allDays = this.getArrDays(language);
-    this.setState({
-      allDays: allDays,
-    });
+    if (allDays && allDays.length > 0) {
+      this.setState({ allDays: allDays });
+    }
+
     // console.log("moment vie", moment(new Date()).format("dddd - DD/MM"));
     // console.log(
     //   "moment eng",
@@ -41,7 +44,7 @@ class DoctorSchedule extends Component {
       let object = {};
       if (language === LANGUAGES.VI) {
         if (i === 0) {
-          let ddMM = moment(new Date()).format("DD/MM");
+          let ddMM = moment(new Date()).format("DD/MM"); //lay dc ngay thang hien tai
           let today = `Hôm nay - ${ddMM}`;
           object.label = today;
         } else {
@@ -56,14 +59,24 @@ class DoctorSchedule extends Component {
           let today = `Today - ${ddMM}`;
           object.label = today;
         } else {
-          object.value = moment(new Date())
+          object.label = moment(new Date())
             .add(i, "days")
-            .local("en")
+            .locale("en")
             .format("ddd - DD/MM");
         }
       }
-      object.value = moment(new Date()).add(i, "days").startOf("day").valueOf();
+      // console.log(
+      //   moment(new Date())
+      //     .add(i, "days")
+      //     .startOf("day")
+      //     .format(dateFormat.SEND_TO_SERVER)
+      // );
+      object.value = moment(new Date())
+        .add(i, "days")
+        .startOf("day")
+        .format(dateFormat.SEND_TO_SERVER);
 
+      // object.value = moment(new Date()).add(i, "days").startOf("day").valueOf();
       allDays.push(object);
     }
 
@@ -75,37 +88,47 @@ class DoctorSchedule extends Component {
       let allDays = this.getArrDays(this.props.language);
       this.setState({ allDays: allDays });
     }
-    //Mở cmt khi có api
-    // if(this.props.doctorIdFromParent !== prevProps.doctorIdFromParent){
-    //   let allDays = this.getArrDays(this.props.language);
-    //   let res = await getScheduleDoctorByDate(this.props.doctorIdFromParent, allDays[0].value);
-    // }
+    if (this.props.doctorIdFromParent !== prevProps.doctorIdFromParent) {
+      let allDays = this.getArrDays(this.props.language);
+      this.loadSchedule(this.props.doctorIdFromParent, allDays[0].value);
+    }
   }
 
-  handleOnChangeSelect = async (event) => {
-    //Mở cmt khi có api
-    // if (this.props.doctorIdFromParent && this.props.doctorIdFromParent !== -1) {
-    //   let doctorId = this.props.doctorIdFromParent;
-    //   let date = event.target.value;
-    //   let res = await getScheduleDoctorByDate(doctorId, date);
-    //   if (res && res.errCode === 0) {
-    //     this.setState({ allAvailableTime: res.data ? res.data : [] });
-    //   }
-    // }
+  loadSchedule = async (id, date) => {
+    try {
+      let res = await fetchSchedule(id, date);
+      if (res && +res.EC === 0) {
+        console.log(res.DT.Schedule_Details);
+        this.setState({
+          allAvailableTime: res.DT.Schedule_Details,
+        });
+      } else {
+        console.log(res.EM);
+        this.setState({
+          allAvailableTime: [],
+        });
+      }
+      // console.log("check state", this.state);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  //Mở cmt khi có API
-  // handleClickScheduleTime = (time) => {
-  //   this.setState({
-  //     isOpenModalBooking: true,
-  //     dataScheduleTimeModal: time
-  //   });
-  // };
+  handleOnChangeSelect = async (event) => {
+    // console.log(event.target.value);
+    //Mở cmt khi có api
+    if (this.props.doctorIdFromParent && this.props.doctorIdFromParent !== -1) {
+      let doctorId = this.props.doctorIdFromParent;
+      let date = event.target.value;
+      this.loadSchedule(doctorId, date);
+    }
+  };
 
-  //dùng tạm vì ko có API, gọi api dc thì xóa
-  handleClickScheduleTime = () => {
+  handleClickScheduleTime = (time) => {
+    // console.log("time", time);
     this.setState({
       isOpenModalBooking: true,
+      dataScheduleTimeModal: time,
     });
   };
 
@@ -116,15 +139,22 @@ class DoctorSchedule extends Component {
   };
 
   render() {
-    //mở cmt khi có api
-    // let { allDays, allAvailableTime, isOpenModalBooking, dataScheduleTimeModal } = this.state;
-    let { allDays, isOpenModalBooking } = this.state;
+    let {
+      allDays,
+      allAvailableTime,
+      isOpenModalBooking,
+      dataScheduleTimeModal,
+    } = this.state;
     let { language } = this.props;
     return (
       <>
         <div className="doctor-schedule-container">
           <div className="all-schedules">
-            <select>
+            <select
+              onChange={(event) => {
+                this.handleOnChangeSelect(event);
+              }}
+            >
               {allDays &&
                 allDays.length > 0 &&
                 allDays.map((item, index) => {
@@ -146,61 +176,54 @@ class DoctorSchedule extends Component {
             </div>
             <div className="time-content">
               {/* Mở cmt khi gọi dc API */}
-              {/* {allAvailableTime && allAvailableTime.length > 0 ? 
-              <>
-                <div className="time-content-btns">
-                  {allAvailableTime.map((item, index) =>{
-                    let timeDisplay = language === LANGUAGES.VI ?
-                    item.timeTypeData.valueVi : item.timeTypeData.valueEn;
-                    return (
-                      <button key 
-                        className={language === LANGUAGES.VI ? 'btn-vie':'btn-en'}
-                        onClick={()=>this.handleClickScheduleTime(item)}
+              {allAvailableTime && allAvailableTime.length > 0 ? (
+                <>
+                  <div className="time-content-btns">
+                    {allAvailableTime.map((item, index) => {
+                      let timeDisplay =
+                        language === LANGUAGES.VI
+                          ? item.Timeframe.nameVI
+                          : item.Timeframe.nameEN;
+                      return (
+                        <button
+                          key={index}
+                          className={
+                            language === LANGUAGES.VI ? "btn-vie" : "btn-en"
+                          }
+                          onClick={() => this.handleClickScheduleTime(item)}
                         >
                           {timeDisplay}
-                      </button>      
-                    )
-                  })}
-                </div>
-              </> : <></>
-              } */}
-
-              <div className="time-content-btns">
-                <button
-                  onClick={() => {
-                    this.handleClickScheduleTime();
-                  }}
-                >
-                  8-9
-                </button>
-                <button>8-9</button>
-                <button>8-9</button>
-              </div>
-              <div className="book-free">
-                <span>
-                  <FormattedMessage id={"patient.detail-doctor.choose"} />
-                  <FormattedMessage id={"patient.detail-doctor.book-free"} />
-                </span>
-              </div>
-            </div>
-
-            <div className="no-schedule">
-              <FormattedMessage id={"patient.detail-doctor.no-schedule"} />
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <div className="book-free">
+                    <span>
+                      <FormattedMessage id={"patient.detail-doctor.choose"} />
+                      <FormattedMessage
+                        id={"patient.detail-doctor.book-free"}
+                      />
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="no-schedule">
+                    <FormattedMessage
+                      id={"patient.detail-doctor.no-schedule"}
+                    />
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Mở cmt khi có api */}
-        {/* <BookingModal
-          isOpenModal={isOpenModalBooking}
-          closeBookingModal={this.closeBookingModal}
-          dataTime={dataScheduleTimeModal}
-        /> */}
-
-        {/* Sài tạm */}
         <BookingModal
           isOpenModal={isOpenModalBooking}
           closeBookingModal={this.closeBookingModal}
+          dataTime={dataScheduleTimeModal}
+          doctorIdFromDoctorSchedule={this.props.doctorIdFromParent}
         />
       </>
     );

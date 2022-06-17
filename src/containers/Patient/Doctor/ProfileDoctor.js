@@ -4,7 +4,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { FormattedMessage } from "react-intl";
 import "./ProfileDoctor.scss";
-import { getProfileDoctorById } from "../../../services/userService";
+import { fetchInfoDoctorModal } from "../../../services/doctorService";
 import { _ } from "lodash";
 import { LANGUAGES } from "../../../utils";
 import { Link } from "react-router-dom";
@@ -17,86 +17,98 @@ class ProfileDoctor extends Component {
   }
 
   async componentDidMount() {
-    //Mở khi có api
-    //let data = await this.getInfoDoctor(this.props.doctorId);
-    // this.setState({
-    //   dataProfile: data,
-    // });
+    let id = this.props.doctorId;
+    if (id) {
+      let data = await this.getInfoDoctor(id);
+      console.log("profileDoctor, data", data);
+      this.setState({
+        dataProfile: data,
+      });
+      // console.log("profileDoctor", this.state.dataProfile);
+    }
   }
 
   getInfoDoctor = async (id) => {
-    //Mở khi có api
-    // let result = {};
-    // if (id) {
-    //   let res = await getProfileDoctorById(id);
-    //   if (res && res.errCode === 0) {
-    //     result = res.data;
-    //   }
-    // }
-    // return result;
+    try {
+      let result = {};
+      if (id) {
+        let res = await fetchInfoDoctorModal(id);
+        if (res && +res.EC === 0) {
+          result = res.DT;
+        } else {
+          console.log(res.EM);
+        }
+      }
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   async componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.props.language === prevProps.language) {
     }
     if (this.props.doctorId !== prevProps.doctorId) {
-      //   this.getInfoDoctor(this.props.doctorId);
+      // let data = await this.getInfoDoctor(this.props.doctorId);
+      // this.setState({
+      //   dataProfile: data,
+      // });
     }
   }
 
   render() {
     // let {dataProfile, isShowLinkDetail, isShowPrice} = this.state
-    // let nameVi='', nameEn='';
-    // if(dataProfile && dataProfile.positionData){
-    //     nameVi = `${dataProfile.positionData.valueVi}, ${dataProfile.lastName}`
-    //     nameEn = `${dataProfile.positionData.valueEn}, ${dataProfile.FirstName}`
 
-    // }
-    let { isShowLinkDetail, isShowPrice, doctorId } = this.props;
-
+    let { dataProfile } = this.state;
+    let {
+      isShowLinkDetail,
+      isShowPrice,
+      doctorId,
+      language,
+      isShowDescriptionDoctor,
+    } = this.props;
+    let nameVi = "",
+      nameEn = "";
+    if (dataProfile && dataProfile.Group) {
+      nameVi = `${dataProfile.Group.name} ${dataProfile.username}`;
+      nameEn = `${dataProfile.Group.name} ${dataProfile.username}`;
+    }
     return (
       <div className="profile-doctor-container">
         <div className="intro-doctor">
-          <div className="content-left"></div>
+          <div
+            className="content-left"
+            style={{
+              backgroundImage: `url(${
+                dataProfile && dataProfile.image ? dataProfile.image : ""
+              })`,
+            }}
+          ></div>
           <div className="content-right">
-            <div className="up">Phó giáo sư nguyen van a</div>
+            <div className="up">
+              {language === LANGUAGES.VI ? nameVi : nameEn}
+            </div>
             <div className="down">
-              <span>
-                Fugiat nulla ut ipsum cillum esse ullamco in est in eiusmod.
-                Nostrud ad est minim aliqua irure sit aliqua. Cillum est cillum
-                proident ullamco minim aliquip cupidatat anim voluptate sint
-                cillum proident sit. Incididunt sit fugiat sint dolor
-                adipisicing. Fugiat est commodo amet enim tempor esse pariatur
-                quis nostrud velit in tempor elit. Ad fugiat adipisicing eu aute
-                eiusmod aute voluptate culpa aute ullamco. Voluptate aliquip
-                duis veniam enim proident est Lorem in culpa incididunt pariatur
-                ipsum amet. Tempor anim laboris reprehenderit proident. Mollit
-                labore in do ea quis reprehenderit ea Lorem ex. Aute elit fugiat
-                est officia minim incididunt sunt.
-              </span>
+              {isShowDescriptionDoctor === true && (
+                <>
+                  <span>
+                    Fugiat nulla ut ipsum cillum esse ullamco in est in eiusmod.
+                    Nostrud ad est minim aliqua irure sit aliqua. Cillum est
+                    cillum proident ullamco minim aliquip cupidatat anim
+                    voluptate sint cillum proident sit. Incididunt sit fugiat
+                    sint dolor adipisicing. Fugiat est commodo amet enim tempor
+                    esse pariatur quis nostrud velit in tempor elit. Ad fugiat
+                    adipisicing eu aute eiusmod aute voluptate culpa aute
+                    ullamco. Voluptate aliquip duis veniam enim proident est
+                    Lorem in culpa incididunt pariatur ipsum amet. Tempor anim
+                    laboris reprehenderit proident. Mollit labore in do ea quis
+                    reprehenderit ea Lorem ex. Aute elit fugiat est officia
+                    minim incididunt sunt.
+                  </span>
+                </>
+              )}
             </div>
           </div>
-
-          {/* <div
-          className="content-left"
-          style={{
-            backgroundImage: `url(${
-              dataProfile && dataProfile.image ? dataProfile.image : ""
-            })`,
-          }}
-        ></div>
-        <div className="content-right">
-          <div className="up">
-            {(language = LANGUAGES.VI ? nameVi : nameEn)}
-          </div>
-          <div className="down">
-            {dataProfile &&
-              dataProfile.Markdown &&
-              dataProfile.Markdown.description && (
-                <span>dataProfile.Markdown.description</span>
-              )}
-          </div>
-        </div> */}
         </div>
         {isShowLinkDetail === true && (
           <div className="view-detail-doctor">

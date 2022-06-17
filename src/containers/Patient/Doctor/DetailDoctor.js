@@ -6,14 +6,13 @@ import "./DetailDoctor.scss";
 import DoctorSchedule from "./DoctorSchedule";
 import DoctorExtraInfo from "./DoctorExtraInfo";
 import { fetchInfoDoctor } from "../../../services/doctorService";
-import { fetchSchedule } from "../../../services/scheduleService";
+// import { fetchSchedule } from "../../../services/scheduleService";
 import { LANGUAGES } from "../../../utils";
 class DetailDoctor extends Component {
   constructor(props) {
     super(props);
     this.state = {
       detailDoctor: {},
-      schedule: [],
       currentDoctorId: -1,
     };
   }
@@ -25,8 +24,11 @@ class DetailDoctor extends Component {
       this.props.match.params.id
     ) {
       let id = this.props.match.params.id;
+      this.setState({
+        currentDoctorId: id,
+      });
       this.loadInfoDoctor(id);
-      this.loadSchedule(id);
+      // this.loadSchedule(id);
     }
   }
 
@@ -35,20 +37,6 @@ class DetailDoctor extends Component {
       let res = await fetchInfoDoctor(id);
       if (res && +res.EC === 0) {
         this.setState({ detailDoctor: res.DT });
-      } else {
-        console.log(res.EM);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  loadSchedule = async (id) => {
-    try {
-      let res = await fetchSchedule(id);
-      console.log(res);
-      if (res && +res.EC === 0) {
-        this.setState({ schedule: res.DT });
       } else {
         console.log(res.EM);
       }
@@ -88,10 +76,12 @@ class DetailDoctor extends Component {
           </div>
           <div className="schedule-doctor">
             <div className="content-left">
-              <DoctorSchedule doctorIdFromParent={this.state.curentDoctorId} />
+              <DoctorSchedule doctorIdFromParent={this.state.currentDoctorId} />
             </div>
             <div className="content-right">
-              <DoctorExtraInfo doctorIdFromParent={this.state.curentDoctorId} />
+              <DoctorExtraInfo
+                doctorIdFromParent={this.state.currentDoctorId}
+              />
             </div>
           </div>
           <div className="detail-info-doctor">

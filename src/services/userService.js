@@ -37,11 +37,6 @@ const deleteUser = async (user) => {
   return await axios.delete("/api/v1/user/delete", { data: { id: user.id } });
 };
 
-//video 83: api lấy profile bác sĩ
-const getProfileDoctorById = (doctorId) => {
-  return axios.get(`/api/get-profile-doctor-by-id?doctorId=${doctorId}`);
-};
-
 const logoutUser = async () => {
   return await axios.post("/api/v1/logout");
 };
@@ -53,6 +48,5 @@ export {
   deleteUser,
   handleRegisterUser,
   fetchGroup,
-  getProfileDoctorById,
   logoutUser,
 };

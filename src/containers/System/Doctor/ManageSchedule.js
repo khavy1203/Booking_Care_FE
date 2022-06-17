@@ -70,22 +70,22 @@ class ManageSchedule extends Component {
     }
   };
 
-  resetInput = () => {
-    let { times } = this.state;
-    if (times && times.length > 0) {
-      times = times.map((item) => {
-        item.isSelected = false;
-        return item;
-      });
-      this.setState({
-        times: times,
-      });
-    }
-  };
+  // resetInput = () => {
+  //   let { times } = this.state;
+  //   if (times && times.length > 0) {
+  //     times = times.map((item) => {
+  //       item.isSelected = false;
+  //       return item;
+  //     });
+  //     this.setState({
+  //       times: times,
+  //     });
+  //   }
+  // };
 
   handleSaveSchedule = async () => {
     let { times, currentDate, maxNumber } = this.state;
-    let { userInfo } = this.props;
+    // let { userInfo } = this.props;
     let result = {};
 
     if (!currentDate) {
@@ -117,8 +117,8 @@ class ManageSchedule extends Component {
         //   return;
         // }
 
-        result.email = userInfo.account.email;
-        result.groupId = userInfo.account.groupWithRoles.id;
+        // result.email = userInfo.account.email;
+        // result.groupId = userInfo.account.groupWithRoles.id;
         result.date = formatedDate;
 
         //timeDetail chứa thời gian và số lượng khám
@@ -135,10 +135,10 @@ class ManageSchedule extends Component {
         let res = await createNewSchedule(result);
         if (res && +res.EC === 0) {
           toast.success(res.EM);
-          this.resetInput();
+          // this.resetInput();
         } else {
           toast.error(res.EM);
-          this.resetInput();
+          // this.resetInput();
         }
         // console.log("response", res);
       } else {
@@ -260,7 +260,7 @@ class ManageSchedule extends Component {
 const mapStateToProps = (state) => {
   return {
     isLoggedIn: state.user.isLoggedIn,
-    userInfo: state.user.userInfo,
+    // userInfo: state.user.userInfo,
     language: state.app.language,
   };
 };

@@ -8,6 +8,7 @@ import { fetchInfoDoctorModal } from "../../../services/doctorService";
 import { _ } from "lodash";
 import { LANGUAGES } from "../../../utils";
 import { Link } from "react-router-dom";
+import moment from "moment";
 class ProfileDoctor extends Component {
   constructor(props) {
     super(props);
@@ -20,7 +21,7 @@ class ProfileDoctor extends Component {
     let id = this.props.doctorId;
     if (id) {
       let data = await this.getInfoDoctor(id);
-      console.log("profileDoctor, data", data);
+      // console.log("profileDoctor, data", data);
       this.setState({
         dataProfile: data,
       });
@@ -55,10 +56,36 @@ class ProfileDoctor extends Component {
       // });
     }
   }
+  renderTimeBooking = (schedule) => {
+    // console.log("schedule", schedule);
+    let { language } = this.props;
+    let date =
+      language === LANGUAGES.VI
+        ? //chia cho 1000 vi chenh lech don vi. moment don vi la mili sec, con unix dung sec
+          moment.unix(+schedule.date / 1000).format("dddd - DD/MM/YYYY")
+        : moment
+            .unix(+schedule.date / 1000)
+            .locale("en")
+            .format("ddd - MM/DD/YYYY");
+    if (schedule) {
+      return (
+        <>
+          <div>
+            {language === LANGUAGES.VI
+              ? schedule.Timeframe.nameVI
+              : schedule.Timeframe.nameEN}{" "}
+            - {date}
+          </div>
+          <div>
+            <FormattedMessage id="patient.booking-modal.priceBooking" />
+          </div>
+        </>
+      );
+    }
+    return <></>;
+  };
 
   render() {
-    // let {dataProfile, isShowLinkDetail, isShowPrice} = this.state
-
     let { dataProfile } = this.state;
     let {
       isShowLinkDetail,
@@ -66,7 +93,9 @@ class ProfileDoctor extends Component {
       doctorId,
       language,
       isShowDescriptionDoctor,
+      selectedSchedule,
     } = this.props;
+    // console.log("selectedSchedule", selectedSchedule);
     let nameVi = "",
       nameEn = "";
     if (dataProfile && dataProfile.Group) {
@@ -89,7 +118,7 @@ class ProfileDoctor extends Component {
               {language === LANGUAGES.VI ? nameVi : nameEn}
             </div>
             <div className="down">
-              {isShowDescriptionDoctor === true && (
+              {isShowDescriptionDoctor === true ? (
                 <>
                   <span>
                     Fugiat nulla ut ipsum cillum esse ullamco in est in eiusmod.
@@ -106,6 +135,8 @@ class ProfileDoctor extends Component {
                     minim incididunt sunt.
                   </span>
                 </>
+              ) : (
+                <>{this.renderTimeBooking(selectedSchedule)}</>
               )}
             </div>
           </div>
@@ -116,7 +147,9 @@ class ProfileDoctor extends Component {
           </div>
         )}
         {isShowPrice === true && (
-          <div className="price">Giá khám 500.000VND</div>
+          <div className="price">
+            <FormattedMessage id="patient.booking-modal.price" /> 500.000VND
+          </div>
         )}
       </div>
     );

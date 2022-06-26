@@ -9,6 +9,8 @@ export const path = {
   DETAIL_SPECIALTY: "/detail-specialty/:id",
   DETAIL_CLINIC: "/detail-clinic/:id",
 
+  DOCTOR_CONTACT: "/contact",
+
   GROUP_ROLE: "/manage-group-role",
 };
 
@@ -24,7 +26,7 @@ export const manageActions = {
 };
 
 export const dateFormat = {
-  SEND_TO_SERVER: "YYYY/MM/DD",
+  SEND_TO_SERVER: "DD/MM/YYYY",
 };
 
 export const YesNoObj = {

@@ -7,26 +7,43 @@ import "./BookingModal.scss";
 import { Modal } from "reactstrap";
 import ProfileDoctor from "../ProfileDoctor";
 import _ from "lodash";
-import DatePicker from "../../../../components/Input/DatePicker";
+import { LANGUAGES } from "../../../../utils";
+// import DatePicker from "../../../../components/Input/DatePicker";
+import { createBooking } from "../../../../services/bookingService";
+import { toast } from "react-toastify";
+import validator from "validator";
 
 class BookingModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fullName: "",
-      phoneNumber: "",
+      username: "",
+      phone: "",
       email: "",
       address: "",
       // reason: "",
       // birthday: "",
-      gender: "",
+      genderId: 1,
       doctorId: "",
+      schedule_detail_id: "",
+      date: "",
     };
   }
   async componentDidMount() {}
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.props.language === prevProps.language) {
+    if (this.props.selectedSchedule !== prevProps.selectedSchedule) {
+      if (
+        this.props.selectedSchedule &&
+        !_.isEmpty(this.props.selectedSchedule)
+      ) {
+        let { doctorId, date, id } = this.props.selectedSchedule;
+        this.setState({
+          doctorId: doctorId,
+          date: date,
+          schedule_detail_id: id,
+        });
+      }
     }
   }
 
@@ -39,21 +56,79 @@ class BookingModal extends Component {
     });
   };
 
-  handleOnchangeDatePicker = (date) => {
-    this.setState({
-      birthday: date[0],
-    });
+  // handleOnchangeDatePicker = (date) => {
+  //   this.setState({
+  //     birthday: date[0],
+  //   });
+  // };
+
+  handleBookingConfirm = async () => {
+    try {
+      let {
+        username,
+        phone,
+        email,
+        address,
+        genderId,
+        doctorId,
+        date,
+        schedule_detail_id,
+      } = this.state;
+
+      if (!this.checkName(username)) return;
+      if (!this.checkEmail(email)) return;
+
+      let obj = {
+        ...this.state,
+      };
+
+      let res = await createBooking(obj);
+      if (res && +res.EC === 0) {
+        toast.success(res.EM);
+        this.props.closeBookingModal();
+      } else {
+        toast.error(res.EM);
+      }
+      console.log(obj);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  checkName = (value) => {
+    if (validator.isEmpty(value)) {
+      toast.error("Vui lòng nhập họ và tên");
+      return false;
+    }
+    if (!validator.isAlpha(value, "vi-VN", { ignore: " " })) {
+      toast.error("họ và tên không phù hợp");
+      return false;
+    }
+    return true;
+  };
+
+  checkEmail = (value) => {
+    if (validator.isEmpty(value)) {
+      toast.error("Vui lòng nhập email");
+      return false;
+    }
+    if (!validator.isEmail(value)) {
+      toast.error("email không phù hợp");
+      return false;
+    }
+    return true;
   };
 
   render() {
     let {
       isOpenModal,
       closeBookingModal,
-      dataTime,
-      doctorIdFromDoctorSchedule,
+      selectedSchedule,
+      language,
+      // doctorIdFromDoctorSchedule,
     } = this.props;
-    let doctorId = doctorIdFromDoctorSchedule ? doctorIdFromDoctorSchedule : "";
-    console.log("booking modal, dataTime", dataTime);
+    let { doctorId } = this.state;
+    console.log(this.state);
     return (
       <Modal
         isOpen={isOpenModal}
@@ -64,23 +139,18 @@ class BookingModal extends Component {
       >
         <div className="booking-modal-content">
           <div className="booking-modal-header">
-            <span className="left">Thông tin đặt lịch khám bệnh</span>
+            <span className="left">
+              <FormattedMessage id="patient.booking-modal.title" />
+            </span>
             <span className="right" onClick={closeBookingModal}>
               <i className="fas fa-times"></i>
             </span>
           </div>
           <div className="booking-modal-body">
             <div className="doctor-info">
-              {/* Mở cmt khi lấy dc doctorId trong dataTime*/}
-              {/* <ProfileDoctor doctorId={doctorId} isShowDescriptionDoctor={false}
-                dataTime={dataTime}
-                isShowLinkDetail={true}
-                isShowPrice={false} /> */}
-
-              {/* Sài tạm */}
               <ProfileDoctor
                 doctorId={doctorId}
-                dataTime={dataTime}
+                selectedSchedule={selectedSchedule}
                 isShowDescriptionDoctor={false}
                 isShowLinkDetail={false}
                 isShowPrice={true}
@@ -89,29 +159,35 @@ class BookingModal extends Component {
 
             <div className="row">
               <div className="col-6 form-group">
-                <label>Họ tên</label>
+                <label>
+                  <FormattedMessage id="patient.booking-modal.name" />
+                </label>
                 <input
                   className="form-control"
                   type="text"
-                  value={this.state.fullName}
+                  value={this.state.username}
                   onChange={(event) => {
-                    this.handleOnchangeInput(event, "fullName");
+                    this.handleOnchangeInput(event, "username");
                   }}
                 />
               </div>
               <div className="col-6 form-group">
-                <label>Số điện thoại</label>
+                <label>
+                  <FormattedMessage id="patient.booking-modal.phone" />
+                </label>
                 <input
                   type="number"
                   className="form-control"
-                  value={this.state.phoneNumber}
+                  value={this.state.phone}
                   onChange={(event) => {
-                    this.handleOnchangeInput(event, "phoneNumber");
+                    this.handleOnchangeInput(event, "phone");
                   }}
                 />
               </div>
               <div className="col-6 form-group">
-                <label>Địa chỉ email</label>
+                <label>
+                  <FormattedMessage id="patient.booking-modal.email" />
+                </label>
                 <input
                   type="text"
                   className="form-control"
@@ -122,7 +198,9 @@ class BookingModal extends Component {
                 />
               </div>
               <div className="col-6 form-group">
-                <label>Điện chỉ liên hệ</label>
+                <label>
+                  <FormattedMessage id="patient.booking-modal.address" />
+                </label>
                 <input
                   type="text"
                   className="form-control"
@@ -152,17 +230,38 @@ class BookingModal extends Component {
                 />
               </div> */}
               <div className="col-6 form-group">
-                <label>Giới tính</label>
-                <input className="form-control" />
+                <label>
+                  <FormattedMessage id="patient.booking-modal.gender" />
+                </label>
+                <select
+                  className="form-control"
+                  onChange={(event) =>
+                    this.handleOnchangeInput(event, "genderId")
+                  }
+                  value={this.state.genderId}
+                >
+                  <option value="1">
+                    {language === LANGUAGES.VI ? "Nam" : "Male"}
+                  </option>
+                  <option value="2">
+                    {language === LANGUAGES.VI ? "Nữ" : "Female"}
+                  </option>
+                  <option value="3">
+                    {language === LANGUAGES.VI ? "Khác" : "Other"}
+                  </option>
+                </select>
               </div>
             </div>
           </div>
           <div className="booking-modal-footer">
-            <button className="btn-booking-confirm" onClick={closeBookingModal}>
-              Xác nhận
+            <button
+              className="btn-booking-confirm"
+              onClick={() => this.handleBookingConfirm()}
+            >
+              <FormattedMessage id="patient.booking-modal.confirm" />
             </button>
             <button className="btn-booking-cancel" onClick={closeBookingModal}>
-              Hủy
+              <FormattedMessage id="patient.booking-modal.cancel" />
             </button>
           </div>
         </div>

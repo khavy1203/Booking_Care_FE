@@ -33,8 +33,8 @@ class Header extends Component {
     }
   };
   render() {
-    const { processLogout, language } = this.props;
-
+    const { processLogout, language, userInfo } = this.props;
+    console.log("hedaer", userInfo);
     return (
       <div className="header-container">
         {/* thanh navigator */}
@@ -44,7 +44,8 @@ class Header extends Component {
 
         <div className="languages">
           <span className="welcome">
-            <FormattedMessage id="homeheader.welcome" />, Admin!
+            <FormattedMessage id="homeheader.welcome" />,{" "}
+            { userInfo && userInfo.account.username}
           </span>
           <span
             className={
@@ -84,6 +85,7 @@ const mapStateToProps = (state) => {
   return {
     isLoggedIn: state.user.isLoggedIn,
     language: state.app.language,
+    userInfo: state.user.userInfo,
   };
 };
 

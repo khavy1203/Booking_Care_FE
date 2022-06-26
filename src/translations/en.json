@@ -74,6 +74,18 @@
             "no-schedule": "The doctor does not have an appointment during this time, please choose another time!",
             "choose": "Choose",
             "book-free": " and book (free)"
+        },
+        "booking-modal":{
+            "title": "Information to book a medical appointment",
+            "name":"Full name",
+            "phone": "Phone number",
+            "email": "Email",
+            "address": "Adress",
+            "gender": "Gender",
+            "confirm": "Confirm",
+            "cancel": "Cancel",
+            "priceBooking": "Free booking",
+            "price":"Price:"
         }
     },
     "admin": {

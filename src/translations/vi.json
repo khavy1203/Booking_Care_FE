@@ -73,6 +73,18 @@
             "no-schedule": "Bác sĩ không có lịch hẹn trong thời gian này, vui lòng chọn thời gian khác!",
             "choose": "Chọn",
             "book-free": " và đặt (miễn phí)"
+        },
+        "booking-modal":{
+            "title": "Thông tin đặt lịch khám bệnh",
+            "name":"Họ và tên",
+            "phone": "Số điện thoại",
+            "email": "Email",
+            "address": "Điện chỉ liên hệ",
+            "gender": "Giới tính",
+            "confirm": "Xác nhận",
+            "cancel": "Hủy",
+            "priceBooking": "Miễn phí đặt lịch",
+            "price":"Giá khám:"
         }
     },
     "admin": {

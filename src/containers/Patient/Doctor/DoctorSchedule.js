@@ -13,10 +13,11 @@ class DoctorSchedule extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      allDays: [],
-      allAvailableTime: [],
+      allDays: [], //mảng dc tạo chứa ngày tháng cho thanh select
+      //allAvailableTime: [],//lấy Schedule_Detail cho vào đây để hiển thị lên giao diện
       isOpenModalBooking: false,
-      dataScheduleTimeModal: {},
+      schedule: {}, //chứa respond của api
+      selectedSchedule: {}, //chứa doctorId, date và 1 Schedule_Detail mà bệnh nhân chọn để truyền props cho booking modal
     };
   }
 
@@ -65,18 +66,9 @@ class DoctorSchedule extends Component {
             .format("ddd - DD/MM");
         }
       }
-      // console.log(
-      //   moment(new Date())
-      //     .add(i, "days")
-      //     .startOf("day")
-      //     .format(dateFormat.SEND_TO_SERVER)
-      // );
-      object.value = moment(new Date())
-        .add(i, "days")
-        .startOf("day")
-        .format(dateFormat.SEND_TO_SERVER);
 
-      // object.value = moment(new Date()).add(i, "days").startOf("day").valueOf();
+      object.value =
+        "" + moment(new Date()).add(i, "days").startOf("day").valueOf();
       allDays.push(object);
     }
 
@@ -98,14 +90,16 @@ class DoctorSchedule extends Component {
     try {
       let res = await fetchSchedule(id, date);
       if (res && +res.EC === 0) {
-        console.log(res.DT.Schedule_Details);
+        // console.log(res.DT);
         this.setState({
-          allAvailableTime: res.DT.Schedule_Details,
+          schedule: res.DT,
+          //allAvailableTime: res.DT.Schedule_Details,
         });
       } else {
         console.log(res.EM);
         this.setState({
-          allAvailableTime: [],
+          schedule: {},
+          //allAvailableTime: [],
         });
       }
       // console.log("check state", this.state);
@@ -128,7 +122,11 @@ class DoctorSchedule extends Component {
     // console.log("time", time);
     this.setState({
       isOpenModalBooking: true,
-      dataScheduleTimeModal: time,
+      selectedSchedule: {
+        ...time,
+        doctorId: this.props.doctorIdFromParent,
+        date: this.state.schedule.date,
+      },
     });
   };
 
@@ -141,9 +139,10 @@ class DoctorSchedule extends Component {
   render() {
     let {
       allDays,
-      allAvailableTime,
+      schedule,
+      //allAvailableTime,
       isOpenModalBooking,
-      dataScheduleTimeModal,
+      selectedSchedule,
     } = this.state;
     let { language } = this.props;
     return (
@@ -175,11 +174,12 @@ class DoctorSchedule extends Component {
               </i>
             </div>
             <div className="time-content">
-              {/* Mở cmt khi gọi dc API */}
-              {allAvailableTime && allAvailableTime.length > 0 ? (
+              {schedule &&
+              schedule.Schedule_Details &&
+              schedule.Schedule_Details.length > 0 ? (
                 <>
                   <div className="time-content-btns">
-                    {allAvailableTime.map((item, index) => {
+                    {schedule.Schedule_Details.map((item, index) => {
                       let timeDisplay =
                         language === LANGUAGES.VI
                           ? item.Timeframe.nameVI
@@ -222,8 +222,9 @@ class DoctorSchedule extends Component {
         <BookingModal
           isOpenModal={isOpenModalBooking}
           closeBookingModal={this.closeBookingModal}
-          dataTime={dataScheduleTimeModal}
-          doctorIdFromDoctorSchedule={this.props.doctorIdFromParent}
+          selectedSchedule={selectedSchedule}
+          // dataTime={selectedSchedule}
+          // doctorIdFromDoctorSchedule={this.props.doctorIdFromParent}
         />
       </>
     );

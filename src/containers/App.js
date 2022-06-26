@@ -24,6 +24,7 @@ import Doctor from "../routes/Doctor";
 import DetailSpecialty from "./Patient/Specialty/DetailSpecialty";
 import DetailClinic from "./Patient/Clinic/DetailClinic";
 // import ManageGroupRole from "./System/GroupRole/ManageGroupRole";//thêm quản lý group role
+import DoctorContact from "./DoctorContact/DoctorContact";
 
 class App extends Component {
   handlePersistorState = () => {
@@ -75,6 +76,7 @@ class App extends Component {
                   <Route path={path.HOMEPAGE} component={HomePage} />
                   {/* <Route path={"users/:id"} component={DetailDoctor} /> */}
                   <Route path={path.DETAIL_DOCTOR} component={DetailDoctor} />
+                  <Route path={path.DOCTOR_CONTACT} component={DoctorContact} />
                   <Route
                     path={path.DETAIL_SPECIALTY}
                     component={DetailSpecialty}

@@ -99,9 +99,11 @@ class ManageSchedule extends Component {
     }
 
     //format ngày (kiểu object) sang string
-    let formatedDate = moment(currentDate).format(dateFormat.SEND_TO_SERVER);
+    //    let formatedDate = moment(currentDate).format(dateFormat.SEND_TO_SERVER);
 
-    // console.log("formatedDate", formatedDate, typeof formatedDate);
+    //kieu timestamp
+    let formatedDate = new Date(currentDate).getTime();
+
     if (times && times.length > 0) {
       //lọc các thời gian dc chọn
       let selectedTimeList = times.filter((item) => item.isSelected === true);
@@ -119,7 +121,7 @@ class ManageSchedule extends Component {
 
         // result.email = userInfo.account.email;
         // result.groupId = userInfo.account.groupWithRoles.id;
-        result.date = formatedDate;
+        result.date = "" + formatedDate;
 
         //timeDetail chứa thời gian và số lượng khám
         let timeDetail = [];

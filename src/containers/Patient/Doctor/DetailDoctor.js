@@ -13,6 +13,7 @@ class DetailDoctor extends Component {
     super(props);
     this.state = {
       detailDoctor: {},
+      clinicId: -1,
       currentDoctorId: -1,
     };
   }
@@ -28,7 +29,6 @@ class DetailDoctor extends Component {
         currentDoctorId: id,
       });
       this.loadInfoDoctor(id);
-      // this.loadSchedule(id);
     }
   }
 
@@ -36,7 +36,7 @@ class DetailDoctor extends Component {
     try {
       let res = await fetchInfoDoctor(id);
       if (res && +res.EC === 0) {
-        this.setState({ detailDoctor: res.DT });
+        this.setState({ detailDoctor: res.DT, clinicId: res.DT.clinicId });
         console.log("detailDoctor", this.state.detailDoctor);
       } else {
         console.log(res.EM);
@@ -49,7 +49,7 @@ class DetailDoctor extends Component {
   componentDidUpdate(prevProps, prevState, snapshot) {}
 
   render() {
-    let { detailDoctor } = this.state;
+    let { detailDoctor, clinicId } = this.state;
     let { language } = this.props;
     let nameVi = `Bác sĩ ${detailDoctor.username}`;
     let nameEn = `Doctor ${detailDoctor.username}`;
@@ -77,11 +77,19 @@ class DetailDoctor extends Component {
           </div>
           <div className="schedule-doctor">
             <div className="content-left">
-              <DoctorSchedule doctorIdFromParent={this.state.currentDoctorId} />
+              <DoctorSchedule
+                doctorIdFromParent={this.state.currentDoctorId}
+                doctorClinicId={clinicId}
+              />
             </div>
             <div className="content-right">
               <DoctorExtraInfo
                 doctorIdFromParent={this.state.currentDoctorId}
+                doctorClinicId={
+                  detailDoctor && detailDoctor.clinicId
+                    ? detailDoctor.clinicId
+                    : ""
+                }
               />
             </div>
           </div>

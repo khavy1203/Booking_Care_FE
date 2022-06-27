@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import "./DoctorSchedule.scss";
 import moment from "moment";
-import localization from "moment/locale/vi";
+// import localization from "moment/locale/vi";
 import { LANGUAGES } from "../../../utils";
 import { FormattedMessage } from "react-intl";
 import BookingModal from "./Modal/BookingModal";
@@ -90,15 +90,27 @@ class DoctorSchedule extends Component {
       let allDays = this.getArrDays(this.props.language);
       this.setState({ allDays: allDays });
     }
-    if (this.props.doctorIdFromParent !== prevProps.doctorIdFromParent) {
+    // if (this.props.doctorIdFromParent !== prevProps.doctorIdFromParent) {
+    //   let allDays = this.getArrDays(this.props.language);
+    //   this.loadSchedule(
+    //     this.props.doctorIdFromParent,
+    //     allDays[0].value,
+    //     this.props.doctorClinicId
+    //   );
+    // }
+    if (this.props.doctorClinicId !== prevProps.doctorClinicId) {
       let allDays = this.getArrDays(this.props.language);
-      this.loadSchedule(this.props.doctorIdFromParent, allDays[0].value);
+      this.loadSchedule(
+        this.props.doctorIdFromParent,
+        allDays[0].value,
+        this.props.doctorClinicId
+      );
     }
   }
 
-  loadSchedule = async (id, date) => {
+  loadSchedule = async (id, date, clinicId) => {
     try {
-      let res = await fetchSchedule(id, date);
+      let res = await fetchSchedule(id, date, clinicId);
       if (res && +res.EC === 0) {
         // console.log(res.DT);
         this.setState({
@@ -124,7 +136,8 @@ class DoctorSchedule extends Component {
     if (this.props.doctorIdFromParent && this.props.doctorIdFromParent !== -1) {
       let doctorId = this.props.doctorIdFromParent;
       let date = event.target.value;
-      this.loadSchedule(doctorId, date);
+      let clinicId = this.props.doctorClinicId;
+      this.loadSchedule(doctorId, date, clinicId);
     }
   };
 

@@ -128,7 +128,7 @@ class BookingModal extends Component {
       // doctorIdFromDoctorSchedule,
     } = this.props;
     let { doctorId } = this.state;
-    console.log(this.state);
+    // console.log(this.state);
     return (
       <Modal
         isOpen={isOpenModal}

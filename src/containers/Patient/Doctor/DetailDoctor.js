@@ -37,6 +37,7 @@ class DetailDoctor extends Component {
       let res = await fetchInfoDoctor(id);
       if (res && +res.EC === 0) {
         this.setState({ detailDoctor: res.DT });
+        console.log("detailDoctor", this.state.detailDoctor);
       } else {
         console.log(res.EM);
       }

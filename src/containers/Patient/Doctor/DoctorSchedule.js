@@ -67,8 +67,18 @@ class DoctorSchedule extends Component {
         }
       }
 
+      //date timestamp kiểu string
+      // object.value =
+      //   "" + moment(new Date()).add(i, "days").startOf("day").valueOf();
+
+      //date DD/MM/YYYY kiểu string
       object.value =
-        "" + moment(new Date()).add(i, "days").startOf("day").valueOf();
+        "" +
+        moment(new Date())
+          .add(i, "days")
+          .startOf("day")
+          .format(dateFormat.SEND_TO_SERVER);
+
       allDays.push(object);
     }
 

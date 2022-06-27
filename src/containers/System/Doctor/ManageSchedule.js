@@ -99,10 +99,10 @@ class ManageSchedule extends Component {
     }
 
     //format ngày (kiểu object) sang string
-    //    let formatedDate = moment(currentDate).format(dateFormat.SEND_TO_SERVER);
+    let formatedDate = moment(currentDate).format(dateFormat.SEND_TO_SERVER);
 
     //kieu timestamp
-    let formatedDate = new Date(currentDate).getTime();
+    // let formatedDate = new Date(currentDate).getTime();
 
     if (times && times.length > 0) {
       //lọc các thời gian dc chọn
@@ -175,6 +175,12 @@ class ManageSchedule extends Component {
     let yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
     let { language } = this.props;
     let { times, maxNumber } = this.state;
+    // let date = moment(new Date()).format(dateFormat.SEND_TO_SERVER);
+    // console.log("date", date, typeof date);
+    // let dateEN = moment(date);
+    // let dateENString = moment(dateEN).format("YYYY/MM/DD");
+    // console.log("dateENString", dateENString, typeof dateENString);
+
     return (
       <div className="manage-schedule-container">
         <div className="m-s-title">

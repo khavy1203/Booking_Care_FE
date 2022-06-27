@@ -6,7 +6,7 @@ import { FormattedMessage } from "react-intl";
 import "./ProfileDoctor.scss";
 import { fetchInfoDoctorModal } from "../../../services/doctorService";
 import { _ } from "lodash";
-import { LANGUAGES } from "../../../utils";
+import { dateFormat, LANGUAGES } from "../../../utils";
 import { Link } from "react-router-dom";
 import moment from "moment";
 class ProfileDoctor extends Component {
@@ -59,14 +59,20 @@ class ProfileDoctor extends Component {
   renderTimeBooking = (schedule) => {
     // console.log("schedule", schedule);
     let { language } = this.props;
+    // let date =
+    //   language === LANGUAGES.VI
+    //     ? //chia cho 1000 vi chenh lech don vi. moment don vi la mili sec, con unix dung sec
+    //       moment.unix(+schedule.date / 1000).format("dddd - DD/MM/YYYY")
+    //     : moment
+    //         .unix(+schedule.date / 1000)
+    //         .locale("en")
+    //         .format("ddd - MM/DD/YYYY");
+    //convert chuỗi date sang kiểu DATE
+    let getDate = moment(schedule.date, dateFormat.SEND_TO_SERVER)._d;
     let date =
       language === LANGUAGES.VI
-        ? //chia cho 1000 vi chenh lech don vi. moment don vi la mili sec, con unix dung sec
-          moment.unix(+schedule.date / 1000).format("dddd - DD/MM/YYYY")
-        : moment
-            .unix(+schedule.date / 1000)
-            .locale("en")
-            .format("ddd - MM/DD/YYYY");
+        ? moment(getDate).format("dddd - DD/MM/YYYY")
+        : moment(getDate).locale("en").format("ddd - MM/DD/YYYY");
     if (schedule) {
       return (
         <>
@@ -95,7 +101,11 @@ class ProfileDoctor extends Component {
       isShowDescriptionDoctor,
       selectedSchedule,
     } = this.props;
-    // console.log("selectedSchedule", selectedSchedule);
+    console.log(
+      "selectedSchedule",
+      moment(selectedSchedule.date, dateFormat.SEND_TO_SERVER)._d
+    );
+
     let nameVi = "",
       nameEn = "";
     if (dataProfile && dataProfile.Group) {

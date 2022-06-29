@@ -12,11 +12,18 @@ import "./UserManage.scss";
 import { toast } from "react-toastify";
 import _ from "lodash";
 import { CommonUtils } from "../../utils";
+import { storage } from "../../firebase";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 class ModalUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      //Huyên
+      file: "", //để lấy file trong event
+      url: "", //sau khi upload file lên firebase, firebase trả về url. Biến này để chứa url
+      per: null, //tiến độ upload file lên firebase, per = 100 thì cho phép mở nút tạo/cập nhật user
+
       email: "",
       phone: "",
       username: "",
@@ -53,7 +60,7 @@ class ModalUser extends Component {
     this.setState({ validInput: this.state.validInputDefault });
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  async componentDidUpdate(prevProps, prevState) {
     if (
       prevProps.action !== this.props.action ||
       prevProps.dataModalUpdate !== this.props.dataModalUpdate
@@ -75,7 +82,75 @@ class ModalUser extends Component {
         this.setUserDataDefault();
       }
     }
+
+    //Huyên: nếu lấy dc file trong event (file trong state thay đổi)
+    //thì gọi hàm uploadFile
+    if (prevState.file !== this.state.file) {
+      if (this.state.file) {
+        await this.uploadFile();
+      }
+    }
+
+    //Huyên: nếu upload thành công và lấy dc url trả về (url trong state thay đổi)
+    //thì thêm trường image kèm giá trị url trong state đã lấy dc
+    if (prevState.url !== this.state.url) {
+      await this.setState({
+        userData: { ...this.state.userData, image: this.state.url },
+      });
+
+      console.log(this.state.userData);
+    }
   }
+
+  //Huyên: hàm upload file lên firebase
+  //dùng async await
+  uploadFile = async () => {
+    let { file } = this.state;
+    const name = new Date().getTime() + file.name;
+    const storageRef = ref(storage, name);
+
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    // Register three observers:
+    // 1. 'state_changed' observer, called any time the state changes
+    // 2. Error observer, called on failure
+    // 3. Completion observer, called on successful completion
+    await uploadTask.on(
+      "state_changed",
+      async (snapshot) => {
+        console.log(snapshot);
+        // Observe state change events such as progress, pause, and resume
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+        await this.setState({ per: progress });
+        switch (snapshot.state) {
+          case "paused":
+            console.log("Upload is paused");
+            break;
+          case "running":
+            console.log("Upload is running");
+            break;
+          default:
+            break;
+        }
+      },
+      (error) => {
+        // Handle unsuccessful uploads
+      },
+      async () => {
+        // Handle successful uploads on complete
+        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+        await getDownloadURL(uploadTask.snapshot.ref).then(
+          async (downloadURL) => {
+            console.log("File available at", downloadURL);
+            await this.setState({ url: downloadURL });
+          }
+        );
+      }
+    );
+  };
 
   setUserDataDefault = () => {
     this.setState({
@@ -164,19 +239,30 @@ class ModalUser extends Component {
   };
 
   //Huyên: hàm chuyển file ảnh sang chuỗi base64
+  // handleOnchangImage = async (event) => {
+  //   let data = event.target.files; //list các file
+  //   let file = data[0];
+  //   if (file) {
+  //     let base64 = await CommonUtils.getBase64(file);
+
+  //     this.setState({
+  //       userData: { ...this.state.userData, image: base64 },
+  //     });
+  //     console.log(this.state);
+  //   }
+  //   console.log(this.state.userData);
+  // };
+
+  //Huyên: lấy file từ event và setState cho file
+  //nếu ko có async await thì hàm setState nó lấy giá trị khởi tạo/trước đó để setState
+  //thay vì lấy giá trị trong event để setState
+  //Nếu ko setState cho file thì hàm componentDidUpdate ở trên ko chạy dc
   handleOnchangImage = async (event) => {
     let data = event.target.files; //list các file
-    let file = data[0];
-
-    if (file) {
-      let base64 = await CommonUtils.getBase64(file);
-
-      this.setState({
-        userData: { ...this.state.userData, image: base64 },
-      });
-      console.log(this.state);
+    let getFile = data[0];
+    if (getFile) {
+      await this.setState({ file: getFile });
     }
-    console.log(this.state.userData);
   };
 
   render() {
@@ -347,7 +433,13 @@ class ModalUser extends Component {
           <Button variant="secondary" onClick={this.props.handleModalUserClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={() => this.handleConfirmUser()}>
+          <Button
+            className="btn-confirm"
+            variant="primary"
+            onClick={() => this.handleConfirmUser()}
+            //Huyên: trong thời gian upload ko cho phép nhấn nút này, đủ per = 100 thì cho phép
+            disabled={this.state.per !== null && this.state.per < 100}
+          >
             {action === "CREATE" ? "Create" : "Update"}
           </Button>
         </Modal.Footer>

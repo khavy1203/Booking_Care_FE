@@ -57,14 +57,14 @@ class OutstandingDoctor extends Component {
               {arrDoctors &&
                 arrDoctors.length > 0 &&
                 arrDoctors.map((item, index) => {
-                  let imageBase64 = "";
+                  // let imageBase64 = "";
                   //ảnh lưu xuống DB đã encode sang base64
                   //nên phải decode để có ảnh
-                  if (item.image) {
-                    imageBase64 = new Buffer(item.image, "base64").toString(
-                      "binary"
-                    );
-                  }
+                  // if (item.image) {
+                  //   imageBase64 = new Buffer(item.image, "base64").toString(
+                  //     "binary"
+                  //   );
+                  // }
                   let nameVi = `Bác sĩ ${item.username}`;
                   let nameEn = `Doctor ${item.username}`;
                   return (
@@ -79,7 +79,7 @@ class OutstandingDoctor extends Component {
                         <div className="outer-bg">
                           <div
                             className="bg-image section-outstanding-doctor"
-                            style={{ backgroundImage: `url(${imageBase64})` }}
+                            style={{ backgroundImage: `url(${item.image})` }}
                           ></div>
                         </div>
                         <div className="position text-center">

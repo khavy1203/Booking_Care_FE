@@ -91,4 +91,11 @@
       color: red;
     }
   }
+  //huyên, khi upload ảnh thì trong lúc đợi phải cho not allow
+  .btn-confirm {
+    &:disabled {
+      opacity: 0.5 !important;
+      cursor: not-allowed !important;
+    }
+  }
 }

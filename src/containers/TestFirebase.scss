@@ -1,0 +1,14 @@
+.img {
+  border: 1px solid red;
+  width: 500px;
+  height: 500px;
+  background-image: url("https://firebasestorage.googleapis.com/v0/b/datn-b2c94.appspot.com/o/1656404402748ds.jpg?alt=media&token=76946b54-e5b0-4118-b76b-2a4a7899d86f");
+}
+.submit {
+  color: white;
+  background-color: rgb(64, 64, 66);
+  &:disabled {
+    background-color: rgb(237, 232, 232);
+    cursor: not-allowed;
+  }
+}

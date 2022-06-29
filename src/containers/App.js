@@ -25,6 +25,7 @@ import DetailSpecialty from "./Patient/Specialty/DetailSpecialty";
 import DetailClinic from "./Patient/Clinic/DetailClinic";
 // import ManageGroupRole from "./System/GroupRole/ManageGroupRole";//thêm quản lý group role
 import DoctorContact from "./DoctorContact/DoctorContact";
+import TestFirebase from "./TestFirebase";
 
 class App extends Component {
   handlePersistorState = () => {
@@ -82,6 +83,8 @@ class App extends Component {
                     component={DetailSpecialty}
                   />
                   <Route path={path.DETAIL_CLINIC} component={DetailClinic} />
+
+                  <Route path={"/test/"} component={TestFirebase} />
                 </Switch>
               </CustomScrollbars>
             </div>

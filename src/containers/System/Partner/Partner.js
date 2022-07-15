@@ -10,6 +10,8 @@ import { getUserAccount, logoutUser } from "../../../services/userService";
 
 import { push } from "connected-react-router";
 import * as actions from "../../../store/actions";
+import ModalDeleteDoctorOfPartner from "./ModalDeleteDoctorOfParner";
+import ModalUpdateDoctorOfPartner from "./ModalUpdateDoctorOfPartner";
 
 class Partner extends Component {
     constructor(props) {
@@ -29,7 +31,12 @@ class Partner extends Component {
             listChilds: {},
             lstSpecialties: {},
             //quản lý bác sĩ
-            lstDoctorOfClinic: []
+            lstDoctorOfClinic: [],
+
+            dataModalDelete: {},
+            dataModalUpdate: {},
+            isShowModalDelete: false,
+            isShowModalUpdate: false
 
         }
     }
@@ -179,6 +186,7 @@ class Partner extends Component {
                 let res = await createUserDoctorsofClinic(data);
                 if (res && res.EC === 0) {
                     toast.success(res.EM)//hiện thông báo thêm role thành công
+                    this.fetchDoctorOfClinic(this.state.userDataCreate.Clinic.id);
                 } else if (res && res.EC === 1) {
                     let strEmail = res.DT.join(', ')
                     toast.error(`${res.EM} : ${strEmail}`)
@@ -187,6 +195,24 @@ class Partner extends Component {
             }
         }
 
+    }
+    handleDeleteDoctor = (item) => {
+        this.setState({ isShowModalDelete: true, dataModalDelete: item });
+
+    }
+    handleModalUpdateDoctor = (item) => {
+        this.setState({ isShowModalUpdate: true, dataModalUpdate: item });
+
+    }
+    handleModalDeleteDoctorOfClinicClose = () => {
+        this.setState({ dataModalDelete: {} });
+        this.setState({ isShowModalDelete: false });
+        this.fetchDoctorOfClinic(this.state.userDataCreate.Clinic.id);
+    }
+    handleModalUpdateDoctorOfClinicClose = () => {
+        this.setState({ dataModalUpdate: {} });
+        this.setState({ isShowModalUpdate: false });
+        this.fetchDoctorOfClinic(this.state.userDataCreate.Clinic.id);
     }
     render() {
         console.log("check lst user", this.state.lstDoctorOfClinic)
@@ -296,12 +322,12 @@ class Partner extends Component {
                                                                     child['Users.Specialty.nameVI']
                                                                 }
                                                             </td>
-                                                            <td>Đang hoạt động</td>
+                                                            <td>{child['Users.Doctorinfo.active'] === 1 ? "Đang hoạt động" : "Tạm dừng"}</td>
 
                                                             <td>
                                                                 <button
                                                                     className="btn btn-warning m-2"
-                                                                // onClick={() => this.handleModalUpdateSpecialty(item)}
+                                                                    onClick={() => this.handleModalUpdateDoctor(child)}
                                                                 >
                                                                     <i
                                                                         className="fa fa-pencil"
@@ -310,7 +336,7 @@ class Partner extends Component {
                                                                 </button>
                                                                 <button
                                                                     className="btn btn-danger"
-                                                                // onClick={() => this.handleDeleteSpecialty(item)}
+                                                                    onClick={() => this.handleDeleteDoctor(child)}
                                                                 >
                                                                     <i className="fa fa-trash"></i>
                                                                 </button>
@@ -352,6 +378,17 @@ class Partner extends Component {
                                         renderOnZeroPageCount={null}
                                     />
                                 )} */}
+                                <ModalDeleteDoctorOfPartner
+                                    show={this.state.isShowModalDelete}
+                                    handleClose={this.handleModalDeleteDoctorOfClinicClose}
+                                    dataModal={this.state.dataModalDelete}
+                                />
+                                <ModalUpdateDoctorOfPartner
+                                    show={this.state.isShowModalUpdate}
+                                    handleClose={this.handleModalUpdateDoctorOfClinicClose}
+                                    dataModal={this.state.dataModalUpdate}
+                                    lstSpecial={this.state.lstSpecialties}
+                                />
                             </div>
                         </div>
                     </div>

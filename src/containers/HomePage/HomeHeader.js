@@ -13,8 +13,10 @@ import { FormattedMessage } from "react-intl";
 import { LANGUAGES } from "../../utils";
 import { changeLanguageApp } from "../../store/actions/appActions";
 import { withRouter } from "react-router";
-import { logoutUser } from "../../services/userService";
+import { logoutUser, getUserAccount } from "../../services/userService";
 import { toast } from "react-toastify";
+import { RiUser3Fill } from "react-icons/ri";
+
 import * as actions from "../../store/actions";
 class HomeHeader extends Component {
   changeLanguage = (language) => {
@@ -22,6 +24,9 @@ class HomeHeader extends Component {
     //fire redux action(event)
     this.props.changeLanguageAppRedux(language);
   };
+  componentDidMount() {
+  }
+
   processLogoutHomeHeader = async () => {
     let data = await logoutUser();
 
@@ -55,8 +60,7 @@ class HomeHeader extends Component {
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item href="/register-clinic">Đăng ký phòng khám</Dropdown.Item>
-                  {/* <Dropdown.Item href="/register-doctor">Đăng ký bác sĩ</Dropdown.Item> */}
-                  {/* <Dropdown.Item href="#/action-3">Something else</Dropdown.Item> */}
+
                 </Dropdown.Menu>
               </Dropdown>
 
@@ -159,13 +163,21 @@ class HomeHeader extends Component {
               </div>
               {
                 this.props.isLoggedIn ?
-                  <div
-                    className="btn btn-logout mt-2"
-                    onClick={() => this.processLogoutHomeHeader()}
-                    title="Log out"
-                  >
-                    <i className="fas fa-sign-out-alt"></i>
-                  </div>
+                  <>
+
+                    <div id="account" className="btn btn-logout mt-2">
+                      <Link to="/user-profile">
+                        <RiUser3Fill style={{ fontSize: '20px' }} />
+                      </Link>
+                    </div>
+                    <div
+                      className="btn btn-logout mt-3"
+                      onClick={() => this.processLogoutHomeHeader()}
+                      title="Log out"
+                    >
+                      <i className="fas fa-sign-out-alt"></i>
+                    </div>
+                  </>
                   :
                   <a href="/login">Login</a>
               }
@@ -249,6 +261,7 @@ const mapStateToProps = (state) => {
   return {
     isLoggedIn: state.user.isLoggedIn,
     language: state.app.language,
+
   };
 };
 
@@ -262,6 +275,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     processLogout: () => dispatch(actions.processLogout()),
     navigate: (path) => dispatch(push(path)),
+    userloginSuccess: (userInfo) =>
+      dispatch(actions.userloginSuccess(userInfo)),
+    userlogOut: () => dispatch(actions.userlogOut()),
   };
 };
 

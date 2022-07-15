@@ -9,10 +9,9 @@ import _ from 'lodash';
 import { storage } from "../../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { registerClinic } from "../../services/partnerService";
-import { getUserAccount, logoutUser } from "../../services/userService";
-
 import { push } from "connected-react-router";
 import * as actions from "../../store/actions";
+import { Redirect } from 'react-router'
 class ClinicContact extends Component {
     constructor(props) {
         super(props);
@@ -51,10 +50,10 @@ class ClinicContact extends Component {
         };
     }
 
+
     componentDidMount() {
-        this.setState({ clinicData: this.state.dataDefault })
-        this.fetchCookigetUserAccount();
-        this.setState({ validInput: this.state.validInputDefault })
+        this.setState({ clinicData: this.state.dataDefault });
+        this.setState({ validInput: this.state.validInputDefault });
         fetch('https://provinces.open-api.vn/api/', {
             method: 'GET', // or 'PUT'
         })
@@ -70,33 +69,11 @@ class ClinicContact extends Component {
             });
     }
 
-    fetchCookigetUserAccount = async () => {
-        let res = await getUserAccount();
-        if (res && +res.EC === 0 && res.DT) {
-            console.log("check res.DT", res.DT.decode.email)
-            this.setState({
-                clinicData: {
-                    ...this.state.clinicData,
-                    emailUserOfClinicRegister: res.DT.decode.email
-                }
-            })
-
-            this.props.userloginSuccess(res.DT.token);
-        } else {
-            this.props.userlogOut();
-            let reslogout = await logoutUser();//nếu ko có thì tiết hành clear cookie cũ đi( nếu tồn tại)
-            if (reslogout && +res.EC === 0) {
-                const { navigate } = this.props;
-                const redirectPath = "/login";
-                navigate(`${redirectPath}`);
-            }
-
-        }
-
-    }
-
     async componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.language === prevProps.language) {
+        }
+        if (prevProps.isLoggedIn !== this.props.isLoggedIn) {
+            console.log("check login trước và sau >>>", prevProps.isLoggedIn, this.props.isLoggedIn)
         }
         if (prevState.selectedProvince !== this.state.selectedProvince) {
             //xử lý cập nhật lại dữ liệu, fetch lại data cho huyện
@@ -145,6 +122,7 @@ class ClinicContact extends Component {
             }
         }
     }
+
     uploadFile = async () => {
         let { file } = this.state;
         const name = new Date().getTime() + file.name;
@@ -263,9 +241,13 @@ class ClinicContact extends Component {
         this.setState({ clinicData: _clinicData });
     };
     registerClinic = async () => {
+        if (!this.props.isLoggedIn) {
+            toast.warn("Bạn phải đăng nhập")
+            const { navigate } = this.props;
+            const redirectPath = "/login";
+            navigate(`${redirectPath}`);
+        }
         let check = this.checkValidateInput();
-
-
         if (check) {
             let _clinicData = _.cloneDeep(this.state.clinicData);
             _clinicData['province'] = this.state.selectedProvince;
@@ -294,6 +276,10 @@ class ClinicContact extends Component {
 
     }
     render() {
+        let checklogin = this.props.isLoggedIn;
+        console.log("checklogin nè >>>>", checklogin)
+        // if (!checklogin) return <Redirect to='/login' />;
+        // else {
         let { per, url } = this.state;
         return (
             <>
@@ -451,6 +437,8 @@ class ClinicContact extends Component {
                 </div>
             </>
         );
+        // }
+
     }
 }
 
@@ -458,7 +446,6 @@ const mapStateToProps = (state) => {
     return {
         isLoggedIn: state.user.isLoggedIn,
         language: state.app.language,
-
     };
 };
 

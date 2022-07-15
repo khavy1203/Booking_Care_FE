@@ -41,6 +41,7 @@ class ManageClinic extends Component {
   componentDidMount() {
     this.fetchClinics();
   }
+
   fetchClinics = async () => {
     let res = await fetchAllClinics(
       this.state.currentPage,
@@ -97,6 +98,7 @@ class ManageClinic extends Component {
   }
 
   render() {
+    console.log("check isloggin in manageClinicU ", this.props.isLoggedIn)
 
     return (
       <>
@@ -212,6 +214,7 @@ class ManageClinic extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    isLoggedIn: state.user.isLoggedIn,
     language: state.app.language,
   };
 };

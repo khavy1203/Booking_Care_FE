@@ -18,7 +18,7 @@ class ModalUpdateUser extends Component {
         this.state = {
             lstGroup: [],
             lstClinic: [],
-            lstSpecial: [],
+            lstSpecialties: [],
             userData: {},
             userDataDefault: {
                 id: "",
@@ -63,7 +63,7 @@ class ModalUpdateUser extends Component {
         let res = await fetchAllSpecialtysNoPage();
         if (res && +res.EC === 0) {
             this.setState({
-                lstSpecial: res.DT,
+                lstSpecialties: res.DT,
             })
         }
     }
@@ -199,7 +199,7 @@ class ModalUpdateUser extends Component {
                                             >
 
                                                 <option value="">Chọn chuyên khoa</option>
-                                                {this.state.lstSpecial.length > 0 && this.state.lstSpecial.map((item, index) => {
+                                                {this.state.lstSpecialties.length > 0 && this.state.lstSpecialties.map((item, index) => {
                                                     return (
                                                         <option
                                                             key={`special-${index}`}

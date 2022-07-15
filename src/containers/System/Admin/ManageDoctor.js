@@ -168,34 +168,6 @@ class ManageDoctor extends Component {
             </div>
           </div>
         </div>
-
-        {/* video 92 */}
-        {/* <div className="row">
-          <div className="col-4 form-group">
-            <label>
-              <FormattedMessage id={"admin.manage-doctor.specialty"} />
-            </label>
-            <Select
-              value={this.state.selectedOption}
-              onChange={this.handleChangeSelect}
-              options={options}
-              placeholder={"Chọn chuyên khoa"}
-            />
-          </div>
-          <div className="col-4 form-group">
-            <label>
-              <FormattedMessage id={"admin.manage-doctor.select-clinic"} />
-            </label>
-            <Select
-              value={this.state.selectedOption}
-              onChange={this.handleChangeSelect}
-              options={options}
-              placeholder={"Chọn phòng khám"}
-            />
-          </div>
-        </div> */}
-        {/* video 92 */}
-
         <div className="info-bottom">
           <div className="manage-doctor-editor-vi form-group">
             <label>Mô tả bác sĩ (VI)</label>
@@ -214,7 +186,6 @@ class ManageDoctor extends Component {
             />
           </div>
         </div>
-
         <button
           onClick={() => {
             this.handleSaveContentmarkdown();

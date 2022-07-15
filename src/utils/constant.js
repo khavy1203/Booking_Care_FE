@@ -15,6 +15,9 @@ export const path = {
   PROCEDURE_CLINIC_CONTACT: "/about-register-clinic",
 
   GROUP_ROLE: "/manage-group-role",
+  USER_PROFILE: "/user-profile",
+  FORGOT_PASSWORD: '/forgot-password',
+  NEW_PASSWORD: '/reset-password',
 };
 
 export const LANGUAGES = {

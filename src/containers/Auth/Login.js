@@ -66,17 +66,9 @@ class Login extends Component {
       this.state.password
     );
     if (response && +response.EC === 0) {
-      //success
-      let groupWithRoles = response.DT.groupWithRoles;
-      let email = response.DT.email;
-      let username = response.DT.username;
-      let token = response.DT.access_token;
-      let data = {
-        isAuthenticated: true,
-        token,
-        account: { groupWithRoles, email, username },
-      };
-      this.props.userloginSuccess(data);
+      const { navigate } = this.props;
+      const redirectPath = "/home";
+      navigate(`${redirectPath}`);
     }
     if (response && +response.EC !== 0) {
       //fail
@@ -87,6 +79,11 @@ class Login extends Component {
   handleTogglePassword = () => {
     this.setState({ isShowPassword: !this.state.isShowPassword });
   };
+  forgotPassword = () => {
+    const { navigate } = this.props;
+    const redirectPath = "/forgot-password";
+    navigate(`${redirectPath}`);
+  }
   render() {
     return (
       <div className="login-backround">
@@ -146,7 +143,7 @@ class Login extends Component {
               </button>
             </div>
             <div className="col-12">
-              <span className="forgot-password">Forgot your password?</span>
+              <span className="forgot-password" onClick={() => this.forgotPassword()}>Forgot your password?</span>
             </div>
             <div className="col-12 text-center  mt-3">
               <span className="text-other-login">Or Login with:</span>

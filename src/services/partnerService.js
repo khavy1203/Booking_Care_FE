@@ -23,11 +23,20 @@ const getDoctorsOfClinic = async (id) => {
     // return await axios.get(`/api/v1/clinic/getStatusClinic?id=${id}`);
     return await axios.get(`/api/v1/partner/getDoctorsOfClinic?id=${id}`);
 };
+
+const deleteDoctorOfClinic = async (doctorClinicData) => {
+    return await axios.post("/api/v1/partner/deleteDoctorOfClinic", { ...doctorClinicData });
+};
+
+const updateDoctorOfClinic = async (doctorClinicData) => {
+    return await axios.post("/api/v1/partner/updateDoctorOfClinic", { ...doctorClinicData });
+};
 export {
     registerClinic,
     createUserDoctorsofClinic,
     getStatusOfClinic,
     fetchAllSpecialtysOfPartner,
-    getDoctorsOfClinic
-
+    getDoctorsOfClinic,
+    deleteDoctorOfClinic,
+    updateDoctorOfClinic
 };

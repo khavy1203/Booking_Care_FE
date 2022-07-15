@@ -44,6 +44,23 @@ const logoutUser = async () => {
   return await axios.post("/api/v1/logout");
 };
 
+const updateInforUser = async (userData) => {
+  return await axios.put("/api/v1/user/updateInforUser", {
+    ...userData,
+  });
+};
+
+const forgotPasswordUser = async (userData) => {
+  return await axios.post("/api/v1/user/forgotPasswordUser", {
+    ...userData,
+  });
+};
+
+const newResetPassword = async (id, hashEmail, dataNewPassword) => {
+  return await axios.post('/api/v1/reset-password', {
+    id, hashEmail, dataNewPassword
+  });
+};
 export {
   handleLoginApi,
   fetchAllUser,
@@ -53,5 +70,8 @@ export {
   handleRegisterUser,
   fetchGroup,
   logoutUser,
-  getUserAccount
+  getUserAccount,
+  updateInforUser,
+  forgotPasswordUser,
+  newResetPassword
 };

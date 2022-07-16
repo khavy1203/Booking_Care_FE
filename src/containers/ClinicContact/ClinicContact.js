@@ -11,7 +11,8 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { registerClinic } from "../../services/partnerService";
 import { push } from "connected-react-router";
 import * as actions from "../../store/actions";
-import { Redirect } from 'react-router'
+import { Redirect } from 'react-router';
+import { getUserAccount, logoutUser } from "../../services/userService";
 class ClinicContact extends Component {
     constructor(props) {
         super(props);
@@ -52,6 +53,8 @@ class ClinicContact extends Component {
 
 
     componentDidMount() {
+        this.fetchCookigetUserAccount();
+
         this.setState({ clinicData: this.state.dataDefault });
         this.setState({ validInput: this.state.validInputDefault });
         fetch('https://provinces.open-api.vn/api/', {
@@ -69,6 +72,23 @@ class ClinicContact extends Component {
             });
     }
 
+    fetchCookigetUserAccount = async () => {
+        let res = await getUserAccount();
+        if (res && +res.EC === 0 && res.DT.decode.email) {
+            let _clinicData = _.cloneDeep(this.state.clinicData);
+            _clinicData['emailUserOfClinicRegister'] = res.DT.decode.email;
+            this.setState({ clinicData: _clinicData });
+        } else {
+            this.props.userlogOut();
+            await logoutUser();//nếu ko có thì tiết hành clear cookie cũ đi( nếu tồn tại)
+
+            const { navigate } = this.props;
+            const redirectPath = "/login";
+            navigate(`${redirectPath}`);//u ko có thì tiết hành clear cookie cũ đi(nếu tồn tại)
+
+        }
+
+    }
     async componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.language === prevProps.language) {
         }
@@ -241,12 +261,6 @@ class ClinicContact extends Component {
         this.setState({ clinicData: _clinicData });
     };
     registerClinic = async () => {
-        if (!this.props.isLoggedIn) {
-            toast.warn("Bạn phải đăng nhập")
-            const { navigate } = this.props;
-            const redirectPath = "/login";
-            navigate(`${redirectPath}`);
-        }
         let check = this.checkValidateInput();
         if (check) {
             let _clinicData = _.cloneDeep(this.state.clinicData);
@@ -268,9 +282,13 @@ class ClinicContact extends Component {
                     url: "",
                     clinicData: this.state.dataDefault,
                 })
+                const { navigate } = this.props;
+                const redirectPath = "/home";
+                navigate(`${redirectPath}`);
                 toast.success(res.EM)
+
             } else {
-                toast.error(res.EM)
+                toast.warn(res.EM)
             }
         }
 

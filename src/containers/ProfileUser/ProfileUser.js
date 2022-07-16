@@ -237,6 +237,14 @@ class ProfileUser extends Component {
                 this.setState({
                     data: this.state.dataDefault
                 })
+                // sau khi cập nhật xong thì phải cập nhật lại cookie
+                this.props.userlogOut();
+                await logoutUser();//nếu ko có thì tiết hành clear cookie cũ đi( nếu tồn tại)
+
+                const { navigate } = this.props;
+                const redirectPath = "/login";
+                navigate(`${redirectPath}`);
+
             } else {
                 toast.error(res.EM);
             }

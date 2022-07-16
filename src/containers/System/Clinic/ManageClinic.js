@@ -134,7 +134,9 @@ class ManageClinic extends Component {
                           <td >
 
                             <div className={
-                              item.status === 0 && "pending-status" || item.status === 1 && "active-status" || item.status === 2 && "pause-status"
+                              item.status === 0 && "pending-status" || item.status === 1
+                              && "active-status" || item.status === 2
+                              && "pause-status"
                             }>
                               {
                                 item.status === 0 && "pending" || item.status === 1 && "active" || item.status === 2 && "pause"

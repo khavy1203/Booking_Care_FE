@@ -18,6 +18,7 @@ export const path = {
   USER_PROFILE: "/user-profile",
   FORGOT_PASSWORD: '/forgot-password',
   NEW_PASSWORD: '/reset-password',
+  LIST_CLINIC_PAGE: '/clinic-page'
 };
 
 export const LANGUAGES = {

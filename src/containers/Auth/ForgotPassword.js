@@ -72,7 +72,7 @@ class ForgotPassword extends Component {
         return (
             <div className="login-backround ">
                 <div className="container">`
-                    <div className="row d-flex justify-content`-center">
+                    <div className="row d-flex justify-content-center">
                         <div className="col-md-4 col-md-offset-4">
                             <div className="panel panel-default">
                                 <div className="panel-body">

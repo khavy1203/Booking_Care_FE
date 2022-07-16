@@ -59,5 +59,11 @@ body {
     box-shadow: none!important;
 }
 
+.rounded-circle {
+    border-radius: 50%!important;
+    width: 150px;
+    height: 150px;
+}
+
 
 /* file */

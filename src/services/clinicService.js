@@ -23,6 +23,7 @@ const deleteClinic = async (clinic) => {
 };
 
 export {
+
     fetchAllClinics,
     createNewClinic,
     updateCurrentClinic,

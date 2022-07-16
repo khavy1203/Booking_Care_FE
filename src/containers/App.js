@@ -32,6 +32,7 @@ import NewPassword from "./Auth/NewPassword";
 import { logoutUser, getUserAccount } from "../services/userService";
 import { push } from "connected-react-router";
 import * as actions from "../store/actions";
+import ListClinicPage from "./ListClinicPage/ListClinicPage"
 class App extends Component {
 
   constructor(props) {
@@ -112,6 +113,8 @@ class App extends Component {
                   <Route path={path.DETAIL_CLINIC} component={DetailClinic} />
                   <Route path={path.FORGOT_PASSWORD} component={ForgotPassword} />
                   <Route path={path.NEW_PASSWORD} component={NewPassword} />
+                  <Route path={path.LIST_CLINIC_PAGE} component={ListClinicPage} />
+
                 </Switch>
               </CustomScrollbars>
             </div>

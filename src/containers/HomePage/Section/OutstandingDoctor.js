@@ -61,9 +61,8 @@ class OutstandingDoctor extends Component {
                   //ảnh lưu xuống DB đã encode sang base64
                   //nên phải decode để có ảnh
                   if (item.image) {
-                    imageBase64 = new Buffer(item.image, "base64").toString(
-                      "binary"
-                    );
+                    imageBase64 = item.image;
+
                   }
                   let nameVi = `Bác sĩ ${item.username}`;
                   let nameEn = `Doctor ${item.username}`;

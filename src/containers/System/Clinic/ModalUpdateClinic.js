@@ -484,7 +484,9 @@ class ModalUpdateClinic extends Component {
                                     }
                                     value={this.state.clinicData.status}
                                 >
-                                    <option value="0">Đợi duyệt</option>
+                                    {
+                                        this.state.clinicData.status === 0 && <option value="0">Đợi duyệt</option>
+                                    }
                                     <option value="1">Hoạt động</option>
                                     <option value="2">Tạm dừng</option>
                                 </select>

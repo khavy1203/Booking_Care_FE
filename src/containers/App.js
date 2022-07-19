@@ -32,7 +32,9 @@ import NewPassword from "./Auth/NewPassword";
 import { logoutUser, getUserAccount } from "../services/userService";
 import { push } from "connected-react-router";
 import * as actions from "../store/actions";
-import ListClinicPage from "./ListClinicPage/ListClinicPage"
+import ListClinicPage from "./ListClinicPage/ListClinicPage";
+import ListDoctorPage from "./ListDoctorPage/ListDoctorPage";
+import ListDoctorAll from "./ListDoctorPage/ListDoctorAll";
 class App extends Component {
 
   constructor(props) {
@@ -114,6 +116,8 @@ class App extends Component {
                   <Route path={path.FORGOT_PASSWORD} component={ForgotPassword} />
                   <Route path={path.NEW_PASSWORD} component={NewPassword} />
                   <Route path={path.LIST_CLINIC_PAGE} component={ListClinicPage} />
+                  <Route path={path.LISTDOCTOR_CLINIC} component={ListDoctorPage} />
+                  <Route path={path.ALL_DOCTOR} component={ListDoctorAll} />
 
                 </Switch>
               </CustomScrollbars>

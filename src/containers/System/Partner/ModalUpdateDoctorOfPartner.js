@@ -353,7 +353,7 @@ class ModalUpdateDoctorOfPartner extends Component {
                             <div className="info-price">
                                 <div className="doctor-price row form-group">
                                     <div className="col-3">
-                                        <label>Giá khám</label>
+                                        <label>Giá khám (VND)</label>
                                         <input
                                             className="form-control"
                                             type="text"
@@ -362,6 +362,38 @@ class ModalUpdateDoctorOfPartner extends Component {
                                                 this.handleOnchangeInput(event.target.value, "price");
                                             }}
                                         />
+
+                                    </div>
+                                    <div className="col-3">
+                                        <label>Chức vụ(VI)</label>
+                                        <select
+                                            className="form-select "
+                                            onChange={(event) => {
+                                                this.handleOnchangeInput(event.target.value, "degree_VI");
+                                            }}
+                                            value={this.state.doctorData.degree_VI}
+                                        >
+                                            <option value="Thạc sĩ">Thạc sĩ</option>
+                                            <option value="Tiến sĩ">Tiến sĩ</option>
+                                            <option value="Thầy thuốc ưu tú">Thầy thuốc ưu tú</option>
+                                            <option value="Thầy thuốc nhân dân">Thầy thuốc nhân dân</option>
+                                        </select>
+                                    </div>
+
+                                    <div className="col-3">
+                                        <label>Chức vụ(EN)</label>
+                                        <select
+                                            className="form-select "
+                                            onChange={(event) => {
+                                                this.handleOnchangeInput(event.target.value, "degree_EN");
+                                            }}
+                                            value={this.state.doctorData.degree_EN}
+                                        >
+                                            <option value="Thạc sĩ">Thạc sĩ</option>
+                                            <option value="Tiến sĩ">Tiến sĩ</option>
+                                            <option value="Thầy thuốc ưu tú">Thầy thuốc ưu tú</option>
+                                            <option value="Thầy thuốc nhân dân">Thầy thuốc nhân dân</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div className="doctor-payment row form-group">
@@ -418,7 +450,8 @@ class ModalUpdateDoctorOfPartner extends Component {
                             <MdEditor
                                 style={{ height: "500px" }}
                                 renderHTML={(text) => mdParser.render(text)}
-                                onChange={this.handleEditorChange}
+                                onChange={this.handleEditorChangeVI}
+                                value={this.state.doctorData.descriptionMarkdown_VI}
                             />
                         </div>
                         <div className="manage-doctor-editor-en form-group">
@@ -426,7 +459,9 @@ class ModalUpdateDoctorOfPartner extends Component {
                             <MdEditor
                                 style={{ height: "500px" }}
                                 renderHTML={(text) => mdParser.render(text)}
-                                onChange={this.handleEditorChange}
+                                onChange={this.handleEditorChangeEN}
+                                value={this.state.doctorData.descriptionMarkdown_EN}
+
                             />
                         </div>
 

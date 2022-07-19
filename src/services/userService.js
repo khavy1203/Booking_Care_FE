@@ -37,6 +37,12 @@ const deleteUser = async (user) => {
   return await axios.delete("/api/v1/user/delete", { data: { id: user.id } });
 };
 
+//Update password
+const updatePassword = async (userData) => {
+  return await axios.put("/api/v1/user/updatepassword", {
+    ...userData,
+  });
+};
 const getUserAccount = async () => {
   return await axios.get("/api/v1/user/account");
 };
@@ -73,5 +79,6 @@ export {
   getUserAccount,
   updateInforUser,
   forgotPasswordUser,
-  newResetPassword
+  newResetPassword,
+  updatePassword
 };

@@ -12,7 +12,7 @@ import { push } from "connected-react-router";
 import * as actions from "../../../store/actions";
 import ModalDeleteDoctorOfPartner from "./ModalDeleteDoctorOfParner";
 import ModalUpdateDoctorOfPartner from "./ModalUpdateDoctorOfPartner";
-
+import ModalUpdateInforClinic from "./ModalUpdateInforClinic";
 class Partner extends Component {
     constructor(props) {
         super(props);
@@ -36,8 +36,9 @@ class Partner extends Component {
             dataModalDelete: {},
             dataModalUpdate: {},
             isShowModalDelete: false,
-            isShowModalUpdate: false
+            isShowModalUpdate: false,
 
+            isShowModalUpdateClinic: false,
         }
     }
     componentDidMount() {
@@ -156,6 +157,16 @@ class Partner extends Component {
 
         }
         return check;
+    }
+    handleModalClinicUpdateOpen = () => {
+        this.setState({
+            isShowModalUpdateClinic: true
+        })
+    }
+    handleModalClinicUpdateClose = () => {
+        this.setState({
+            isShowModalUpdateClinic: false
+        })
     }
     handleSave = async () => {
         let check = await this.checkActiveClinic(this.state.userDataCreate);
@@ -282,9 +293,15 @@ class Partner extends Component {
 
                         </div>
                     </div>
-                    <div>
-                        <button className='btn btn-warning mt-3' onClick={() => this.handleSave()}> Save </button>
+                    <div className="col-12 d-flex justify-content-between">
+                        <div>
+                            <button className='btn btn-success mt-3' onClick={() => this.handleSave()}> Save </button>
+                        </div>
+                        <div>
+                            <button className='btn btn-warning mt-3' onClick={() => this.handleModalClinicUpdateOpen()}> Thêm thông tin hiển thị phòng khám </button>
+                        </div>
                     </div>
+
                     <hr />
                     <div className="mt-3 table-role">
                         <h4>Danh sách bác sĩ trong phòng khám của bạn: </h4>
@@ -388,6 +405,11 @@ class Partner extends Component {
                                     handleClose={this.handleModalUpdateDoctorOfClinicClose}
                                     dataModal={this.state.dataModalUpdate}
                                     lstSpecial={this.state.lstSpecialties}
+                                />
+                                <ModalUpdateInforClinic
+                                    show={this.state.isShowModalUpdateClinic}
+                                    handleClose={this.handleModalClinicUpdateClose}
+                                    dataModal={this.state.userDataCreate?.Clinic}
                                 />
                             </div>
                         </div>

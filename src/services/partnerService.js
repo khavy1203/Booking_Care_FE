@@ -31,6 +31,10 @@ const deleteDoctorOfClinic = async (doctorClinicData) => {
 const updateDoctorOfClinic = async (doctorClinicData) => {
     return await axios.post("/api/v1/partner/updateDoctorOfClinic", { ...doctorClinicData });
 };
+
+const addImformationClinic = async (clinicData) => {
+    return await axios.post("/api/v1/partner/addImformationClinic", { ...clinicData });
+};
 export {
     registerClinic,
     createUserDoctorsofClinic,
@@ -38,5 +42,6 @@ export {
     fetchAllSpecialtysOfPartner,
     getDoctorsOfClinic,
     deleteDoctorOfClinic,
-    updateDoctorOfClinic
+    updateDoctorOfClinic,
+    addImformationClinic
 };

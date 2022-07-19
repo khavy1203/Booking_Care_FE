@@ -8,8 +8,8 @@ const fetchInfoDoctor = (doctorId) => {
   return axios.get(`/api/v1/doctor-detail?id=${doctorId}`);
 };
 
-const fetchInfoDoctorModal = (doctorId) => {
-  return axios.get(`/api/v1/doctor-modal?id=${doctorId}`);
+const fetchInfoDoctorModal = async (doctorId) => {
+  return await axios.get(`/api/v1/doctor-modal?id=${doctorId}`);
 };
 
 const registerDoctor = async (doctorData) => {
@@ -17,4 +17,9 @@ const registerDoctor = async (doctorData) => {
     ...doctorData,
   });
 };
-export { fetchTopDoctorHome, fetchInfoDoctor, fetchInfoDoctorModal, registerDoctor };
+
+const getAllDoctorsPagination = async (page, limit, special) => {
+  return await axios.get(`/api/v1/doctor/getAllDoctors?page=${page}&limit=${limit}&special=${special}`);
+};
+
+export { fetchTopDoctorHome, fetchInfoDoctor, fetchInfoDoctorModal, registerDoctor, getAllDoctorsPagination };

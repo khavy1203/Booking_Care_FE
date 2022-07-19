@@ -455,8 +455,8 @@ class ModalUpdateClinic extends Component {
                                     <label>Số điện thoại liên hệ :{clinicData.phoneContact ? clinicData.phoneContact : "Người dùng chưa có sđt"}  </label>
                                 </div>
                             </div>
-                            <div className="col-12 mt-3 form-group">
-                                <label>Mô tả _EN)</label>
+                            {/* <div className="col-12 mt-3 form-group">
+                                <label>Mô tả(VI))</label>
                                 <MdEditor
                                     style={{ height: "300px" }}
                                     renderHTML={(text) => mdParser.render(text)}
@@ -465,14 +465,14 @@ class ModalUpdateClinic extends Component {
                                 />
                             </div>
                             <div className="col-12  mt-3 form-group">
-                                <label>Mô tả (EN)</label>
+                                <label>Mô tả(EN)</label>
                                 <MdEditor
                                     style={{ height: "300px" }}
                                     renderHTML={(text) => mdParser.render(text)}
                                     onChange={this.handleEditorChangeEN}
                                     value={this.state.clinicData.descriptionMarkdown_EN}
                                 />
-                            </div>
+                            </div> */}
                             <div className="col-12 col-sm-6 form-groupId mt-3">
                                 <label>
                                     Trạng thái (<span className="red">*</span>) :

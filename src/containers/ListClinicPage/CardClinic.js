@@ -18,11 +18,16 @@ class CardClinic extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            clinicData: {}
+            clinicData: {},
+
         };
+
     }
     componentDidMount() {
+
     }
+
+
 
     // key = {`row-${index}`
     // id = { item.id }
@@ -35,7 +40,7 @@ class CardClinic extends Component {
     // phoneContact = { item.phoneContact }
 
     render() {
-
+        // let { nameProvince, nameDistrict, nameWard } = this.props;
         return (
             <>
                 <div key={this.props.key} className="Clinic_clinic_wrapper__2TMPG">
@@ -56,7 +61,7 @@ class CardClinic extends Component {
                                 {this.props.nameVI}
                             </a>
                             <div className="Clinic_address__4NF8S">
-                                254 Hòa Hảo Phường 04 Quận 10 Hồ Chí Minh
+                                {`${this.props.addressVI} -${this.props.nameWard}  - ${this.props.nameDistrict} - ${this.props.nameProvince}  `}
                             </div>
                         </div>
                         <div className="Clinic_bottom__1TFQL">
@@ -76,7 +81,7 @@ class CardClinic extends Component {
                                     <span>Chia sẻ</span>
                                 </a>
                                 <a
-                                    href="/tra-cuu/phong-kham/d1573a07-5cec-4697-9b5f-8b6bf1993437"
+                                    href={`/detail-doctor/${this.props.id}`}
                                     className="Clinic_btn_detail__2spys"
                                     draggable="false"
                                 >
@@ -116,8 +121,9 @@ class CardClinic extends Component {
                                 <span>Giờ làm việc:</span>
                             </div>
                             <div className="Clinic_text__2Kkr7">
-                                Từ thứ hai đến thứ bảy: từ 04h00 đến 19h00. Chủ nhật: từ 04h00 đến
-                                12h00.
+                                {this.props.email.timework ? this.props.email.timework : `Từ thứ hai đến thứ bảy: từ 04h00 đến 19h00. Chủ nhật: từ 04h00 đến
+                                 12h00.`}
+
                             </div>
                         </div>
                     </div>

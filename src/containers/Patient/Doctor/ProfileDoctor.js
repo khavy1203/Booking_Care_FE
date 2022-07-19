@@ -71,7 +71,7 @@ class ProfileDoctor extends Component {
     let getDate = moment(schedule.date, dateFormat.SEND_TO_SERVER)._d;
     let date =
       language === LANGUAGES.VI
-        ? moment(getDate).format("dddd - DD/MM/YYYY")
+        ? moment(getDate).locale("vi").format("dddd - DD/MM/YYYY")
         : moment(getDate).locale("en").format("ddd - MM/DD/YYYY");
     if (schedule) {
       return (
@@ -118,9 +118,8 @@ class ProfileDoctor extends Component {
           <div
             className="content-left"
             style={{
-              backgroundImage: `url(${
-                dataProfile && dataProfile.image ? dataProfile.image : ""
-              })`,
+              backgroundImage: `url(${dataProfile && dataProfile.image ? dataProfile.image : ""
+                })`,
             }}
           ></div>
           <div className="content-right">

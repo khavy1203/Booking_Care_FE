@@ -41,32 +41,33 @@ class DoctorSchedule extends Component {
 
   getArrDays = (language) => {
     let allDays = [];
-    for (let i = 0; i < 7; i++) {
+    for (let i = 1; i < 8; i++) {
       let object = {};
       if (language === LANGUAGES.VI) {
-        if (i === 0) {
-          let ddMM = moment(new Date()).format("DD/MM"); //lay dc ngay thang hien tai
-          let today = `Hôm nay - ${ddMM}`;
-          object.label = today;
-        } else {
-          let labelVi = moment(new Date())
-            .add(i, "days")
-            .format("dddd - DD/MM");
-          object.label = this.capitalizeFirstLetter(labelVi);
-        }
+        // if (i === 1) {
+        //   let ddMM = moment(new Date()).format("DD/MM"); //lay dc ngay thang hien tai
+        //   let today = `Hôm nay - ${ddMM}`;
+        //   object.label = today;
+        // } else {
+        let labelVi = moment(new Date())
+          .add(i, "days")
+          .locale("vi")
+          .format("dddd - DD/MM")
+          ;
+        object.label = this.capitalizeFirstLetter(labelVi);
+        // }
       } else {
-        if (i === 0) {
-          let ddMM = moment(new Date()).format("DD/MM");
-          let today = `Today - ${ddMM}`;
-          object.label = today;
-        } else {
-          object.label = moment(new Date())
-            .add(i, "days")
-            .locale("en")
-            .format("ddd - DD/MM");
-        }
+        // if (i === 0) {
+        //   let ddMM = moment(new Date()).format("DD/MM");
+        //   let today = `Today - ${ddMM}`;
+        //   object.label = today;
+        // } else {
+        object.label = moment(new Date())
+          .add(i, "days")
+          .locale("en")
+          .format("ddd - DD/MM");
+        // }
       }
-
       //date timestamp kiểu string
       // object.value =
       //   "" + moment(new Date()).add(i, "days").startOf("day").valueOf();
@@ -81,7 +82,7 @@ class DoctorSchedule extends Component {
 
       allDays.push(object);
     }
-
+    console.log("check all days", allDays)
     return allDays;
   };
 
@@ -131,8 +132,6 @@ class DoctorSchedule extends Component {
   };
 
   handleOnChangeSelect = async (event) => {
-    // console.log(event.target.value);
-    //Mở cmt khi có api
     if (this.props.doctorIdFromParent && this.props.doctorIdFromParent !== -1) {
       let doctorId = this.props.doctorIdFromParent;
       let date = event.target.value;
@@ -142,7 +141,6 @@ class DoctorSchedule extends Component {
   };
 
   handleClickScheduleTime = (time) => {
-    // console.log("time", time);
     this.setState({
       isOpenModalBooking: true,
       selectedSchedule: {
@@ -198,8 +196,8 @@ class DoctorSchedule extends Component {
             </div>
             <div className="time-content">
               {schedule &&
-              schedule.Schedule_Details &&
-              schedule.Schedule_Details.length > 0 ? (
+                schedule.Schedule_Details &&
+                schedule.Schedule_Details.length > 0 ? (
                 <>
                   <div className="time-content-btns">
                     {schedule.Schedule_Details.map((item, index) => {
@@ -246,8 +244,8 @@ class DoctorSchedule extends Component {
           isOpenModal={isOpenModalBooking}
           closeBookingModal={this.closeBookingModal}
           selectedSchedule={selectedSchedule}
-          // dataTime={selectedSchedule}
-          // doctorIdFromDoctorSchedule={this.props.doctorIdFromParent}
+        // dataTime={selectedSchedule}
+        // doctorIdFromDoctorSchedule={this.props.doctorIdFromParent}
         />
       </>
     );

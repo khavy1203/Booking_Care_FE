@@ -77,6 +77,8 @@ class ClinicContact extends Component {
         if (res && +res.EC === 0 && res.DT.decode.email) {
             let _clinicData = _.cloneDeep(this.state.clinicData);
             _clinicData['emailUserOfClinicRegister'] = res.DT.decode.email;
+            console.log("check decode phone ", res.DT.decode)
+            _clinicData['phoneContact'] = res.DT.decode.phone;
             this.setState({ clinicData: _clinicData });
         } else {
             this.props.userlogOut();
@@ -295,8 +297,9 @@ class ClinicContact extends Component {
     }
     render() {
         let checklogin = this.props.isLoggedIn;
-        console.log("checklogin nè >>>>", checklogin)
+        console.log("check data clinic nè >>>>", this.state.clinicData)
         // if (!checklogin) return <Redirect to='/login' />;
+
         // else {
         let { per, url } = this.state;
         return (

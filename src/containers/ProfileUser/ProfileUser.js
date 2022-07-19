@@ -14,10 +14,12 @@ import { getUserAccount, logoutUser, updateInforUser } from "../../services/user
 import { push } from "connected-react-router";
 import * as actions from "../../store/actions";
 import { ImUpload2 } from "react-icons/im";
+import ModalChangePassWord from "./ModalChangePassWord";
 class ProfileUser extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            isShowModalUpdatePassword: false,
             userData: {},
 
             validInput: {},
@@ -250,6 +252,13 @@ class ProfileUser extends Component {
             }
         }
     }
+    handleModalUpdatePasswordClose = () => {
+        this.setState({ isShowModalUpdatePassword: false })
+    }
+
+    changePasswordUser = () => {
+        this.setState({ isShowModalUpdatePassword: true })
+    }
     render() {
         let { per, url, userData } = this.state;
         console.log("check userData>>>", userData);
@@ -461,10 +470,15 @@ class ProfileUser extends Component {
                                         }
 
                                         <hr />
-                                        <div className="row">
-                                            <div className="col-sm-12">
+                                        <div className="row d-flex justify-content-between">
+                                            <div className="col-sm-6">
                                                 <button className="btn btn-primary" onClick={() => { this.updateUser() }}>
                                                     Cập nhật thông tin
+                                                </button>
+                                            </div>
+                                            <div className="col-sm-6  d-flex justify-content-end">
+                                                <button className="btn btn-primary" onClick={() => { this.changePasswordUser() }}>
+                                                    Thay đổi mật khẩu
                                                 </button>
                                             </div>
                                         </div>
@@ -475,7 +489,11 @@ class ProfileUser extends Component {
                         </div>
                     </div>
                 </div>
-
+                <ModalChangePassWord
+                    show={this.state.isShowModalUpdatePassword}
+                    handleClose={this.handleModalUpdatePasswordClose}
+                    dataModal={this.state.userData}
+                />
             </>
         );
     }

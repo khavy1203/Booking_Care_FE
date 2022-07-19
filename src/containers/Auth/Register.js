@@ -73,7 +73,7 @@ class Register extends Component {
         }
         if (this.state.password !== this.state.confirmpassword) {
             toast.warn("Please enter a confirmpassword match the password");
-            this.setState({ objCheckInput: { ...this.state.defaultValidInput, isInvalidConfirmpassword: false } });
+            this.setState({ objCheckInput: { ...this.state.defaultValidInput, isInvalidPassword: false } });
             return false;
         }
 

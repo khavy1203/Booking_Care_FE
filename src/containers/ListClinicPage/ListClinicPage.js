@@ -9,14 +9,21 @@ import "./ListClinicPage.scss";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import * as actions from "../../store/actions";
-import { fetchAllClinics } from "../../services/clinicService";
+import { getInforClininicOfUserOnPage } from "../../services/clinicService";
 import ReactPaginate from "react-paginate";
 import { toast } from "react-toastify";
+import Select from 'react-select';
 
 import {
     RiArrowDropDownLine
 } from "react-icons/ri";
 import CardClinic from "./CardClinic";
+
+const options = [
+    { value: 'chocolatevalu', label: 'Chocolatelabe' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' },
+];
 
 class ListClinicPage extends Component {
 
@@ -24,22 +31,207 @@ class ListClinicPage extends Component {
         super(props);
         this.state = {
             userData: {},
+
             currentPage: 1,
             currentLimit: 7,
             totalPage: 0,//phân trang
+
+            selectedProvinceId: null,
+            selectedDistrictId: null,
+            selectedWardId: null,
+
+            lstProvince: [],
+            lstDistrict: [],
+            lstWard: [],
+
+            lstProvinceOption: [],
+            lstDistrictOption: [],
+            lstWardOption: [],
+
 
             listClinics: [],
         };
     }
     componentDidMount() {
         this.fetchClinics();
+        this.fetchProvince();
+        this.fetchDistrict();
+        this.fetchWard();
     }
+    async componentDidUpdate(prevProps, prevState) {
+        if (prevState.selectedProvinceId !== this.state.selectedProvinceId) {
+            await this.fetchDistrict();
+            //fetchApi lấy data Clinic
+            let res = await getInforClininicOfUserOnPage(
+                this.state.currentPage,
+                this.state.currentLimit,
+                this.state.selectedProvinceId.value
+            );
+            if (res && +res.EC === 0) {
+
+                this.setState({
+                    listClinics: res.DT.clinics,
+                    totalPage: res.DT.totalPages
+                })
+            } else {
+                toast.error(res.EM)
+            }
+
+        }
+        if (prevState.selectedDistrictId !== this.state.selectedDistrictId) {
+            await this.fetchWard();
+            let res = await getInforClininicOfUserOnPage(
+                this.state.currentPage,
+                this.state.currentLimit,
+                this.state.selectedProvinceId.value,
+                this.state.selectedDistrictId.value
+            );
+            if (res && +res.EC === 0) {
+
+                this.setState({
+                    listClinics: res.DT.clinics,
+                    totalPage: res.DT.totalPages
+                })
+            } else {
+                toast.error(res.EM)
+            }
+
+            //fetchApi lấy data Clinic
+        }
+        if (prevState.selectedWardId !== this.state.selectedWardId) {
+            await this.fetchWard();
+            let res = await getInforClininicOfUserOnPage(
+                this.state.currentPage,
+                this.state.currentLimit,
+                this.state.selectedProvinceId.value,
+                this.state.selectedDistrictId.value,
+                this.state.selectedWardId.value,
+            );
+            if (res && +res.EC === 0) {
+
+                this.setState({
+                    listClinics: res.DT.clinics,
+                    totalPage: res.DT.totalPages
+                })
+            } else {
+                toast.error(res.EM)
+            }
+            //fetchApi lấy data Clinic
+        }
+    }
+    fetchProvince = () => {
+
+        fetch('https://provinces.open-api.vn/api/', {
+            method: 'GET', // or 'PUT'
+        })
+            .then(response => response.json())
+            .then((actualData) => {
+                this.setState({
+                    lstProvince: this.coverAPIAddressToList(actualData),
+                    lstProvinceOption: this.coverAPIAddressToListOption(actualData)
+                });
+
+            })
+            .catch((err) => {
+                console.log(err.message);
+            })
+            .finally(() => {
+                // setLoading(false);
+            });
+
+
+    }
+    fetchDistrict = async () => {
+        await fetch('https://provinces.open-api.vn/api/d', {
+            method: 'GET', // or 'PUT'
+        })
+            .then(response => response.json())
+            .then(async (actualData) => {
+                let lstDistrictOptionfetch = {};
+                if (this.state.selectedProvinceId) {
+                    lstDistrictOptionfetch = actualData.filter((item) =>
+                        item.province_code === +this.state.selectedProvinceId.value
+                    )
+                }
+                this.setState({
+                    lstDistrict: this.coverAPIAddressToList(actualData),
+                    lstDistrictOption: lstDistrictOptionfetch ? this.coverAPIAddressToListOption(lstDistrictOptionfetch) : {}
+                });
+
+            })
+            .catch((err) => {
+                console.log(err.message);
+            })
+            .finally(() => {
+                // setLoading(false);
+            });
+    }
+    fetchWard = () => {
+        fetch('https://provinces.open-api.vn/api/w', {
+            method: 'GET', // or 'PUT'
+        })
+            .then(response => response.json())
+            .then((actualData) => {
+                let listWardOptionFetch = {};
+                if (this.state.selectedDistrictId) {
+                    listWardOptionFetch = actualData.filter((item) =>
+                        item.district_code === +this.state.selectedDistrictId.value
+                    )
+                }
+                this.setState({
+                    lstWard: this.coverAPIAddressToList(actualData),
+                    lstWardOption: listWardOptionFetch ? this.coverAPIAddressToListOption(listWardOptionFetch) : {}
+                });
+
+            })
+            .catch((err) => {
+                console.log(err.message);
+            })
+            .finally(() => {
+                // setLoading(false);
+            });
+    }
+    coverAPIAddressToList = (lstAPI) => {
+        let lstcustom = {};
+        if (lstAPI && lstAPI.length > 0)
+            lstAPI.map((item, index) => {
+                lstcustom[item.code] = item.name;
+            })
+        return lstcustom;
+    }
+    coverAPIAddressToListOption = (lstAPI) => {
+        let lstcustom = {};
+        if (lstAPI && lstAPI.length > 0)
+            lstcustom = lstAPI.map((item, index) => {
+                return {
+                    value: item.code,
+                    label: item.name
+                }
+            })
+        return lstcustom;
+    }
+    handleChangeProvince = (selectedProvinceId) => {
+        this.setState({ selectedProvinceId }, () =>
+            console.log(`Option selected:`, this.state.selectedProvinceId)
+        );
+    };
+    handleChangeDistrict = (selectedDistrictId) => {
+        this.setState({ selectedDistrictId }, () =>
+            console.log(`Option selected:`, this.state.selectedDistrictId)
+        );
+    };
+    handleChangeWard = (selectedWardId) => {
+        this.setState({ selectedWardId }, () =>
+            console.log(`Option selected:`, this.state.selectedWardId)
+        );
+    };
+
     handlePageClick = async (event) => {
         this.setState({ currentPage: event.selected + 1 }); // lỗi bất đồng bộ, cách fix thêm chỉ số vào fetchUser
         await this.fetchClinics();
     };
     fetchClinics = async () => {
-        let res = await fetchAllClinics(
+        let res = await getInforClininicOfUserOnPage(
             this.state.currentPage,
             this.state.currentLimit
         );
@@ -56,146 +248,41 @@ class ListClinicPage extends Component {
 
     render() {
         console.log("check user data >>>", this.state.userData)
-        let settings = {
-            dots: false,
-            infinite: false,
-            speed: 500,
-            slidesToShow: 4,
-            slidesToScroll: 4,
-        };
+
         console.log("check lst clinic, Totalpage >>", this.state.listClinics, this.state.totalPage)
 
+        let { selectedProvinceId, selectedDistrictId, selectedWardId, lstProvince, lstDistrict, lstWard, lstProvinceOption, lstDistrictOption, lstWardOption } = this.state;
+        console.log("check state >>", this.state)
         return (
             <div>
                 <HomeHeader isShowBanner={true} />
                 <div className="Clinics_body__1PfOW">
                     <div className="Container_container__uCFWk Container_desktop__35haU Clinics_wrapper_container__wBAoW">
                         <div className="Filter_search__Mg5hk">
-                            <div className="Filter_select__18BMn custom-select css-2b097c-container">
-                                <span
-                                    aria-live="polite"
-                                    aria-atomic="false"
-                                    aria-relevant="additions text"
-                                    className="css-7pg0cj-a11yText"
-                                />
-                                <div className="custom-select__control css-yk16xz-control">
-                                    <div className="custom-select__value-container css-1hwfws3">
-                                        <div className="custom-select__placeholder css-1wa3eu0-placeholder">
-                                            Tỉnh / Thành phố
-                                        </div>
-                                        <input
-                                            id="select-1"
-                                            readOnly=""
-                                            tabIndex={0}
-                                            defaultValue=""
-                                            aria-autocomplete="list"
-                                            className="css-62g3xt-dummyInput"
-                                        />
-                                    </div>
-                                    <div className="custom-select__indicators css-1wy0on6">
-                                        <span className="custom-select__indicator-separator css-1okebmr-indicatorSeparator" />
-                                        <div
-                                            className="custom-select__indicator custom-select__dropdown-indicator css-tlfecz-indicatorContainer"
-                                            aria-hidden="true"
-                                        >
-                                            <svg
-                                                height={20}
-                                                width={20}
-                                                viewBox="0 0 20 20"
-                                                aria-hidden="true"
-                                                focusable="false"
-                                                className="css-8mmkcg"
-                                            >
-                                                <path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z" />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="Filter_select__18BMn custom-select custom-select--is-disabled css-14jk2my-container">
-                                <span
-                                    aria-live="polite"
-                                    aria-atomic="false"
-                                    aria-relevant="additions text"
-                                    className="css-7pg0cj-a11yText"
-                                />
-                                <div className="custom-select__control custom-select__control--is-disabled css-1fhf3k1-control">
-                                    <div className="custom-select__value-container css-1hwfws3">
-                                        <div className="custom-select__placeholder css-1wa3eu0-placeholder">
-                                            Quận / Huyện
-                                        </div>
-                                        <input
-                                            id="select-2"
-                                            readOnly=""
-                                            disabled=""
-                                            tabIndex={0}
-                                            defaultValue=""
-                                            aria-autocomplete="list"
-                                            className="css-62g3xt-dummyInput"
-                                        />
-                                    </div>
-                                    <div className="custom-select__indicators css-1wy0on6">
-                                        <span className="custom-select__indicator-separator css-109onse-indicatorSeparator" />
-                                        <div
-                                            className="custom-select__indicator custom-select__dropdown-indicator css-tlfecz-indicatorContainer"
-                                            aria-hidden="true"
-                                        >
-                                            <svg
-                                                height={20}
-                                                width={20}
-                                                viewBox="0 0 20 20"
-                                                aria-hidden="true"
-                                                focusable="false"
-                                                className="css-8mmkcg"
-                                            >
-                                                <path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z" />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="Filter_select__18BMn custom-select custom-select--is-disabled css-14jk2my-container">
-                                <span
-                                    aria-live="polite"
-                                    aria-atomic="false"
-                                    aria-relevant="additions text"
-                                    className="css-7pg0cj-a11yText"
-                                />
-                                <div className="custom-select__control custom-select__control--is-disabled css-1fhf3k1-control">
-                                    <div className="custom-select__value-container css-1hwfws3">
-                                        <div className="custom-select__placeholder css-1wa3eu0-placeholder">
-                                            Phường / Xã
-                                        </div>
-                                        <input
-                                            id="select-3"
-                                            readOnly=""
-                                            disabled=""
-                                            tabIndex={0}
-                                            defaultValue=""
-                                            aria-autocomplete="list"
-                                            className="css-62g3xt-dummyInput"
-                                        />
-                                    </div>
-                                    <div className="custom-select__indicators css-1wy0on6">
-                                        <span className="custom-select__indicator-separator css-109onse-indicatorSeparator" />
-                                        <div
-                                            className="custom-select__indicator custom-select__dropdown-indicator css-tlfecz-indicatorContainer"
-                                            aria-hidden="true"
-                                        >
-                                            <svg
-                                                height={20}
-                                                width={20}
-                                                viewBox="0 0 20 20"
-                                                aria-hidden="true"
-                                                focusable="false"
-                                                className="css-8mmkcg"
-                                            >
-                                                <path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z" />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <Select
+                                value={selectedProvinceId}
+                                onChange={this.handleChangeProvince}
+                                options={lstProvinceOption}
+                                className="Filter_select__18BMn custom-select css-2b097c-container flex-search"
+                                defaultValue={selectedProvinceId}
+                                placeholder={"Chọn Tỉnh/Thành phố"}
+                            />
+                            <Select
+                                value={selectedDistrictId}
+                                onChange={this.handleChangeDistrict}
+                                options={lstDistrictOption}
+                                className="Filter_select__18BMn custom-select css-2b097c-container flex-search"
+                                defaultValue={selectedDistrictId}
+                                placeholder={"Chọn Quận/Huyện"}
+                            />
+                            <Select
+                                value={selectedWardId}
+                                onChange={this.handleChangeWard}
+                                options={lstWardOption}
+                                className="Filter_select__18BMn custom-select css-2b097c-container flex-search"
+                                defaultValue={selectedWardId}
+                                placeholder={"Chọn Xã/Phường"}
+                            />
                             <div className="Filter_group_filter__2RA9c">
                                 <div className="Filter_filter_sort__2Z7LW">
                                     <span>Sắp xếp theo: </span>
@@ -263,7 +350,11 @@ class ListClinicPage extends Component {
                                                 addressEN={item.addressEN}
                                                 img={item['Users.image']}
                                                 email={item['Users.email']}
-                                                phoneContact={item.phoneContact}
+                                                phoneContact={item['Users.phone']}
+                                                timework={item.timework}
+                                                nameProvince={lstProvince[item.provinceId]}
+                                                nameDistrict={lstDistrict[item.districtId]}
+                                                nameWard={lstWard[item.wardId]}
                                             />
                                         );
                                 })}

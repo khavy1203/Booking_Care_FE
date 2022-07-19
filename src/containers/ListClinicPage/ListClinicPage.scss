@@ -212,6 +212,7 @@
             }
             .Clinic_text__2Kkr7 {
                 width: calc(100% - 150px);
+                word-wrap: break-word;
             }
         }
     }
@@ -359,7 +360,6 @@ textarea {
         justify-content: flex-end;
     }
     display: flex;
-    padding: 16px 24px;
     border-radius: 8px;
     background-color: #fff;
 }
@@ -569,4 +569,14 @@ a {
 .footer {
     padding-left: 106px;
     margin-top: 15px;
+}
+
+.css-yk16xz-control {
+    height: 100%;
+}
+
+.flex-search {
+    height: 100% !important;
+    border: none !important;
+    width: 40% !important;
 }

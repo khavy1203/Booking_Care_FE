@@ -1,0 +1,423 @@
+.Page_wrapper__2FpUM.Page_desktop__21nvB {
+    max-width: 1920px;
+    min-width: 1182px;
+}
+
+.ClinicDetail_wrapper__yqiMu {
+    position: relative;
+    .ClinicDetail_breadcrumb__RTrk- {
+        height: 69px;
+        background-color: #fff;
+    }
+    .ClinicDetail_body__3T77W {
+        padding-top: 30px;
+        padding-bottom: 24px;
+        background: #f5f7fa;
+        .ClinicDetail_wrapper_clinic__3q2lu {
+            display: flex;
+            padding: 0;
+            justify-content: center;
+            .ClinicDetail_left_content__1AP51 {
+                width: 100%;
+                padding: 0 15px;
+                max-width: 358px;
+                margin-right: 32px;
+                .ClinicDetail_summary__5X3zu {
+                    padding: 16px;
+                    border-radius: 8px;
+                    margin-bottom: 24px;
+                    background: #fff;
+                    .ClinicDetail_top__2WebE {
+                        text-align: center;
+                        padding-bottom: 24px;
+                        border-bottom: 1px solid #eff0f3;
+                        display: flex;
+                        align-items: center;
+                        flex-direction: column;
+                        .ClinicDetail_group_title__3lTIP {
+                            padding: 0 12px;
+                            .ClinicDetail_title__1cHWX {
+                                font-size: 20px;
+                                margin-top: 16px;
+                                font-weight: 700;
+                                line-height: 24px;
+                                margin-bottom: 8px;
+                            }
+                            .ClinicDetail_address__3iTvZ {
+                                font-size: 14px;
+                                font-weight: 400;
+                                line-height: 18px;
+                            }
+                        }
+                    }
+                    .ClinicDetail_bottom__1ocVm {
+                        margin-top: 24px;
+                        .ClinicDetail_list_item__3Xig4 {
+                            margin-bottom: 8px;
+                            .ClinicDetail_content__2xZpZ {
+                                display: block;
+                                position: relative;
+                                padding-left: 16px;
+                                margin-bottom: 4px;
+                                font-size: 14px;
+                                font-weight: 600;
+                                line-height: 18px;
+                                img {
+                                    position: absolute;
+                                    left: 0;
+                                    top: 50%;
+                                    transform: translateY(-50%);
+                                }
+                            }
+                            .ClinicDetail_hight_light__3Ul_- {
+                                color: #1479ff;
+                                font-weight: 700;
+                                padding-left: 16px;
+                            }
+                        }
+                        .ClinicDetail_button__1nh2h {
+                            display: flex;
+                            margin-top: 16px;
+                            align-items: center;
+                            .ClinicDetail_share__2FMDu {
+                                padding: 6px 16px;
+                                margin-right: 8px;
+                                border-radius: 8px;
+                                text-align: center;
+                                text-decoration: none;
+                                flex-grow: 0;
+                                flex-shrink: 0;
+                                flex-basis: calc(50% - 4px);
+                                border: 1px solid #1479ff;
+                            }
+                        }
+                    }
+                }
+                .ClinicDetail_about__1eNPD {
+                    padding: 24px;
+                    border-radius: 8px;
+                    background: #fff;
+                    .ClinicDetail_title__1cHWX {
+                        font-size: 20px;
+                        color: #37383a;
+                        font-weight: 700;
+                        line-height: 24px;
+                        margin-bottom: 16px;
+                    }
+                    .ClinicDetail_description__3kqmn {
+                        white-space: pre-line;
+                    }
+                }
+            }
+            .ClinicDetail_right_content__L_34K {
+                flex: 1 1;
+                .ClinicDetail_block_item__3B88u {
+                    &:not(:last-child) {
+                        margin-bottom: 24px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.Page_wrapper__2FpUM {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.Container_container__uCFWk.Container_desktop__35haU {
+    width: 95%;
+}
+
+.Container_container__uCFWk {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.Breadcrumb_breadcrumb__3KVL4 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    .Breadcrumb_route_item__OzVt_ {
+        color: #37383a;
+        display: flex;
+        margin: 2px 0;
+        align-items: center;
+        .Breadcrumb_route_name__UUKHm {
+            cursor: pointer;
+            color: #37383a;
+            -webkit-transition: .3s;
+            transition: .3s;
+            text-decoration: none;
+            font-size: 14px;
+            line-height: normal;
+            font-weight: 400;
+            margin-right: 6px;
+        }
+        &:last-child {
+            .Breadcrumb_route_name__UUKHm {
+                cursor: default;
+                color: #1479ff;
+                font-weight: 700;
+            }
+        }
+    }
+}
+
+* {
+    box-sizing: inherit;
+    &:before {
+        box-sizing: inherit;
+    }
+    &:after {
+        box-sizing: inherit;
+    }
+}
+
+img {
+    vertical-align: middle;
+    border-style: none;
+}
+
+svg {
+    vertical-align: middle;
+}
+
+.BannerSlider_wrapper__tFzIl {
+    .BannerSlider_slider_wrapper__JRppF {
+        width: 791px;
+        position: relative;
+        border-radius: 8px;
+        .BannerSlider_slider__3BZNI {
+            border-radius: 8px;
+            .BannerSlider_banner_item__25ai3 {
+                width: 791px;
+                height: 395px;
+                border-radius: 8px;
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    border-radius: 8px;
+                    object-position: center;
+                }
+            }
+        }
+    }
+}
+
+.slick-list {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    display: block;
+}
+
+.slick-slider {
+    position: relative;
+    display: block;
+    position: relative;
+    display: block;
+    .slick-list {
+        transform: translateZ(0);
+    }
+    .slick-track {
+        transform: translateZ(0);
+    }
+}
+
+.slick-track {
+    position: relative;
+    top: 0;
+    left: 0;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.slick-initialized {
+    .slick-slide {
+        display: block;
+    }
+}
+
+.slick-slide {
+    display: none;
+    float: left;
+    height: 100%;
+    min-height: 1px;
+    img {
+        display: block;
+    }
+}
+
+.Feedback_Feedback__17vAI {
+    padding: 24px;
+    border-radius: 8px;
+    background: #fff;
+    .Feedback_title__2EBgw {
+        font-size: 20px;
+        color: #37383a;
+        font-weight: 700;
+        line-height: 24px;
+        margin-bottom: 8px;
+    }
+    .Feedback_sub_title__2FcoY {
+        font-size: 14px;
+        font-weight: 400;
+        color: #808890;
+        line-height: 18px;
+        margin-bottom: 8px;
+    }
+    .Feedback_text__2XSC4 {
+        width: 100%;
+        resize: none;
+        padding: 16px;
+        outline: none;
+        color: #37383a;
+        margin-top: 12px;
+        border-radius: 8px;
+        border: 1px solid rgba(137, 147, 164, .5);
+    }
+    .Feedback_button__1gtfE {
+        display: flex;
+        margin-top: 12px;
+        justify-content: flex-end;
+        .Feedback_btn_button__194m- {
+            width: 122px;
+            height: 48px;
+            color: #fff;
+            border-radius: 8px;
+            background-color: #1479ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+        }
+    }
+}
+
+.react-rater {
+    display: inline-block;
+    line-height: normal;
+    display: inline-block;
+    >* {
+        display: inline-block;
+        display: inline-block;
+    }
+    div {
+        margin-right: 4px;
+        .react-rater-star {
+            margin-right: 0;
+            font-size: 20px;
+        }
+    }
+}
+
+.react-rater-star {
+    cursor: pointer;
+    color: #ccc;
+    position: relative;
+}
+
+button {
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    &:not(:disabled) {
+        cursor: pointer;
+    }
+}
+
+input {
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
+
+optgroup {
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
+
+select {
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
+
+textarea {
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    overflow: auto;
+    resize: vertical;
+}
+
+[type=button] {
+    &:not(:disabled) {
+        cursor: pointer;
+    }
+}
+
+[type=reset] {
+    &:not(:disabled) {
+        cursor: pointer;
+    }
+}
+
+[type=submit] {
+    &:not(:disabled) {
+        cursor: pointer;
+    }
+}
+
+.Access_wrapper__Q7BwJ {
+    .Access_icon_wrapper__1nsIw {
+        .Access_icon__7Ol0Q {
+            width: 100%;
+            height: 100%;
+            border-radius: 100%;
+        }
+    }
+}
+
+.ImgLazy_imglazy__2DUUB.ImgLazy_loaded__3xqMo {
+    opacity: 1;
+}
+
+.footer-doctor {
+    padding-left: 0px;
+    margin-top: 15px;
+}
+
+.name-special {
+    width: 200px !important;
+}
+
+.detail-doctor {
+    width: 100px !important;
+}
+
+.description-clinic {
+    width: 100%;
+}
+
+.img-clinic {
+    width: 100%;
+    height: 400px;
+    border-radius: 8px;
+}

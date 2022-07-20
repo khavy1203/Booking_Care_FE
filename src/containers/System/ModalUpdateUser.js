@@ -11,6 +11,8 @@ import { fetchGroup } from "../../services/userService";
 import { fetchAllClinicsNoPage } from "../../services/clinicService";
 import { fetchAllSpecialtysNoPage } from "../../services/specialtyService";
 import { updateCurrentUser } from "../../services/userService";
+import { storage } from "../../firebase";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 class ModalUpdateUser extends Component {
     constructor(props) {
@@ -31,6 +33,7 @@ class ModalUpdateUser extends Component {
                 groupId: 3,
                 clinicId: 0,
                 specialtyId: 0,
+
             },
             validInput: {},
             validInputDefault: {
@@ -41,8 +44,11 @@ class ModalUpdateUser extends Component {
                 genderId: true,
                 groupId: true,
                 clinicId: true,
-                specialtyId: true
+                specialtyId: true,
+
             },
+            file: "",
+            per: null,
         };
     }
 
@@ -58,7 +64,74 @@ class ModalUpdateUser extends Component {
         })
 
     }
+    async componentDidUpdate(prevProps, prevState) {
+
+
+        if (prevProps.dataModal !== this.props.dataModal) {
+            this.setState({ userData: this.props.dataModal })
+        }
+        if (prevState.file !== this.state.file) {
+            if (this.state.file) {
+                await this.uploadFile();
+            }
+        }
+    }
     //fetch ds chuyên khoa
+    uploadFile = async () => {
+        let { file } = this.state;
+        const name = new Date().getTime() + file.name;
+        const storageRef = ref(storage, name);
+
+        const uploadTask = uploadBytesResumable(storageRef, file);
+
+        // Register three observers:
+        // 1. 'state_changed' observer, called any time the state changes
+        // 2. Error observer, called on failure
+        // 3. Completion observer, called on successful completion
+        await uploadTask.on(
+            "state_changed",
+            async (snapshot) => {
+                console.log(snapshot);
+                // Observe state change events such as progress, pause, and resume
+                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                const progress =
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log("Upload is " + progress + "% done");
+                await this.setState({ per: progress });
+                switch (snapshot.state) {
+                    case "paused":
+                        console.log("Upload is paused");
+                        break;
+                    case "running":
+                        console.log("Upload is running");
+                        break;
+                    default:
+                        break;
+                }
+            },
+            (error) => {
+                // Handle unsuccessful uploads
+            },
+            async () => {
+                // Handle successful uploads on complete
+                // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+                await getDownloadURL(uploadTask.snapshot.ref).then(
+                    async (downloadURL) => {
+                        let _userData = _.cloneDeep(this.state.userData);
+                        _userData["image"] = downloadURL;
+                        this.setState({ userData: _userData });
+                    }
+                );
+            }
+        );
+    };
+    handleOnchangImage = (event) => {
+        let data = event.target.files; //list các file
+        let getFile = data[0];
+        if (getFile) {
+            this.setState({ file: getFile });
+        }
+    }
     fetchSpecialty = async () => {
         let res = await fetchAllSpecialtysNoPage();
         if (res && +res.EC === 0) {
@@ -87,12 +160,7 @@ class ModalUpdateUser extends Component {
         }
     }
 
-    async componentDidUpdate(prevProps, prevState) {
 
-        if (prevProps.dataModal !== this.props.dataModal) {
-            this.setState({ userData: this.props.dataModal })
-        }
-    }
 
     handleOnchangeInput = (value, name) => {
         let _userData = _.cloneDeep(this.state.userData);
@@ -114,6 +182,55 @@ class ModalUpdateUser extends Component {
             toast.error(res.EM);
         }
 
+    };
+
+    uploadFile = async () => {
+        let { file } = this.state;
+        const name = new Date().getTime() + file.name;
+        const storageRef = ref(storage, name);
+
+        const uploadTask = uploadBytesResumable(storageRef, file);
+
+        // Register three observers:
+        // 1. 'state_changed' observer, called any time the state changes
+        // 2. Error observer, called on failure
+        // 3. Completion observer, called on successful completion
+        await uploadTask.on(
+            "state_changed",
+            async (snapshot) => {
+                console.log(snapshot);
+                // Observe state change events such as progress, pause, and resume
+                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                const progress =
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log("Upload is " + progress + "% done");
+                await this.setState({ per: progress });
+                switch (snapshot.state) {
+                    case "paused":
+                        console.log("Upload is paused");
+                        break;
+                    case "running":
+                        console.log("Upload is running");
+                        break;
+                    default:
+                        break;
+                }
+            },
+            (error) => {
+                // Handle unsuccessful uploads
+            },
+            async () => {
+                // Handle successful uploads on complete
+                // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+                await getDownloadURL(uploadTask.snapshot.ref).then(
+                    async (downloadURL) => {
+                        let _userData = _.cloneDeep(this.state.userData);
+                        _userData["image"] = downloadURL;
+                        this.setState({ userData: _userData });
+                    }
+                );
+            }
+        );
     };
 
     render() {
@@ -306,12 +423,28 @@ class ModalUpdateUser extends Component {
                                             }
                                         />
                                     </div>
+                                </div>
+                                <div className="col-12 form-group row">
+                                    <div class="form-group col-8 ">
+                                        <label for="exampleFormControlFile4" className="noice-dowload">Hình ảnh bác sĩ</label>
+                                        <input
+                                            className={
+                                                this.state.validInput.url
+                                                    ? "form-control"
+                                                    : "form-control is-invalid"
+                                            }
+                                            type="file" class="form-control-file" id="exampleFormControlFile4"
 
-                                    <div className="img-avatar form-group my-3 col-2">
-                                        <label>Ảnh đại diện:</label>
-                                        < img src={this.state.userData.image ? this.state.userData.image : 'https://image.shutterstock.com/z/stock-vector-drawings-design-house-no-color-334341113.jpg'} />
+                                            onChange={(event) => {
+                                                this.handleOnchangImage(event);
+                                            }}
+                                        />
                                     </div>
                                 </div>
+                                <div>
+                                    < img src={this.state.userData.image ? this.state.userData.image : 'https://image.shutterstock.com/z/stock-vector-drawings-design-house-no-color-334341113.jpg'} width={100} height={100} />
+                                </div>
+
 
                             </div>
                         </div>

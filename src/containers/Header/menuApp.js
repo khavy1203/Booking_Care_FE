@@ -1,6 +1,12 @@
 export const adminMenu = [
   //quản lý người dùng
   {
+    name: "menu.admin.home",
+    menus: [
+      { name: "menu.admin.home", link: "/" },
+    ],
+  },
+  {
     name: "menu.admin.manage-user",
     menus: [
       { name: "menu.admin.crud", link: "/system/user-manage" },
@@ -41,12 +47,6 @@ export const adminMenu = [
     ],
   },
   //quản lý cẩm nang
-  {
-    name: "menu.admin.handbook",
-    menus: [
-      { name: "menu.admin.manage-handbook", link: "/system/manage-handbook" },
-    ],
-  },
 
   //quản lý group role
   {

@@ -28,8 +28,18 @@ class System extends Component {
   }
   fetchCookigetUserAccount = async () => {
     let res = await getUserAccount();
-    if (res && +res.EC === 0 && res.DT.decode) {
+    console.log("check res .> tại admi>>>", res)
+    let decode = res.DT.decode;
+    if (res && +res.EC === 0 && decode) {
+      if (+decode.groupId === 3) {
+        console.log("đã vô check id bằng 3")
+        const { navigate } = this.props;
+        const redirectPath = "/home";
+        navigate(`${redirectPath}`);
+      }
+      console.log(" res.DT.decode", res.DT.decode)
       this.props.userloginSuccess(res.DT.token);
+
     } else {
       this.props.userlogOut();
       await logoutUser();//nếu ko có thì tiết hành clear cookie cũ đi( nếu tồn tại)
@@ -48,6 +58,7 @@ class System extends Component {
         <div className="system-container">
           <div className="system-list">
             <Switch>
+
               <Route path="/system/user-manage" component={UserManage} />
               <Route path="/system/user-redux" component={UserRedux} />
               <Route path="/system/manage-doctor" component={ManageDoctor} />
@@ -65,6 +76,8 @@ class System extends Component {
                 path="/system/partner-clinic"
                 component={Partner}
               />
+
+
             </Switch>
           </div>
         </div>

@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import _ from 'lodash';
 import { storage } from "../../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { getUserAccount, logoutUser, updateInforUser } from "../../services/userService";
+import { getUserAccount, logoutUser, updateInforUser, getUserById } from "../../services/userService";
 
 import { push } from "connected-react-router";
 import * as actions from "../../store/actions";
@@ -21,7 +21,7 @@ class ProfileUser extends Component {
         this.state = {
             isShowModalUpdatePassword: false,
             userData: {},
-
+            userDataDecode: {},
             validInput: {},
             addressClinic: "",
             dataDefault: {
@@ -64,12 +64,19 @@ class ProfileUser extends Component {
     fetchCookigetUserAccount = async () => {
         let res = await getUserAccount();
         if (res && +res.EC === 0 && res.DT.decode) {
-            console.log("check res.DT", res.DT.decode.email)
+            console.log("check res.DT", res.DT)
+
+            // get UserbyID
 
             this.setState({
-                userData: res.DT.decode
+                userDataDecode: res.DT.decode
             })
-
+            let infoUser = await getUserById(res.DT.decode.id)
+            if (infoUser && infoUser.EC === 0) {
+                this.setState({
+                    userData: infoUser.DT
+                })
+            }
             this.props.userloginSuccess(res.DT.token);
         } else {
             this.props.userlogOut();
@@ -239,14 +246,6 @@ class ProfileUser extends Component {
                 this.setState({
                     data: this.state.dataDefault
                 })
-                // sau khi cập nhật xong thì phải cập nhật lại cookie
-                this.props.userlogOut();
-                await logoutUser();//nếu ko có thì tiết hành clear cookie cũ đi( nếu tồn tại)
-
-                const { navigate } = this.props;
-                const redirectPath = "/login";
-                navigate(`${redirectPath}`);
-
             } else {
                 toast.error(res.EM);
             }
@@ -420,7 +419,7 @@ class ProfileUser extends Component {
                                         <hr />
                                         {/* tạo điều kiện nếu là bác sĩ thì mới có những thông tin bên dưới */}
                                         {
-                                            userData && userData['groupWithRoles'] && userData['groupWithRoles']['id'] === 5 ?
+                                            userData && userData['groupId'] === 5 ?
                                                 <>
                                                     <div className="row">
                                                         <div className="col-sm-3">

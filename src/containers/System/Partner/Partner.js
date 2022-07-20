@@ -6,7 +6,7 @@ import _ from 'lodash';
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from 'uuid';
 import { createUserDoctorsofClinic, getStatusOfClinic, fetchAllSpecialtysOfPartner, getDoctorsOfClinic } from "../../../services/partnerService";
-import { getUserAccount, logoutUser } from "../../../services/userService";
+import { getUserAccount, logoutUser, getUserById } from "../../../services/userService";
 
 import { push } from "connected-react-router";
 import * as actions from "../../../store/actions";
@@ -71,10 +71,13 @@ class Partner extends Component {
         if (res && +res.EC === 0 && res.DT.decode) {
             console.log("check res.DT", res.DT.decode.email)
 
-            this.setState({
-                userDataCreate: res.DT.decode
-            })
 
+            let infoUser = await getUserById(res.DT.decode.id)
+            if (infoUser && infoUser.EC === 0) {
+                this.setState({
+                    userDataCreate: infoUser.DT
+                })
+            }
             this.props.userloginSuccess(res.DT.token);
         } else {
             this.props.userlogOut();
@@ -409,7 +412,7 @@ class Partner extends Component {
                                 <ModalUpdateInforClinic
                                     show={this.state.isShowModalUpdateClinic}
                                     handleClose={this.handleModalClinicUpdateClose}
-                                    dataModal={this.state.userDataCreate?.Clinic}
+                                    dataModal={this.state.userDataCreate}
                                 />
                             </div>
                         </div>

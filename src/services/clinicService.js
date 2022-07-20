@@ -32,6 +32,10 @@ const getInforClininicOfUserOnPage = async (page, limit, province, district, war
 const getClinic = async (idClinic) => {
     return await axios.get(`/api/v1/clinic/getClinic?id=${idClinic}`);
 }
+const fetchAllClinicsOfSupport = async (page, limit) => {
+    return await axios.get(`/api/v1/clinic/fetchAllClinicsOfSupport?page=${page}&limit=${limit}`);
+};
+
 export {
 
     fetchAllClinics,
@@ -41,5 +45,6 @@ export {
     fetchAllClinicsNoPage,
     fetchDoctorOfCLinic,
     getInforClininicOfUserOnPage,
-    getClinic
+    getClinic,
+    fetchAllClinicsOfSupport
 };

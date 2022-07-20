@@ -96,10 +96,6 @@ class ModalCreateUser extends Component {
                 await this.uploadFile();
             }
         }
-
-
-
-
     }
     uploadFile = async () => {
         let { file } = this.state;

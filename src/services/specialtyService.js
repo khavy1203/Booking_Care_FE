@@ -20,10 +20,14 @@ const deleteSpecialty = async (specialty) => {
   return await axios.delete("/api/v1/specialty/delete", { data: { id: specialty.id } });
 };
 
+const fetchAllSpecialOfSupport = async (page, limit) => {
+  return await axios.get(`/api/v1/specialty/fetchAllSpecialOfSupport?page=${page}&limit=${limit}`);
+};
 export {
   createNewSpecialty,
   fetchAllSpecialties,
   fetchAllSpecialtysNoPage,
   updateCurrentSpecialty,
-  deleteSpecialty
+  deleteSpecialty,
+  fetchAllSpecialOfSupport
 };

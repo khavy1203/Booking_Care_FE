@@ -66,7 +66,8 @@ class Login extends Component {
       this.state.password
     );
     if (response && +response.EC === 0) {
-      this.props.userloginSuccess(response.DT.access_token);
+
+      await this.props.userloginSuccess(response.DT.access_token);
       const { navigate } = this.props;
       const redirectPath = "/home";
       navigate(`${redirectPath}`);

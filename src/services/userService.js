@@ -67,6 +67,9 @@ const newResetPassword = async (id, hashEmail, dataNewPassword) => {
     id, hashEmail, dataNewPassword
   });
 };
+const getUserById = async (id) => {
+  return await axios.get(`/api/v1/user/getUserById?id=${id}`);
+}
 export {
   handleLoginApi,
   fetchAllUser,
@@ -80,5 +83,6 @@ export {
   updateInforUser,
   forgotPasswordUser,
   newResetPassword,
-  updatePassword
+  updatePassword,
+  getUserById
 };

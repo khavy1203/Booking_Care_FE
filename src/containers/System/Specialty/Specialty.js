@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { FormattedMessage } from "react-intl";
 import MarkdownIt from "markdown-it";
 import { CommonUtils } from "../../../utils";
-import { fetchAllSpecialties, createNewSpecialty, } from "../../../services/specialtyService";
+import { fetchAllSpecialOfSupport, createNewSpecialty, } from "../../../services/specialtyService";
 
 import ReactPaginate from "react-paginate";
 import _ from 'lodash';
@@ -41,7 +41,7 @@ class Specialty extends Component {
         this.fetchSpecialty();
     }
     fetchSpecialty = async () => {
-        let res = await fetchAllSpecialties(
+        let res = await fetchAllSpecialOfSupport(
             this.state.currentPage,
             this.state.currentLimit
         );

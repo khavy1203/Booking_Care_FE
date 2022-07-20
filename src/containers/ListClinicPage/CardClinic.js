@@ -81,7 +81,7 @@ class CardClinic extends Component {
                                     <span>Chia sẻ</span>
                                 </a>
                                 <a
-                                    href={`/detail-doctor/${this.props.id}`}
+                                    href={`/doctor-page/${this.props.id}`}
                                     className="Clinic_btn_detail__2spys"
                                     draggable="false"
                                 >

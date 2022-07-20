@@ -60,7 +60,7 @@ class HomeHeader extends Component {
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item href="/register-clinic">Đăng ký phòng khám</Dropdown.Item>
-
+                  <Dropdown.Item href="/system/partner-clinic">Dành cho đối tác</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
 

@@ -31,7 +31,6 @@ class Header extends Component {
     let data = await logoutUser();
 
     if (data && +data.EC === 0) {
-      toast.success("logout succeeds");
 
       const { navigate } = this.props;
       this.props.processLogout();
@@ -44,6 +43,7 @@ class Header extends Component {
   render() {
     console.log("check login >>>", this.props.isLoggedIn)
     const { language, userData } = this.props;
+
     return (
       <div className="header-container">
         {/* thanh navigator */}

@@ -37,7 +37,8 @@
             "manage-group-role": "Manage group roles",
             "group-role": "Group role",
             "partner": "Partner",
-            "partner-clinic": "Partner Clinic"
+            "partner-clinic": "Partner Clinic",
+            "home": "Home"
         },
         "doctor": {
             "manage-schedule": "Manage Doctor's schedule",

@@ -46,8 +46,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.fetchCookigetUserAccount();
     this.handlePersistorState();
+    this.fetchCookigetUserAccount();
   }
 
   fetchCookigetUserAccount = async () => {
@@ -55,9 +55,9 @@ class App extends Component {
     if (res && +res.EC === 0 && res.DT.decode) {
       this.props.userloginSuccess(res.DT.token);
     } else {
+      console.log("đã vô này")
       this.props.userlogOut();
       await logoutUser();//nếu ko có thì tiết hành clear cookie cũ đi( nếu tồn tại)
-
     }
 
   }

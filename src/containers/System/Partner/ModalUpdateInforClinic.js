@@ -32,7 +32,7 @@ class ModalUpdateInforClinic extends Component {
     }
     async componentDidUpdate(prevProps, prevState) {
         if (prevProps.dataModal !== this.props.dataModal) {
-            this.setState({ clinicData: this.props.dataModal })
+            this.setState({ clinicData: this.props.dataModal.Clinic })
         }
     }
     // getClinicId = async () => {

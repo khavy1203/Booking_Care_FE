@@ -6,8 +6,7 @@ import MarkdownIt from "markdown-it";
 import { CommonUtils } from "../../../utils";
 import "../UserManage.scss";
 
-import { fetchAllClinics, createNewClinic, } from "../../../services/clinicService";
-
+import { fetchAllClinics, createNewClinic, fetchAllClinicsOfSupport } from "../../../services/clinicService";
 import ReactPaginate from "react-paginate";
 import ModalDeleteClinic from "./ModalDeleteClinic";
 import _ from 'lodash';
@@ -43,7 +42,7 @@ class ManageClinic extends Component {
   }
 
   fetchClinics = async () => {
-    let res = await fetchAllClinics(
+    let res = await fetchAllClinicsOfSupport(
       this.state.currentPage,
       this.state.currentLimit
     );

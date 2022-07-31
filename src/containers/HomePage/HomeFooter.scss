@@ -1,0 +1,50 @@
+@mixin border($c) {
+  border: 1px solid $c;
+}
+
+.footer-bottom {
+  background-color: #64b9e5;
+  color: #fff;
+  padding: 10px;
+}
+
+.home-footer {
+  background-color: #efefef;
+  display: flex;
+  justify-content: center;
+
+  .footer-container {
+    margin: 30px 100px;
+    display: flex;
+    width: 100%;
+
+    @include border(red);
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      .footer-link {
+        color: #45c3d2;
+        text-decoration: none;
+        padding: 5px 0;
+        font-size: 15px;
+      }
+    }
+    .left {
+      flex: 6;
+
+      @include border(blue);
+    }
+
+    .center {
+      flex: 3;
+      @include border(green);
+    }
+
+    .right {
+      flex: 3;
+      @include border(brown);
+    }
+  }
+}

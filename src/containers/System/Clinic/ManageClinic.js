@@ -57,6 +57,9 @@ class ManageClinic extends Component {
     }
   }
   async componentDidUpdate(prevProps, prevState) {
+    if (prevState.currentPage !== this.state.currentPage) {
+      await this.fetchClinics();
+    }
   }
 
   handlePageClick = async (event) => {

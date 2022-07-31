@@ -70,6 +70,10 @@ const newResetPassword = async (id, hashEmail, dataNewPassword) => {
 const getUserById = async (id) => {
   return await axios.get(`/api/v1/user/getUserById?id=${id}`);
 }
+
+const searchUser = async (dt, page, limit) => {
+  return await axios.get(`/api/v1/user/searchUser?search=${dt}&page=${page}&limit=${limit}`);
+}
 export {
   handleLoginApi,
   fetchAllUser,
@@ -84,5 +88,6 @@ export {
   forgotPasswordUser,
   newResetPassword,
   updatePassword,
-  getUserById
+  getUserById,
+  searchUser
 };

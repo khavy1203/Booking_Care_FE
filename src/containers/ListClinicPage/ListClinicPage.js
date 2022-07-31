@@ -59,6 +59,9 @@ class ListClinicPage extends Component {
         this.fetchWard();
     }
     async componentDidUpdate(prevProps, prevState) {
+        if (prevState.currentPage !== this.state.currentPage) {
+            await this.fetchClinics();
+        }
         if (prevState.selectedProvinceId !== this.state.selectedProvinceId) {
             await this.fetchDistrict();
             //fetchApi lấy data Clinic

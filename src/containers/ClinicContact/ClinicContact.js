@@ -307,7 +307,7 @@ class ClinicContact extends Component {
                 <HomeHeader />
                 <div className="contact-container container d-flex justify-content-center">
                     <div className="form-contact">
-                        <div className="contact-title mt-4">Hợp tác cùng BookingCare</div>
+                        <div className="contact-title mt-4">Hợp tác cùng Virgo</div>
                         <div className="contact-text mb-3">
                             Chúng tôi rất hân hạnh được hợp tác với bác sĩ và cơ sở y tế. Vui
                             lòng gửi thông tin, chúng tôi sẽ liên hệ lại trong thời gian sớm

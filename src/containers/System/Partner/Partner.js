@@ -13,11 +13,13 @@ import * as actions from "../../../store/actions";
 import ModalDeleteDoctorOfPartner from "./ModalDeleteDoctorOfParner";
 import ModalUpdateDoctorOfPartner from "./ModalUpdateDoctorOfPartner";
 import ModalUpdateInforClinic from "./ModalUpdateInforClinic";
+import { ContactlessOutlined } from "@mui/icons-material";
 class Partner extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            searchValue: "",
+            tableFillter: {},
             //phần thêm user
             userDataCreate: {},
             dataChildDefaultCreate:
@@ -41,6 +43,7 @@ class Partner extends Component {
             isShowModalUpdateClinic: false,
         }
     }
+
     componentDidMount() {
         this.fetchCookigetUserAccount();
         this.fetchSpecialty();
@@ -50,11 +53,16 @@ class Partner extends Component {
             }
         })
     }
+
     componentDidUpdate(prevProps, prevState) {
         if (prevState.userDataCreate !== this.state.userDataCreate) {
             this.fetchDoctorOfClinic(this.state.userDataCreate.Clinic.id);
         }
+        if (prevState.lstDoctorOfClinic !== this.state.lstDoctorOfClinic) {
+            this.setState({ tableFillter: this.state.lstDoctorOfClinic })
+        }
     };
+
     fetchDoctorOfClinic = async (clinnId) => {
         console.log("check user data >>.", this.state.userDataCreate)
         console.log("check user data id clinic >>.", this.state.userDataCreate.Clinic.id)
@@ -97,6 +105,57 @@ class Partner extends Component {
             this.setState({
                 lstSpecialties: res.DT
             })
+        }
+
+    }
+    fillerData = (e) => {
+        if (e.target.value != "") {
+            let isActive = 0;
+            let check = false;
+            let arrayFillter = [];
+
+            if ("đang hoạt động".includes(e.target.value.toLowerCase())) isActive = 1;
+            if ("tạm dừng".includes(e.target.value.toLowerCase())) isActive = 2;
+
+            this.setState({ searchValue: e.target.value })
+            if (this.state.lstDoctorOfClinic) {
+                Object.entries(this.state.lstDoctorOfClinic).map(([key1, child1], index) => {
+                    Object.entries(child1).map(([key2, child2], index) => {
+                        console.log("check key 2???", key2)
+                        if (key2 === "Users.Doctorinfo.active" && isActive !== 0) {//kiểm tra có active không, tại hiển thị là chuỗi mà truy vấn là integer
+                            if (child2 === isActive) {
+                                arrayFillter.push(child1);
+                            }
+                            console.log("check isactive??? và arrayFillter", isActive, arrayFillter)
+
+                            return;
+                        }
+
+                        if (String(child2).toLowerCase().includes(e.target.value.toLowerCase())) {
+                            console.log("child2 .", child2)
+                            check = true;
+                        }
+                        else {
+                            check = false;
+                        };
+                        if (check) {
+                            arrayFillter[key1] = child1;
+                        }
+                    })
+                })
+                console.log("check arrayFillter", arrayFillter)
+
+                this.setState({ tableFillter: arrayFillter })
+            }
+        } else {
+            if (this.state.lstDoctorOfClinic) {
+                this.setState({
+                    tableFillter: this.state.lstDoctorOfClinic,
+                    searchValue: e.target.value
+                })
+
+            }
+
         }
 
     }
@@ -230,6 +289,8 @@ class Partner extends Component {
     }
     render() {
         console.log("check lst user", this.state.lstDoctorOfClinic)
+        console.log("check fillertable>> ", this.state.tableFillter)
+
         return (
             <div className="role-container" >
                 <div className="container">
@@ -306,11 +367,20 @@ class Partner extends Component {
                     </div>
 
                     <hr />
-                    <div className="mt-3 table-role">
-                        <h4>Danh sách bác sĩ trong phòng khám của bạn: </h4>
-                        {/* <TableRole ref={childRef} /> */}
-                        {/* truyền dữ liệu xuống thằng con */}
+                    <div className="col-12 row">
+                        <div className="mt-3 table-role col-6">
+                            <h4>Danh sách bác sĩ trong phòng khám của bạn: </h4>
+
+                        </div>
+                        <div className="mt-3 table-role col-6">
+                            <input type="text" className="form-control" placeholder="Search"
+                                value={this.state.searchValue}
+                                onChange={(event) => this.fillerData(event)}
+                            />
+
+                        </div>
                     </div>
+
                     <div className="manage-Specialtyy-container">
                         <div className="Specialty-body">
                             <table className="table table-bordered table-hover">
@@ -324,14 +394,14 @@ class Partner extends Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {this.state.lstDoctorOfClinic && this.state.lstDoctorOfClinic.length > 0 ? (
+                                    {/* thay this.state.lstDoctorOfClinic thành danh sách lọc thành table fillter */}
+                                    {this.state.tableFillter && this.state.tableFillter.length > 0 ?
                                         <>
-                                            {Object.entries(this.state.lstDoctorOfClinic).map(([key, child], index) => {
+                                            {Object.entries(this.state.tableFillter).map(([key, child], index) => {
                                                 if (+child["Users.groupId"] === 2)
                                                     return (
 
-                                                        <tr key={`row-${index}`
-                                                        }>
+                                                        <tr key={child['Users.id']}>
                                                             <td>
                                                                 {index}
                                                             </td>
@@ -366,38 +436,17 @@ class Partner extends Component {
                                                     );
                                             })}
                                         </>
-                                    ) : (
+                                        :
                                         <>
                                             <tr>
                                                 <td>Không có Specialtys nào</td>
                                             </tr>
                                         </>
-                                    )}
+                                    }
                                 </tbody>
                             </table>
                             <div className="footer">
-                                {/* {this.state.totalPage > 0 && (
-                                    <ReactPaginate
-                                        nextLabel="next >"
-                                        onPageChange={this.handlePageClick}
-                                        pageRangeDisplayed={3}
-                                        marginPagesDisplayed={2}
-                                        pageCount={this.state.totalPage}
-                                        previousLabel="< previous"
-                                        pageClassName="page-item"
-                                        pageLinkClassName="page-link"
-                                        previousClassName="page-item"
-                                        previousLinkClassName="page-link"
-                                        nextClassName="page-item"
-                                        nextLinkClassName="page-link"
-                                        breakLabel="..."
-                                        breakClassName="page-item"
-                                        breakLinkClassName="page-link"
-                                        containerClassName="pagination"
-                                        activeClassName="active"
-                                        renderOnZeroPageCount={null}
-                                    />
-                                )} */}
+
                                 <ModalDeleteDoctorOfPartner
                                     show={this.state.isShowModalDelete}
                                     handleClose={this.handleModalDeleteDoctorOfClinicClose}

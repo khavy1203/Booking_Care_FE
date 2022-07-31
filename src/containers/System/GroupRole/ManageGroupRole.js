@@ -109,7 +109,7 @@ class ManageGroupRole extends Component {
         }
     }
     render() {
-
+        console.log("check this.state.userGroups", this.state.userGroups)
         return (
             <div className="group-role-container">
                 <div className="container">
@@ -122,7 +122,7 @@ class ManageGroupRole extends Component {
                                     onChange={(event) => this.handleOnchangeGroup(event.target.value)}
                                 >
                                     <option value="">Please select your group</option>
-                                    {this.state.userGroups.length > 0 && this.state.userGroups.map((item, index) => {
+                                    {this.state.userGroups.length > 0 && this.state.userGroups.id !== 1 && this.state.userGroups.map((item, index) => {
                                         return (
                                             <option
                                                 key={`group-${index}`}
@@ -149,7 +149,7 @@ class ManageGroupRole extends Component {
                                                 onChange={(event) => this.handleSelectRole(event.target.value)}
                                             />
                                             <label className="form-check-label" htmlFor={`list-role-${index}`}>
-                                                {item.url}
+                                                {item.description}
                                             </label>
                                         </div>
                                     )

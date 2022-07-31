@@ -42,6 +42,9 @@ class ListClinicPage extends Component {
 
     }
     async componentDidUpdate(prevProps, prevState) {
+        if (prevState.currentPage !== this.state.currentPage) {
+            this.fetchDoctors();
+        }
         if (prevState.selectedSpecialty !== this.state.selectedSpecialty) {
             let res = await getAllDoctorsPagination(
                 this.state.currentPage,

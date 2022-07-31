@@ -57,6 +57,9 @@ class ListDoctorPage extends Component {
 
     }
     componentDidUpdate(prevProps, prevState) {
+        if (prevState.currentPage !== this.state.currentPage) {
+            this.fetchDoctorOfCLinic();
+        }
         if (prevState.currentClinicId !== this.state.currentClinicId) {
             this.fetchDoctorOfCLinic();
         }

@@ -23,6 +23,7 @@ class ModalUpdateDoctorOfPartner extends Component {
             doctorData: {},
             lstSpecial: [],
             doctorDataDefault: {
+                username: "",//yêu cầu cần thêm họ và tên của Bác sĩ
                 idUser: "",
                 specialIdUser: "",
                 idDoctorInfo: "",
@@ -45,6 +46,7 @@ class ModalUpdateDoctorOfPartner extends Component {
             },
             validInput: {},
             validInputDefault: {
+                username: true,//yêu cầu cần thêm họ và tên của Bác sĩ
                 idUser: true,
                 specialIdUser: true,
                 idDoctorInfo: true,
@@ -82,7 +84,9 @@ class ModalUpdateDoctorOfPartner extends Component {
     async componentDidUpdate(prevProps, prevState) {
         let dataUpdate = this.props.dataModal;
         if (prevProps.dataModal !== this.props.dataModal) {
+            console.log("check prop data Modal >>>", this.props.dataModal)
             let _doctorData = _.cloneDeep(this.state.doctorData);
+            _doctorData['username'] = dataUpdate['Users.username'];
             _doctorData['idUser'] = dataUpdate['Users.id'];
             _doctorData['idDoctorInfo'] = dataUpdate['Users.Doctorinfo.id'];
             _doctorData['specialIdUser'] = dataUpdate['Users.Specialty.id'];
@@ -203,7 +207,7 @@ class ModalUpdateDoctorOfPartner extends Component {
     checkValidateInput = () => {
 
         this.setState({ validInput: this.state.validInputDefault });
-        let array = ['specialIdUser', 'active'];
+        let array = ['specialIdUser', 'active', 'username'];
 
         for (let i = 0; i < array.length; i++) {
             if (!this.state.doctorData[array[i]]) {
@@ -320,6 +324,26 @@ class ModalUpdateDoctorOfPartner extends Component {
                                 <div className="intro-doctor-vi col-6">
                                     <label>
                                         {/* <FormattedMessage id="admin.manage-doctor.intro" /> */}
+                                        Họ tên bác sĩ
+                                    </label>
+                                    <input
+                                        className={this.state.validInput.username
+                                            ? "form-control"
+                                            : "form-control is-invalid"
+                                        }
+                                        type="text"
+                                        value={this.state.doctorData.username}
+                                        onChange={(event) => {
+                                            this.handleOnchangeInput(event.target.value, "username");
+                                        }}
+                                    />
+
+                                </div>
+                            </div>
+                            <div className="info-doctor row form-group">
+                                <div className="intro-doctor-vi col-6">
+                                    <label>
+                                        {/* <FormattedMessage id="admin.manage-doctor.intro" /> */}
                                         Thông tin giới thiệu (VI)
                                     </label>
                                     <textarea
@@ -330,7 +354,6 @@ class ModalUpdateDoctorOfPartner extends Component {
                                             this.handleOnchangeInput(event.target.value, "descriptionHTLM_VI");
                                         }}
                                     >
-                                        adasdsa
                                     </textarea>
                                 </div>
                                 <div className="intro-doctor-en col-6">
@@ -357,6 +380,7 @@ class ModalUpdateDoctorOfPartner extends Component {
                                         <input
                                             className="form-control"
                                             type="text"
+
                                             value={this.state.doctorData.price}
                                             onChange={(event) => {
                                                 this.handleOnchangeInput(event.target.value, "price");

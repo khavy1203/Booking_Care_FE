@@ -38,7 +38,7 @@ class System extends Component {
         const redirectPath = "/home";
         navigate(`${redirectPath}`);
       }
-      //console.log(" res.DT.decode", res.DT.decode);
+      console.log(" res.DT.decode", res.DT.decode);
       this.props.userloginSuccess(res.DT.token);
     } else {
       this.props.userlogOut();

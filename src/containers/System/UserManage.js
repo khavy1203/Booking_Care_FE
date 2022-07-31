@@ -4,9 +4,16 @@ import { connect } from "react-redux";
 import "./UserManage.scss";
 import ReactPaginate from "react-paginate";
 import ModalDeleteUser from "./ModalUserDelete";
-import { fetchAllUser, deleteUser } from "../../services/userService";
+import {
+  fetchAllUser,
+  deleteUser,
+  getUserAccount,
+  searchUser,
+} from "../../services/userService";
 import ModalUpdateUser from "./ModalUpdateUser";
 import ModalCreateUser from "./ModalCreateUser";
+import { push } from "connected-react-router";
+import * as actions from "../../store/actions";
 import { toast } from "react-toastify";
 
 require("dotenv").config();
@@ -15,12 +22,15 @@ class UserManage extends Component {
     super(props);
     //khai báo state
     this.state = {
+      searchValue: "",
+      tableFillter: {},
       //page
       listUser: [],
       currentPage: 1,
       currentLimit: 7,
       totalPage: 0,
 
+      lstUserNoPage: [],
       //update user
       dataModalUpdate: {},
 
@@ -29,15 +39,31 @@ class UserManage extends Component {
 
       isShowModalDelete: false,
       isShowModalUpdateUser: false,
-      isShowModalCreateUser: false
+      isShowModalCreateUser: false,
+      userData: {},
     };
   }
   componentDidMount() {
     this.fetchUser();
+    // this.fetchUserNoPage();
+    this.fetchCookigetUserAccount();
   }
+  fetchCookigetUserAccount = async () => {
+    let res = await getUserAccount();
+    if (res && +res.EC === 0 && res.DT.decode) {
+      this.props.userloginSuccess(res.DT.token);
+      console.log("check user data", res.DT.decode);
+      this.setState({
+        userData: res.DT.decode,
+      });
+    }
+  };
   componentDidUpdate(prevProps, prevState) {
     if (prevState.currentPage !== this.state.currentPage) {
       this.fetchUser();
+    }
+    if (prevState.listUser !== this.state.listUser) {
+      this.setState({ tableFillter: this.state.listUser });
     }
   }
 
@@ -58,6 +84,14 @@ class UserManage extends Component {
       this.setState({ listUser: response.DT.users });
     }
   };
+  // fetchUserNoPage = async () => {
+
+  //   let response = await fetchAllUser();
+
+  //   if (response && +response.EC === 0) {
+  //     this.setState({ lstUserNoPage: response.DT });
+  //   }
+  // };
   handlePageClick = async (event) => {
     this.setState({ currentPage: event.selected + 1 }); // lỗi bất đồng bộ, cách fix thêm chỉ số vào fetchUser
     await this.fetchUser();
@@ -68,8 +102,6 @@ class UserManage extends Component {
     this.setState({ isShowModalDelete: true });
   };
 
-
-
   // //update modal
   handleModalUserClose = async () => {
     this.setState({
@@ -77,7 +109,7 @@ class UserManage extends Component {
       isShowModalUpdateUser: false,
       isShowModalCreateUser: false,
       dataModalUpdate: {},
-      dataModalDelete: {}
+      dataModalDelete: {},
     });
     await this.fetchUser();
   };
@@ -89,7 +121,67 @@ class UserManage extends Component {
     this.setState({ isShowModalCreateUser: true });
   };
 
+  fillerData = (e) => {
+    this.setState({ searchValue: e.target.value });
+
+    // if (e.target.value != "") {
+    //   // let isActive = 0;
+    //   let check = false;
+    //   let arrayFillter = [];
+
+    //   // if ("đang hoạt động".includes(e.target.value.toLowerCase())) isActive = 1;
+    //   // if ("tạm dừng".includes(e.target.value.toLowerCase())) isActive = 2;
+
+    //   this.setState({ searchValue: e.target.value })
+    //   if (this.state.listUser) {
+    //     Object.entries(this.state.listUser).map(([key1, child1], index) => {
+    //       Object.entries(child1).map(([key2, child2], index) => {
+    //         console.log("check key 2???", key2)
+    //         if (String(child2).toLowerCase().includes(e.target.value.toLowerCase())) {
+    //           console.log("child2 .", child2)
+    //           check = true;
+    //         }
+    //         else {
+    //           check = false;
+    //         };
+    //         if (check) {
+    //           arrayFillter[key1] = child1;
+    //         }
+    //       })
+    //     })
+    //     console.log("check arrayFillter", arrayFillter)
+
+    //     this.setState({ tableFillter: arrayFillter })
+    //   }
+    // } else {
+    //   if (this.state.listUser) {
+    //     this.setState({
+    //       tableFillter: this.state.listUser,
+    //       searchValue: e.target.value
+    //     })
+    //   }
+    // }
+  };
+  searchUser = async (event) => {
+    if (event.key === "Enter") {
+      if (this.state.searchValue != "") {
+        let response = await searchUser(
+          this.state.searchValue,
+          this.state.currentPage,
+          this.state.currentLimit
+        );
+
+        if (response && +response.EC === 0) {
+          this.setState({ totalPage: response.DT.totalPages });
+          this.setState({ listUser: response.DT.users });
+        }
+      } else {
+        this.fetchUser();
+      }
+    }
+  };
   render() {
+    console.log("check fillertable>> ", this.state.tableFillter);
     return (
       <>
         <div className="container">
@@ -98,13 +190,25 @@ class UserManage extends Component {
               <div className="title">
                 <h3>Table user</h3>
               </div>
-              <div className="action">
-                <button
-                  className="btn btn-success"
-                  onClick={() => this.handleShowCreateModalUser()}
-                >
-                  <i className="fa fa-plus"></i>Add new user
-                </button>
+              <div className="col-12 row">
+                <div className="action col-6">
+                  <button
+                    className="btn btn-success"
+                    onClick={() => this.handleShowCreateModalUser()}
+                  >
+                    <i className="fa fa-plus"></i>Add new user
+                  </button>
+                </div>
+                <div className="mt-3 table-role col-6">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Search"
+                    value={this.state.searchValue}
+                    onChange={(event) => this.fillerData(event)}
+                    onKeyPress={this.searchUser}
+                  />
+                </div>
               </div>
             </div>
 
@@ -124,7 +228,11 @@ class UserManage extends Component {
                     <>
                       {this.state.listUser.map((item, index) => {
                         let admin = process.env.REACT_APP_EMAIL_ADMIN;
-                        if (admin === item.email) return;
+                        if (
+                          admin === item.email ||
+                          item.id === this.state.userData.id
+                        )
+                          return;
                         return (
                           <tr key={`row-${index}`}>
                             <td>
@@ -218,7 +326,10 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    userloginSuccess: (userInfo) =>
+      dispatch(actions.userloginSuccess(userInfo)),
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserManage);

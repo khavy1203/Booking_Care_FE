@@ -11,7 +11,7 @@ class HomeFoote extends Component {
           <div className="footer-container">
             <div className="footer-content left">
               <div>Logo</div>
-              <div>Công ty Cổ phần Công nghệ BookingCare</div>
+              <div>Công ty Cổ phần Công nghệ Vergo</div>
               <div>Địa chỉ</div>
             </div>
             <div className="footer-content center">

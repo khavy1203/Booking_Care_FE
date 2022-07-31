@@ -82,7 +82,7 @@
         },
         "booking-modal": {
             "title": "Information to book a medical appointment",
-            "name": "Patient name",
+            "name": "Full name",
             "phone": "Phone number",
             "email": "Email",
             "address": "Adress",

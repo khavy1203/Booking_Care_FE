@@ -98,7 +98,6 @@ class ManageSchedule extends Component {
 
   handleSaveSchedule = async () => {
     let { times, currentDate, maxNumber } = this.state;
-
     let result = {};
 
     if (!currentDate) {

@@ -6,13 +6,16 @@ import MarkdownIt from "markdown-it";
 import { CommonUtils } from "../../../utils";
 import "../UserManage.scss";
 
-import { fetchAllClinics, createNewClinic, fetchAllClinicsOfSupport } from "../../../services/clinicService";
+import {
+  fetchAllClinics,
+  createNewClinic,
+  fetchAllClinicsOfSupport,
+} from "../../../services/clinicService";
 import ReactPaginate from "react-paginate";
 import ModalDeleteClinic from "./ModalDeleteClinic";
-import _ from 'lodash';
+import _ from "lodash";
 import { toast } from "react-toastify";
 import ModalUpdateClinic from "./ModalUpdateClinic";
-
 
 const mdParser = new MarkdownIt(/* Markdown-it options */);
 
@@ -22,7 +25,7 @@ class ManageClinic extends Component {
     this.state = {
       currentPage: 1,
       currentLimit: 7,
-      totalPage: 0,//phân trang
+      totalPage: 0, //phân trang
 
       listClinics: [],
 
@@ -31,10 +34,7 @@ class ManageClinic extends Component {
 
       isShowModalDelete: false,
       dataModalDelete: {},
-
-
     };
-
   }
 
   componentDidMount() {
@@ -47,16 +47,18 @@ class ManageClinic extends Component {
       this.state.currentLimit
     );
     if (res && +res.EC === 0) {
-
       this.setState({
         listClinics: res.DT.clinics,
-        totalPage: res.DT.totalPages
-      })
+        totalPage: res.DT.totalPages,
+      });
     } else {
-      toast.error(res.EM)
+      toast.error(res.EM);
     }
-  }
+  };
   async componentDidUpdate(prevProps, prevState) {
+    if (prevState.currentPage !== this.state.currentPage) {
+      await this.fetchClinics();
+    }
   }
 
   handlePageClick = async (event) => {
@@ -70,34 +72,34 @@ class ManageClinic extends Component {
     if (getFile) {
       this.setState({ file: getFile });
     }
-  }
+  };
 
   handleDeleteClinic = (item) => {
     this.setState({ dataModalDelete: item });
     this.setState({ isShowModalDelete: true });
-  }
+  };
 
   handleModalDeleteClinicClose = async () => {
     this.setState({ dataModalDelete: {} });
     this.setState({ isShowModalDelete: false });
     await this.fetchClinics();
-  }
+  };
   handleModalUpdateClinicClose = async () => {
     this.setState({ dataModalUpdateClinic: {} });
     this.setState({ isShowModalUpdateClinic: false });
     await this.fetchClinics();
-  }
+  };
 
   handleModalUpdateClinic = (item) => {
     // this.setClinicDataItem(item);
     this.setState({
       isShowModalUpdateClinic: true,
-      dataModalUpdateClinic: item
-    })
-  }
+      dataModalUpdateClinic: item,
+    });
+  };
 
   render() {
-    console.log("check isloggin in manageClinicU ", this.props.isLoggedIn)
+    console.log("check isloggin in manageClinicU ", this.props.isLoggedIn);
 
     return (
       <>
@@ -108,10 +110,10 @@ class ManageClinic extends Component {
             <table className="table table-bordered table-hover">
               <thead>
                 <tr>
-                  <th >No</th>
-                  <th  >Tên</th>
+                  <th>No</th>
+                  <th>Tên</th>
                   <th className="col-5">Địa chỉ</th>
-                  <th >Tỉnh</th>
+                  <th>Tỉnh</th>
                   <th>Trạng thái</th>
                 </tr>
               </thead>
@@ -130,16 +132,17 @@ class ManageClinic extends Component {
                           <td>{item.nameVI}</td>
                           <td>{item.addressVI}</td>
                           <td>{item.provinceId ? item.provinceId : ""}</td>
-                          <td >
-
-                            <div className={
-                              item.status === 0 && "pending-status" || item.status === 1
-                              && "active-status" || item.status === 2
-                              && "pause-status"
-                            }>
-                              {
-                                item.status === 0 && "pending" || item.status === 1 && "active" || item.status === 2 && "pause"
+                          <td>
+                            <div
+                              className={
+                                (item.status === 0 && "pending-status") ||
+                                (item.status === 1 && "active-status") ||
+                                (item.status === 2 && "pause-status")
                               }
+                            >
+                              {(item.status === 0 && "pending") ||
+                                (item.status === 1 && "active") ||
+                                (item.status === 2 && "pause")}
                             </div>
                           </td>
                           <td>

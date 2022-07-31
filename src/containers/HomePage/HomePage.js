@@ -23,7 +23,7 @@ class HomePage extends Component {
   componentDidMount() {}
 
   render() {
-    //console.log("check user data >>>", this.state.userData)
+    console.log("check user data >>>", this.state.userData);
     let settings = {
       dots: false,
       infinite: false,
@@ -39,6 +39,7 @@ class HomePage extends Component {
         <OutstandingDoctor settings={settings} />
         <Handbook settings={settings} />
         <About />
+
         <HomeFooter />
       </div>
     );

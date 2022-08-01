@@ -20,6 +20,7 @@ import { push } from "connected-react-router";
 import * as actions from "../../store/actions";
 import { ImUpload2 } from "react-icons/im";
 import ModalChangePassWord from "./ModalChangePassWord";
+import HomeFooter from "../HomePage/HomeFooter";
 class ProfileUser extends Component {
   constructor(props) {
     super(props);
@@ -268,6 +269,15 @@ class ProfileUser extends Component {
   changePasswordUser = () => {
     this.setState({ isShowModalUpdatePassword: true });
   };
+
+  //Huyên:
+  handleViewHistory = () => {
+    if (this.props.history) {
+      this.props.history.push(`/booking-history`);
+    }
+    //this.state.userData
+  };
+
   render() {
     let { per, url, userData } = this.state;
     console.log("check userData>>>", userData);
@@ -327,6 +337,20 @@ class ProfileUser extends Component {
                       </div>
                     </div>
                   </div>
+                  {this.state.userData.groupId === 3 ? (
+                    <div className="card-footer">
+                      <div className="d-flex flex-column align-items-center text-center">
+                        <button
+                          className="btn btn-primary m-2"
+                          onClick={() => this.handleViewHistory()}
+                        >
+                          Xem lịch sử khám bệnh
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               </div>
               <div className="col-md-8">
@@ -538,6 +562,7 @@ class ProfileUser extends Component {
             </div>
           </div>
         </div>
+        <HomeFooter />
         <ModalChangePassWord
           show={this.state.isShowModalUpdatePassword}
           handleClose={this.handleModalUpdatePasswordClose}

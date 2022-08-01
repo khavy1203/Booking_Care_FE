@@ -35,11 +35,15 @@
 }
 
 .section-share {
-  &.section-specialty {
-    background-color: #f5f5f5;
-  }
+  // &.section-specialty {
+  //   background-color: #f5f5f5;
+  // }
 
-  &.section-outstanding-doctor {
+  // &.section-outstanding-doctor {
+  //   background-color: #f5f5f5;
+  // }
+
+  &.section-medical-facility {
     background-color: #f5f5f5;
   }
 
@@ -59,13 +63,13 @@
         background-size: cover;
         background-color: #eee;
 
-        &.section-specialty {
-          background-image: url("../../assets/specialty/co-xuong-khop.jpg");
-        }
+        // &.section-specialty {
+        //   background-image: url("../../assets/specialty/co-xuong-khop.jpg");
+        // }
 
-        &.section-medical-facility {
-          background-image: url("../../assets/facility/benh-vien-thu-cuc.jpg");
-        }
+        // &.section-medical-facility {
+        //   background-image: url("../../assets/facility/benh-vien-thu-cuc.jpg");
+        // }
 
         &.section-outstanding-doctor {
           //background-image: url("../../assets/outstandingDoctor/anh-dai-dien-bs.jpg");

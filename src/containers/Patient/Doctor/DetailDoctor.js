@@ -8,6 +8,7 @@ import DoctorExtraInfo from "./DoctorExtraInfo";
 import { fetchInfoDoctor } from "../../../services/doctorService";
 // import { fetchSchedule } from "../../../services/scheduleService";
 import { LANGUAGES } from "../../../utils";
+import HomeFooter from "../../HomePage/HomeFooter";
 class DetailDoctor extends Component {
   constructor(props) {
     super(props);
@@ -123,23 +124,16 @@ class DetailDoctor extends Component {
               <DoctorExtraInfo DetailDoctor={detailDoctor} />
             </div>
           </div>
-          {doctorDes_VI || doctorDes_EN ? (
-            <>
-              <div className="detail-info-doctor">
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      language === LANGUAGES.VI ? doctorDes_VI : doctorDes_EN,
-                  }}
-                ></div>
-              </div>
-            </>
-          ) : (
-            <></>
-          )}
-
-          <div className="comment-doctor">comment-doctor</div>
+          <div className="detail-info-doctor">
+            <div
+              dangerouslySetInnerHTML={{
+                __html: language === LANGUAGES.VI ? doctorDes_VI : doctorDes_EN,
+              }}
+            ></div>
+          </div>
+          {/* <div className="comment-doctor">comment-doctor</div> */}
         </div>
+        <HomeFooter />
       </Fragment>
     );
   }

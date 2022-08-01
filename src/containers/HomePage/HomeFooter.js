@@ -3,16 +3,19 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 // import { FormattedMessage } from "react-intl";
 import "./HomeFooter.scss";
+import logo from "../../assets/Logo.svg";
 class HomeFoote extends Component {
   render() {
     return (
       <>
-        <div className="home-footer">
+        <div className="homepage-footer">
           <div className="footer-container">
             <div className="footer-content left">
-              <div>Logo</div>
-              <div>Công ty Cổ phần Công nghệ Vergo</div>
-              <div>Địa chỉ</div>
+              <div className="footer-logo"></div>
+              <div className="company-title">
+                <h5>Công ty Cổ phần Công nghệ VigorDoctor</h5>
+              </div>
+              <div>180 Đ. Cao Lỗ, Phường 4, Quận 8, Thành phố Hồ Chí Minh</div>
             </div>
             <div className="footer-content center">
               <Link className="footer-link" to={"/home"}>
@@ -34,7 +37,18 @@ class HomeFoote extends Component {
                 Quy chế hoạt động
               </Link>
             </div>
-            <div className="footer-content right">branch</div>
+            <div className="footer-content right">
+              <div className="company-info">
+                <div className="info-item">
+                  <h5>Văn phòng tại TP Hồ Chí Minh</h5>
+                  <p>180 Đ. Cao Lỗ, Phường 4, Quận 8, Thành phố Hồ Chí Minh</p>
+                </div>
+                <div className="info-item">
+                  <h5>Hỗ trợ khách hàng</h5>
+                  <p>support@vigordoctor.vn (7h30 - 18h) </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div className="footer-bottom">&copy; 2022</div>

@@ -8,13 +8,25 @@ import DoctorExtraInfo from "./DoctorExtraInfo";
 import { fetchInfoDoctor } from "../../../services/doctorService";
 // import { fetchSchedule } from "../../../services/scheduleService";
 import { LANGUAGES } from "../../../utils";
+import HomeFooter from "../../HomePage/HomeFooter";
 class DetailDoctor extends Component {
   constructor(props) {
     super(props);
     this.state = {
       detailDoctor: {},
-      clinicId: -1,
       currentDoctorId: -1,
+
+      doctorName: "",
+      doctorImage: "",
+
+      //Thông tin bác sĩ
+      degree_VI: "",
+      degree_EN: "",
+      introductionVI: "",
+      doctorDes_VI: "",
+
+      introductionEN: "",
+      doctorDes_EN: "",
     };
   }
   async componentDidMount() {
@@ -36,7 +48,23 @@ class DetailDoctor extends Component {
     try {
       let res = await fetchInfoDoctor(id);
       if (res && +res.EC === 0) {
-        this.setState({ detailDoctor: res.DT, clinicId: res.DT.clinicId });
+        this.setState({
+          detailDoctor: res.DT,
+
+          doctorName: res.DT.username,
+          doctorImage: res.DT.image,
+
+          introductionVI: res.DT.Doctorinfo.introductionVI,
+          introductionEN: res.DT.Doctorinfo.introductionEN,
+          degree_VI: res.DT.Doctorinfo.degree_VI,
+          degree_EN: res.DT.Doctorinfo.degree_EN,
+
+          doctorDes_VI: res.DT.Doctorinfo.descriptionHTLM_VI,
+          doctorDes_EN: res.DT.Doctorinfo.descriptionHTLM_EN,
+
+          specialtyVI: res.DT.Specialty.nameVI,
+          specialtyEN: res.DT.Specialty.nameEN,
+        });
         console.log("detailDoctor", this.state.detailDoctor);
       } else {
         console.log(res.EM);
@@ -49,10 +77,23 @@ class DetailDoctor extends Component {
   componentDidUpdate(prevProps, prevState, snapshot) {}
 
   render() {
-    let { detailDoctor, clinicId } = this.state;
+    let {
+      detailDoctor,
+
+      doctorName,
+      doctorImage,
+
+      introductionVI,
+      introductionEN,
+      degree_VI,
+      degree_EN,
+
+      doctorDes_VI,
+      doctorDes_EN,
+    } = this.state;
     let { language } = this.props;
-    let nameVi = `Bác sĩ ${detailDoctor.username}`;
-    let nameEn = `Doctor ${detailDoctor.username}`;
+    let nameVi = `${degree_VI} ${doctorName}`;
+    let nameEn = `${degree_EN} ${doctorName}`;
     return (
       <Fragment>
         <HomeHeader isShowBanner={false} />
@@ -61,9 +102,7 @@ class DetailDoctor extends Component {
             <div
               className="content-left"
               style={{
-                backgroundImage: `url(${
-                  detailDoctor && detailDoctor.image ? detailDoctor.image : ""
-                })`,
+                backgroundImage: `url(${doctorImage})`,
               }}
             ></div>
             <div className="content-right">
@@ -71,59 +110,30 @@ class DetailDoctor extends Component {
                 {language === LANGUAGES.VI ? nameVi : nameEn}
               </div>
               <div className="down">
-                <span>Duis excepteur tempor dolor nulla esse laborum sit.</span>
+                <span>
+                  {language === LANGUAGES.VI ? introductionVI : introductionEN}
+                </span>
               </div>
             </div>
           </div>
           <div className="schedule-doctor">
             <div className="content-left">
-              <DoctorSchedule
-                doctorIdFromParent={this.state.currentDoctorId}
-                doctorClinicId={clinicId}
-              />
+              <DoctorSchedule DetailDoctor={detailDoctor} />
             </div>
             <div className="content-right">
-              <DoctorExtraInfo
-                doctorIdFromParent={this.state.currentDoctorId}
-                doctorClinicId={
-                  detailDoctor && detailDoctor.clinicId
-                    ? detailDoctor.clinicId
-                    : ""
-                }
-              />
+              <DoctorExtraInfo DetailDoctor={detailDoctor} />
             </div>
           </div>
           <div className="detail-info-doctor">
-            {/* dangerouslySetInnerHTML={{
-                __html: "<p>First &middot; Second</p>",
-              }} */}
-            <div>
-              Reprehenderit cupidatat nostrud aute consectetur ad nisi
-              consectetur adipisicing eiusmod in anim ex. Velit aliqua mollit
-              cillum nulla nostrud ea in minim Lorem pariatur id incididunt
-              Lorem eu. Officia laboris amet cupidatat proident proident velit
-              adipisicing dolore. Laboris id laborum ipsum non est consectetur
-              non. Ex irure sint excepteur aliquip sit. Ea ipsum consectetur
-              deserunt fugiat non. Aliqua proident fugiat dolore officia aute
-              duis pariatur enim tempor. Dolor aliqua dolor labore sint. Fugiat
-              est dolore aliqua do enim eu exercitation enim ex proident eiusmod
-              et. Est laboris nostrud ut excepteur commodo consequat esse
-              excepteur irure cillum in. Quis consequat adipisicing elit
-              occaecat pariatur do elit tempor qui proident. Ad consequat culpa
-              ut dolor irure aute sint aliqua id ipsum. Cillum commodo in
-              proident pariatur ipsum culpa voluptate in. Officia ad adipisicing
-              incididunt laboris elit in est cupidatat id irure et. Esse officia
-              enim labore dolor aute culpa ullamco et esse officia incididunt
-              et. Veniam nisi sit deserunt dolore sunt velit nostrud ea ea aute
-              adipisicing cupidatat reprehenderit ex. Do et eu aute sit non
-              adipisicing mollit deserunt voluptate Lorem exercitation consequat
-              laborum Lorem. Sit sit ea dolore irure occaecat id minim dolore et
-              consectetur adipisicing tempor. Consectetur magna officia aute
-              amet.
-            </div>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: language === LANGUAGES.VI ? doctorDes_VI : doctorDes_EN,
+              }}
+            ></div>
           </div>
-          <div className="comment-doctor">comment-doctor</div>
+          {/* <div className="comment-doctor">comment-doctor</div> */}
         </div>
+        <HomeFooter />
       </Fragment>
     );
   }

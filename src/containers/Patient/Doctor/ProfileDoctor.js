@@ -13,51 +13,52 @@ class ProfileDoctor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataProfile: {},
+      //dataProfile: {},
     };
   }
 
-  async componentDidMount() {
-    let id = this.props.doctorId;
-    if (id) {
-      let data = await this.getInfoDoctor(id);
-      // console.log("profileDoctor, data", data);
-      this.setState({
-        dataProfile: data,
-      });
-      // console.log("profileDoctor", this.state.dataProfile);
-    }
+  componentDidMount() {
+    // let id = this.props.doctorId;
+    // if (id) {
+    //   let data = await this.getInfoDoctor(id);
+    //   // console.log("profileDoctor, data", data);
+    //   this.setState({
+    //     dataProfile: data,
+    //   });
+    //   // console.log("profileDoctor", this.state.dataProfile);
+    // }
   }
 
-  getInfoDoctor = async (id) => {
-    try {
-      let result = {};
-      if (id) {
-        let res = await fetchInfoDoctorModal(id);
-        if (res && +res.EC === 0) {
-          result = res.DT;
-        } else {
-          console.log(res.EM);
-        }
-      }
-      return result;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // getInfoDoctor = async (id) => {
+  //   try {
+  //     let result = {};
+  //     if (id) {
+  //       let res = await fetchInfoDoctorModal(id);
+  //       if (res && +res.EC === 0) {
+  //         result = res.DT;
+  //       } else {
+  //         console.log(res.EM);
+  //       }
+  //     }
+  //     return result;
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   async componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.props.language === prevProps.language) {
     }
     if (this.props.doctorId !== prevProps.doctorId) {
-      // let data = await this.getInfoDoctor(this.props.doctorId);
-      // this.setState({
-      //   dataProfile: data,
-      // });
     }
   }
+
+  capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   renderTimeBooking = (schedule) => {
-    // console.log("schedule", schedule);
+    console.log("schedule", schedule);
     let { language } = this.props;
     // let date =
     //   language === LANGUAGES.VI
@@ -68,23 +69,29 @@ class ProfileDoctor extends Component {
     //         .locale("en")
     //         .format("ddd - MM/DD/YYYY");
     //convert chuỗi date sang kiểu DATE
-    let getDate = moment(schedule.date, dateFormat.SEND_TO_SERVER)._d;
+    //let getDate = moment(schedule.date, dateFormat.SEND_TO_SERVER)._d;
+
     let date =
       language === LANGUAGES.VI
-        ? moment(getDate).locale("vi").format("dddd - DD/MM/YYYY")
-        : moment(getDate).locale("en").format("ddd - MM/DD/YYYY");
+        ? this.capitalizeFirstLetter(
+            moment(schedule.date).locale("vi").format("dddd - DD/MM/YYYY")
+          )
+        : this.capitalizeFirstLetter(
+            moment(schedule.date).locale("en").format("ddd - MM/DD/YYYY")
+          );
     if (schedule) {
       return (
         <>
+          <div>Ngày khám: {date}</div>
           <div>
+            Giờ khám:{" "}
             {language === LANGUAGES.VI
               ? schedule.Timeframe.nameVI
-              : schedule.Timeframe.nameEN}{" "}
-            - {date}
+              : schedule.Timeframe.nameEN}
           </div>
-          <div>
+          {/* <div>
             <FormattedMessage id="patient.booking-modal.priceBooking" />
-          </div>
+          </div> */}
         </>
       );
     }
@@ -92,25 +99,31 @@ class ProfileDoctor extends Component {
   };
 
   render() {
-    let { dataProfile } = this.state;
+    //let { dataProfile } = this.state;
     let {
-      isShowLinkDetail,
-      isShowPrice,
-      doctorId,
+      // isShowLinkDetail,
+      // isShowPrice,
+      // doctorId,
+      // isShowDescriptionDoctor,
       language,
-      isShowDescriptionDoctor,
+      DetailDoctor,
       selectedSchedule,
     } = this.props;
-    console.log(
-      "selectedSchedule",
-      moment(selectedSchedule.date, dateFormat.SEND_TO_SERVER)._d
-    );
+    console.log("check props", this.props);
 
     let nameVi = "",
-      nameEn = "";
-    if (dataProfile && dataProfile.Group) {
-      nameVi = `${dataProfile.Group.name} ${dataProfile.username}`;
-      nameEn = `${dataProfile.Group.name} ${dataProfile.username}`;
+      nameEn = "",
+      specialtyVi = "",
+      specialtyEn = "",
+      clinicVi = "",
+      clinicEn = "";
+    if (DetailDoctor) {
+      nameVi = `${DetailDoctor.Doctorinfo.degree_VI} ${DetailDoctor.username}`;
+      nameEn = `${DetailDoctor.Doctorinfo.degree_EN} ${DetailDoctor.username}`;
+      specialtyVi = `${DetailDoctor.Specialty.nameVI}`;
+      specialtyEn = `${DetailDoctor.Specialty.nameEN}`;
+      clinicVi = `${DetailDoctor.Clinic.nameVI}`;
+      clinicEn = `${DetailDoctor.Clinic.nameEN}`;
     }
     return (
       <div className="profile-doctor-container">
@@ -118,16 +131,19 @@ class ProfileDoctor extends Component {
           <div
             className="content-left"
             style={{
-              backgroundImage: `url(${dataProfile && dataProfile.image ? dataProfile.image : ""
-                })`,
+              backgroundImage: `url(${
+                DetailDoctor && DetailDoctor.image ? DetailDoctor.image : ""
+              })`,
             }}
           ></div>
           <div className="content-right">
             <div className="up">
-              {language === LANGUAGES.VI ? nameVi : nameEn}
+              <div>{language === LANGUAGES.VI ? nameVi : nameEn}</div>
             </div>
             <div className="down">
-              {isShowDescriptionDoctor === true ? (
+              <div>{language === LANGUAGES.VI ? specialtyVi : specialtyEn}</div>
+              <div>{language === LANGUAGES.VI ? clinicVi : clinicEn}</div>
+              {/* {isShowDescriptionDoctor === true ? (
                 <>
                   <span>
                     Fugiat nulla ut ipsum cillum esse ullamco in est in eiusmod.
@@ -146,20 +162,21 @@ class ProfileDoctor extends Component {
                 </>
               ) : (
                 <>{this.renderTimeBooking(selectedSchedule)}</>
-              )}
+              )} */}
+              <>{this.renderTimeBooking(selectedSchedule)}</>
             </div>
           </div>
         </div>
-        {isShowLinkDetail === true && (
+        {/* {isShowLinkDetail === true && (
           <div className="view-detail-doctor">
             <Link to={`/detail-doctor/${doctorId}`}>Xem thêm</Link>
           </div>
-        )}
-        {isShowPrice === true && (
+        )} */}
+        {/* {isShowPrice === true && (
           <div className="price">
             <FormattedMessage id="patient.booking-modal.price" /> 500.000VND
           </div>
-        )}
+        )} */}
       </div>
     );
   }

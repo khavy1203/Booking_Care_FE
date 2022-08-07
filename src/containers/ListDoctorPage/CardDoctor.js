@@ -39,13 +39,12 @@ class CardDoctor extends Component {
                     </div>
                     <div className="Clinic_summary__1JSae">
                         <div className="Clinic_top__27iif">
-                            <a
-                                href="/tra-cuu/phong-kham/d1573a07-5cec-4697-9b5f-8b6bf1993437"
+                            <div
+
                                 className="Clinic_title__36l72"
-                                draggable="false"
                             >
                                 {this.props.username}
-                            </a>
+                            </div>
                             <div className="Clinic_address__4NF8S">
                                 Bác sĩ : {this.props.degree_VI ? this.props.degree_VI : "Chưa cập nhật thông tin cá nhân"}
                             </div>

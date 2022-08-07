@@ -1,14 +1,11 @@
-@mixin border($c) {
-  border: 1px solid $c;
-}
-
 .footer-bottom {
   background-color: #64b9e5;
   color: #fff;
   padding: 10px;
 }
 
-.home-footer {
+.homepage-footer {
+  margin-top: 25px;
   background-color: #efefef;
   display: flex;
   justify-content: center;
@@ -18,11 +15,11 @@
     display: flex;
     width: 100%;
 
-    @include border(red);
     .footer-content {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
+      justify-content: flex-start;
 
       .footer-link {
         color: #45c3d2;
@@ -33,18 +30,39 @@
     }
     .left {
       flex: 6;
-
-      @include border(blue);
+      .footer-logo {
+        background-image: url("../../assets/Logo.svg");
+        height: 50%;
+        width: 50%;
+        background-repeat: no-repeat;
+        margin-left: -20px;
+        cursor: pointer;
+      }
+      // .company-title {
+      //   font-weight: bold;
+      //   margin: 5px 0;
+      // }
     }
 
     .center {
       flex: 3;
-      @include border(green);
     }
 
     .right {
       flex: 3;
-      @include border(brown);
+      .company-info {
+        .info-item {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: flex-start;
+          h6 {
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+          }
+        }
+      }
     }
   }
 }

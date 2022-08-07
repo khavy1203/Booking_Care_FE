@@ -53,13 +53,13 @@ class CardClinic extends Component {
                     </div>
                     <div className="Clinic_summary__1JSae">
                         <div className="Clinic_top__27iif">
-                            <a
-                                href="/tra-cuu/phong-kham/d1573a07-5cec-4697-9b5f-8b6bf1993437"
+                            <div
+
                                 className="Clinic_title__36l72"
-                                draggable="false"
+
                             >
                                 {this.props.nameVI}
-                            </a>
+                            </div>
                             <div className="Clinic_address__4NF8S">
                                 {`${this.props.addressVI} -${this.props.nameWard}  - ${this.props.nameDistrict} - ${this.props.nameProvince}  `}
                             </div>

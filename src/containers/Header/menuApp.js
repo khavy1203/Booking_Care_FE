@@ -2,9 +2,7 @@ export const adminMenu = [
   //quản lý người dùng
   {
     name: "menu.admin.home",
-    menus: [
-      { name: "menu.admin.home", link: "/" },
-    ],
+    menus: [{ name: "menu.admin.home", link: "/" }],
   },
   {
     name: "menu.admin.manage-user",
@@ -27,9 +25,6 @@ export const adminMenu = [
         // ],
       },
       // { name: "menu.admin.manage-admin", link: "/system/user-admin" },
-      //quản lý kế hoạch khám bệnh của bác sĩ
-
-      { name: "menu.doctor.manage-schedule", link: "/doctor/manage-schedule" },
     ],
   },
   //quản lý phòng khám
@@ -46,7 +41,6 @@ export const adminMenu = [
       { name: "menu.admin.manage-specialty", link: "/system/manage-specialty" },
     ],
   },
-  //quản lý cẩm nang
 
   //quản lý group role
   {
@@ -59,7 +53,7 @@ export const adminMenu = [
     ],
   },
 
-  //quản lý bác sĩ của đối tác
+  //quản lý bác sĩ, lịch hẹn khám bệnh của đối tác
   {
     name: "menu.admin.partner",
     menus: [
@@ -67,17 +61,41 @@ export const adminMenu = [
         name: "menu.admin.partner-clinic",
         link: "/system/partner-clinic/",
       },
+      {
+        name: "menu.admin.manage-appointment",
+        link: "/system/manage-appointment",
+      },
     ],
   },
-];
 
-export const doctorMenu = [
   //quản lý kế hoạch khám bệnh của bác sĩ
   {
-    name: "menu.doctor.manage-schedule",
+    name: "menu.admin.doctor",
     menus: [
-      { name: "menu.doctor.manage-schedule", link: "/doctor/manage-schedule" },
-      { name: "menu.doctor.manage-patient", link: "/doctor/manage-patient" },
+      { name: "menu.admin.manage-schedule", link: "/system/manage-schedule" },
+      { name: "menu.admin.manage-patient", link: "/system/manage-patient" },
     ],
   },
+
+  // //quản lý  của hỗ trợ viên
+  // {
+  //   name: "menu.admin.supportor",
+  //   menus: [
+  //     {
+  //       name: "menu.admin.manage-appointment",
+  //       link: "/system/manage-appointment",
+  //     },
+  //   ],
+  // },
 ];
+
+// export const doctorMenu = [
+//   //quản lý kế hoạch khám bệnh của bác sĩ
+//   {
+//     name: "menu.doctor.manage-schedule",
+//     menus: [
+//       { name: "menu.doctor.manage-schedule", link: "/doctor/manage-schedule" },
+//       { name: "menu.doctor.manage-patient", link: "/doctor/manage-patient" },
+//     ],
+//   },
+// ];

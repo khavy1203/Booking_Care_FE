@@ -4,7 +4,9 @@ import { FormattedMessage } from "react-intl";
 import Slider from "react-slick";
 import "./Specialty.scss";
 import { withRouter } from "react-router";
-//import api here
+import { fetchTopSpecialtyHome } from "../../../services/specialtyService";
+import { LANGUAGES } from "../../../utils";
+import { Link } from "react-router-dom";
 
 class Specialty extends Component {
   constructor(props) {
@@ -15,17 +17,37 @@ class Specialty extends Component {
   }
 
   async componentDidMount() {
-    //fetch api here
+    await this.getTopSpecialty(10);
   }
 
+  getTopSpecialty = async (limit) => {
+    try {
+      let res = await fetchTopSpecialtyHome(limit);
+      if (res && +res.EC === 0) {
+        this.setState({
+          dataSpecialty: res.DT,
+        });
+        console.log("top specialty data", this.state.dataSpecialty);
+      } else {
+        console.log(res.EM);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   handleViewDetailSpecialty = (specialty) => {
-    specialty = { id: 1 };
     if (this.props.history) {
-      this.props.history.push(`/detail-specialty/${specialty.id}`);
+      this.props.history.push(`/doctorall-page`);
+
+      //this.props.history.push(`/detail-specialty/${specialty.id}`);
     }
   };
 
   render() {
+    let { dataSpecialty } = this.state;
+    let { language } = this.props;
+    //console.log("check state", dataSpecialty);
     return (
       <div className="section-share section-specialty">
         <div className="section-container">
@@ -34,40 +56,37 @@ class Specialty extends Component {
               <FormattedMessage id={"homepage.specialty-popular"} />
             </span>
             <button className="btn-section">
-              <FormattedMessage id={"homepage.more-info"} />
+              <Link
+                to="/doctorall-page"
+                style={{ textDecoration: "none", color: "black" }}
+              >
+                <FormattedMessage id={"homepage.more-info"} />{" "}
+              </Link>
             </button>
           </div>
           <div className="section-body">
             <Slider {...this.props.settings}>
-              <div
-                className="section-customize specialty-child"
-                onClick={() => {
-                  this.handleViewDetailSpecialty();
-                }}
-              >
-                <div className="bg-image section-specialty"></div>
-                <div className="specialty-name">cơ xương khớp Nhấp vào đây</div>
-              </div>
-              <div className="section-customize">
-                <div className="bg-image section-specialty"></div>
-                <div>cơ xương khớp 2</div>
-              </div>
-              <div className="section-customize">
-                <div className="bg-image section-specialty"></div>
-                <div>cơ xương khớp 3</div>
-              </div>
-              <div className="section-customize">
-                <div className="bg-image section-specialty"></div>
-                <div>cơ xương khớp 4</div>
-              </div>
-              <div className="section-customize">
-                <div className="bg-image section-specialty"></div>
-                <div>cơ xương khớp 5</div>
-              </div>
-              <div className="section-customize">
-                <div className="bg-image section-specialty"></div>
-                <div>cơ xương khớp 6</div>
-              </div>
+              {dataSpecialty &&
+                dataSpecialty.length > 0 &&
+                dataSpecialty.map((item, index) => {
+                  return (
+                    <div
+                      key={index}
+                      className="section-customize specialty-child"
+                      onClick={() => {
+                        this.handleViewDetailSpecialty(item);
+                      }}
+                    >
+                      <div
+                        className="bg-image section-specialty"
+                        style={{ backgroundImage: `url(${item.image})` }}
+                      ></div>
+                      <div className="specialty-name">
+                        {language === LANGUAGES.VI ? item.nameVI : item.nameEN}
+                      </div>
+                    </div>
+                  );
+                })}
             </Slider>
           </div>
         </div>

@@ -38,12 +38,14 @@
             "group-role": "Group role",
             "partner": "Partner",
             "partner-clinic": "Partner Clinic",
-            "home": "Home"
-        },
-        "doctor": {
-            "manage-schedule": "Manage Doctor's schedule",
-            "manage-patient": "Manage Doctor's patient"
+            "home": "Home",
 
+            "doctor": "Doctor",
+            "manage-schedule": "Manage Doctor's schedule",
+            "manage-patient": "Manage Doctor's patient",
+
+            "supportor": "Support Staff",
+            "manage-appointment": "Manage Patient's appointment"
         }
     },
     "manage-user": {

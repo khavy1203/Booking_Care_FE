@@ -16,11 +16,12 @@ export const path = {
 
   GROUP_ROLE: "/manage-group-role",
   USER_PROFILE: "/user-profile",
-  FORGOT_PASSWORD: '/forgot-password',
-  NEW_PASSWORD: '/reset-password',
-  LIST_CLINIC_PAGE: '/clinic-page',
+  BOOKING_HISTORY: "/booking-history",
+  FORGOT_PASSWORD: "/forgot-password",
+  NEW_PASSWORD: "/reset-password",
+  LIST_CLINIC_PAGE: "/clinic-page",
   LISTDOCTOR_CLINIC: "/doctor-page/:id",
-  ALL_DOCTOR: "/doctorall-page"
+  ALL_DOCTOR: "/doctorall-page",
 };
 
 export const LANGUAGES = {

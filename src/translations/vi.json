@@ -38,11 +38,14 @@
             "group-role": "Nhóm quyền",
             "partner": "Đối tác",
             "partner-clinic": "Quản lý bác sĩ tại phòng khám",
-            "home": "Trang chủ"
-        },
-        "doctor": {
+            "home": "Trang chủ",
+
+            "doctor": "Bác sĩ",
             "manage-schedule": "Quản lý kế hoạch khám bệnh",
-            "manage-patient": "Quản lý bệnh nhân"
+            "manage-patient": "Quản lý bệnh nhân",
+
+            "supportor": "Hỗ trợ viên",
+            "manage-appointment": "Quản lý lịch hẹn khám bệnh"
         }
     },
     "manage-user": {

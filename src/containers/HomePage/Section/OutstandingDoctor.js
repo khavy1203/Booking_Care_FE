@@ -57,15 +57,19 @@ class OutstandingDoctor extends Component {
               {arrDoctors &&
                 arrDoctors.length > 0 &&
                 arrDoctors.map((item, index) => {
-                  let imageBase64 = "";
-                  //ảnh lưu xuống DB đã encode sang base64
-                  //nên phải decode để có ảnh
-                  if (item.image) {
-                    imageBase64 = item.image;
-
-                  }
-                  let nameVi = `Bác sĩ ${item.username}`;
-                  let nameEn = `Doctor ${item.username}`;
+                  let image = item.image ? item.image : "";
+                  let nameVi = item.Doctorinfo.degree_VI
+                    ? `${item.Doctorinfo.degree_VI} ${item.username}`
+                    : "";
+                  let nameEn = item.Doctorinfo.degree_EN
+                    ? `${item.Doctorinfo.degree_EN} ${item.username}`
+                    : "";
+                  let specialtyVi = item.Specialty.nameVI
+                    ? item.Specialty.nameVI
+                    : "";
+                  let specialtyEn = item.Specialty.nameEN
+                    ? item.Specialty.nameEN
+                    : "";
                   return (
                     <div
                       key={index}
@@ -78,14 +82,18 @@ class OutstandingDoctor extends Component {
                         <div className="outer-bg">
                           <div
                             className="bg-image section-outstanding-doctor"
-                            style={{ backgroundImage: `url(${imageBase64})` }}
+                            style={{ backgroundImage: `url(${image})` }}
                           ></div>
                         </div>
                         <div className="position text-center">
                           <div className="outstanding-doctor-text">
                             {language === LANGUAGES.VI ? nameVi : nameEn}
                           </div>
-                          <div>Cơ xương khớp</div>
+                          <div style={{ color: "#555" }}>
+                            {language === LANGUAGES.VI
+                              ? specialtyVi
+                              : specialtyEn}
+                          </div>
                         </div>
                       </div>
                     </div>

@@ -7,12 +7,13 @@ import DatePicker from "../../../components/Input/DatePicker";
 import { fetchAllTimes } from "../../../services/timeframeService";
 import { toast } from "react-toastify";
 import moment from "moment";
-import { createNewSchedule } from "../../../services/scheduleService";
-// const options = [
-//   { value: "chocolate", label: "Chocolate" },
-//   { value: "strawberry", label: "Strawberry" },
-//   { value: "vanilla", label: "Vanilla" },
-// ];
+import "moment/locale/vi";
+import {
+  createNewSchedule,
+  fetchScheduleForTable,
+  deleteSchedule,
+} from "../../../services/scheduleService";
+import UpdateScheduleModal from "./UpdateScheduleModal";
 
 class ManageSchedule extends Component {
   constructor(props) {
@@ -21,11 +22,17 @@ class ManageSchedule extends Component {
       currentDate: "",
       maxNumber: "",
       times: [],
+
+      //Huyên: dưới này là cho table và update
+      listSchedule: [],
+      selectedSchedule: {},
+      isOpenUpdateModal: false,
     };
   }
 
   componentDidMount() {
     this.getTimes();
+    this.loadSchedule();
   }
 
   getTimes = async () => {
@@ -53,6 +60,12 @@ class ManageSchedule extends Component {
     this.setState({
       currentDate: date[0],
     });
+    console.log(
+      "this.state.currentDate)",
+      new Date(this.state.currentDate).getTime()
+    );
+    // console.log("javascript", new Date(this.state.currentDate));
+    // console.log("DatePicker", date[0]);
   };
 
   handleClickBtnTime = (time) => {
@@ -85,7 +98,6 @@ class ManageSchedule extends Component {
 
   handleSaveSchedule = async () => {
     let { times, currentDate, maxNumber } = this.state;
-    // let { userInfo } = this.props;
     let result = {};
 
     if (!currentDate) {
@@ -98,37 +110,29 @@ class ManageSchedule extends Component {
       return;
     }
 
+    // if (maxNumber > 5) {
+    //   toast.error("Không vượt quá 5!");
+    //   return;
+    // }
     //format ngày (kiểu object) sang string
-    let formatedDate = moment(currentDate).format(dateFormat.SEND_TO_SERVER);
+    //let formatedDate = moment(currentDate).format(dateFormat.SEND_TO_SERVER);
 
     //kieu timestamp
-    // let formatedDate = new Date(currentDate).getTime();
-
+    //let formatedDate = new Date(currentDate).getTime();
+    //console.log("formatedDate", formatedDate);
+    let formatedDate = moment(currentDate).toISOString();
     if (times && times.length > 0) {
       //lọc các thời gian dc chọn
       let selectedTimeList = times.filter((item) => item.isSelected === true);
 
       if (selectedTimeList && selectedTimeList.length > 0) {
-        //kiểm tra có thời gian nào dc chọn mà có số lượng khám <= 0
-        // let timeNoMaxPatient = selectedTimeList.find((item) => {
-        //   return item.maxPatient <= 0;
-        // });
-        //nếu tìm được thì báo lỗi
-        // if (timeNoMaxPatient) {
-        //   toast.error("Invalid maximum number of patients!");
-        //   return;
-        // }
-
-        // result.email = userInfo.account.email;
-        // result.groupId = userInfo.account.groupWithRoles.id;
-        result.date = "" + formatedDate;
+        result.date = formatedDate;
 
         //timeDetail chứa thời gian và số lượng khám
         let timeDetail = [];
         selectedTimeList.map((time) => {
           let object = {};
           object.timeframeId = time.id;
-          // object.maxNumber = time.maxPatient;
           object.maxNumber = maxNumber;
           timeDetail.push(object);
         });
@@ -138,6 +142,7 @@ class ManageSchedule extends Component {
         if (res && +res.EC === 0) {
           toast.success(res.EM);
           // this.resetInput();
+          await this.loadSchedule();
         } else {
           toast.error(res.EM);
           // this.resetInput();
@@ -150,36 +155,64 @@ class ManageSchedule extends Component {
     }
   };
 
-  // handleMaxPatient = (event, time) => {
-  //   let { times } = this.state;
-  //   if (times && times.length > 0) {
-  //     times = times.map((item) => {
-  //       if (item.id === time.id) {
-  //         item.maxPatient = +event.target.value;
-  //       }
-  //       return item;
-  //     });
-  //     this.setState({
-  //       times: times,
-  //     });
-  //   }
-  // };
-
   handleMaxNumber = (event) => {
     this.setState({
-      maxNumber: event.target.value,
+      maxNumber: event.target.value.replace(/\D/g, ""),
     });
   };
+
+  //Các hàm dưới này dùng cho table và xóa kế hoạch
+
+  loadSchedule = async () => {
+    try {
+      let res = await fetchScheduleForTable();
+      if (res && +res.EC === 0) {
+        this.setState({
+          listSchedule: res.DT,
+        });
+        console.log(this.state.listSchedule);
+      } else {
+        console.log("Lỗi nạp schedule", res.EM);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  handleOpenUpdateModal = (schedule) => {
+    this.setState({
+      isOpenUpdateModal: true,
+      selectedSchedule: schedule,
+    });
+  };
+  handleCloseUpdateModal = () => {
+    this.setState({
+      isOpenUpdateModal: false,
+    });
+  };
+
+  handleDeleteSchedule = async (schedule) => {
+    let choose = window.confirm(`Bạn có muốn xóa bản ghi ${schedule.id} này?`);
+    if (choose === true) {
+      let res = await deleteSchedule(schedule.id);
+      console.log("handleDeleteSchedule", res.DT);
+      if (res && (+res.EC === 0 || +res.EC === 3)) {
+        toast.success(res.EM);
+        await this.loadSchedule();
+      } else {
+        toast.error(res.EM);
+      }
+    }
+  };
+
+  capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
   render() {
     let yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
     let { language } = this.props;
-    let { times, maxNumber } = this.state;
-    // let date = moment(new Date()).format(dateFormat.SEND_TO_SERVER);
-    // console.log("date", date, typeof date);
-    // let dateEN = moment(date);
-    // let dateENString = moment(dateEN).format("YYYY/MM/DD");
-    // console.log("dateENString", dateENString, typeof dateENString);
+    let { times, maxNumber, listSchedule } = this.state;
 
     return (
       <div className="manage-schedule-container">
@@ -188,6 +221,7 @@ class ManageSchedule extends Component {
         </div>
         <div className="container">
           <div className="schedule-date row">
+            <h5>Thêm kế hoạch khám bệnh</h5>
             <div className="col-6 form-group">
               <label>
                 <FormattedMessage id={"manage-schedule.choose-date"} />
@@ -200,10 +234,11 @@ class ManageSchedule extends Component {
               />
             </div>
             <div className="max-patient col-6 form-group">
-              <label>số lượng khám:</label>
+              <label>Số lượng khám:</label>
               <input
                 className="form-control"
-                type="number"
+                type="text"
+                pattern="[0-9]*"
                 value={maxNumber}
                 onChange={(event) => {
                   this.handleMaxNumber(event);
@@ -228,20 +263,6 @@ class ManageSchedule extends Component {
                       >
                         {language === LANGUAGES.VI ? item.nameVI : item.nameEN}
                       </button>
-                      {/* 
-                      {item.isSelected === true && (
-                        <div className="max-patient">
-                          <label>số lượng khám:</label>
-                          <input
-                            type="number"
-                            value={item.maxPatient}
-                            onChange={(event) => {
-                              this.handleMaxPatient(event, item);
-                            }}
-                          />
-                        </div>
-                      )}
-                       */}
                     </div>
                   );
                 })}
@@ -260,6 +281,73 @@ class ManageSchedule extends Component {
             </div>
           </div>
         </div>
+
+        <div className="container ">
+          <hr />
+          <h5>Danh sách kế hoạch khám bệnh</h5>
+          <div className="table-patient row mt-3">
+            <div className="col-12 table-manage-patient ">
+              <table className="table table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Ngày khám bệnh</th>
+                    <th>Ngày tạo kế hoạch</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {listSchedule &&
+                    listSchedule.length > 0 &&
+                    listSchedule.map((item, index) => {
+                      let dayOfWeak = this.capitalizeFirstLetter(
+                        moment(item.date).locale("vi").format("dddd")
+                      );
+                      let scheduleDate = moment(item.date).format("DD/MM/YYYY");
+
+                      let createdAtDay = this.capitalizeFirstLetter(
+                        moment(item.createdAt).locale("vi").format("dddd")
+                      );
+                      let createdAt = moment(item.createdAt).format(
+                        "DD/MM/YYYY"
+                      );
+                      return (
+                        <tr key={index}>
+                          <td>{item.id}</td>
+                          <td>{`${dayOfWeak} - ${scheduleDate}`}</td>
+                          <td>{`${createdAtDay} - ${createdAt}`}</td>
+
+                          <td>
+                            <button
+                              className="btn btn-warning m-2"
+                              onClick={() => this.handleOpenUpdateModal(item)}
+                            >
+                              <i
+                                className="fa fa-pencil"
+                                aria-hidden="true"
+                              ></i>
+                            </button>
+
+                            <button
+                              className="btn btn-danger m-2"
+                              onClick={() => this.handleDeleteSchedule(item)}
+                            >
+                              <i className="fa fa-trash"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <UpdateScheduleModal
+          show={this.state.isOpenUpdateModal}
+          handleClose={this.handleCloseUpdateModal}
+          selectedSchedule={this.state.selectedSchedule}
+        />
       </div>
     );
   }

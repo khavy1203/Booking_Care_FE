@@ -11,7 +11,10 @@ import { toast } from "react-toastify";
 import { storage } from "../../../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { fetchAllClinics, deleteClinic, createNewClinic, updateCurrentClinic } from "../../../services/clinicService";
-
+import { Link } from 'react-router-dom';
+import {
+    SiZalo
+} from "react-icons/si";
 const mdParser = new MarkdownIt(/* Markdown-it options */);
 
 class ModalUpdateClinic extends Component {
@@ -451,8 +454,20 @@ class ModalUpdateClinic extends Component {
                                     <a href={clinicData.linkfile ? clinicData.linkfile : "#"} target="_blank" rel="noopener noreferrer">{clinicData.linkfile ? "Link file đính kèm" : "Người dùng chưa upload file"}
                                     </a>
                                 </div>
-                                <div className="col-6 form-group">
-                                    <label>Số điện thoại liên hệ :{clinicData.phoneContact ? clinicData.phoneContact : "Người dùng chưa có sđt"}  </label>
+                                <div className="col-6 form-group ">
+                                    <div className="col-10">Số điện thoại liên hệ :
+                                        {clinicData.phoneContact ? clinicData.phoneContact : "Người dùng chưa có sđt"}  </div>
+                                    {
+                                        clinicData.phoneContact &&
+                                        <a href={`https://zalo.me/${clinicData.phoneContact}`} target="_blank" rel="noopener noreferrer"
+                                            className="col-2" style={{ color: "green", fontSize: 30 }}>
+                                            <SiZalo
+                                                value={{ height: '100%', width: '100%' }}
+
+                                            />
+                                        </a>
+                                    }
+
                                 </div>
                             </div>
                             {/* <div className="col-12 mt-3 form-group">

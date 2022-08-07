@@ -4,7 +4,12 @@ import { connect } from "react-redux";
 import "./UserManage.scss";
 import ReactPaginate from "react-paginate";
 import ModalDeleteUser from "./ModalUserDelete";
-import { fetchAllUser, deleteUser, getUserAccount, searchUser } from "../../services/userService";
+import {
+  fetchAllUser,
+  deleteUser,
+  getUserAccount,
+  searchUser,
+} from "../../services/userService";
 import ModalUpdateUser from "./ModalUpdateUser";
 import ModalCreateUser from "./ModalCreateUser";
 import { push } from "connected-react-router";
@@ -42,27 +47,23 @@ class UserManage extends Component {
     this.fetchUser();
     // this.fetchUserNoPage();
     this.fetchCookigetUserAccount();
-
   }
   fetchCookigetUserAccount = async () => {
-
     let res = await getUserAccount();
     if (res && +res.EC === 0 && res.DT.decode) {
       this.props.userloginSuccess(res.DT.token);
-      console.log("check user data", res.DT.decode)
+      console.log("check user data", res.DT.decode);
       this.setState({
-        userData: res.DT.decode
-      })
+        userData: res.DT.decode,
+      });
     }
-
-
-  }
+  };
   componentDidUpdate(prevProps, prevState) {
     if (prevState.currentPage !== this.state.currentPage) {
       this.fetchUser();
     }
     if (prevState.listUser !== this.state.listUser) {
-      this.setState({ tableFillter: this.state.listUser })
+      this.setState({ tableFillter: this.state.listUser });
     }
   }
 
@@ -73,7 +74,6 @@ class UserManage extends Component {
   */
 
   fetchUser = async () => {
-
     let response = await fetchAllUser(
       this.state.currentPage,
       this.state.currentLimit
@@ -83,8 +83,6 @@ class UserManage extends Component {
       this.setState({ totalPage: response.DT.totalPages });
       this.setState({ listUser: response.DT.users });
     }
-
-
   };
   // fetchUserNoPage = async () => {
 
@@ -104,8 +102,6 @@ class UserManage extends Component {
     this.setState({ isShowModalDelete: true });
   };
 
-
-
   // //update modal
   handleModalUserClose = async () => {
     this.setState({
@@ -113,7 +109,7 @@ class UserManage extends Component {
       isShowModalUpdateUser: false,
       isShowModalCreateUser: false,
       dataModalUpdate: {},
-      dataModalDelete: {}
+      dataModalDelete: {},
     });
     await this.fetchUser();
   };
@@ -126,7 +122,7 @@ class UserManage extends Component {
   };
 
   fillerData = (e) => {
-    this.setState({ searchValue: e.target.value })
+    this.setState({ searchValue: e.target.value });
 
     // if (e.target.value != "") {
     //   // let isActive = 0;
@@ -165,28 +161,27 @@ class UserManage extends Component {
     //     })
     //   }
     // }
-
-  }
+  };
   searchUser = async (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       if (this.state.searchValue != "") {
-        let response = await searchUser(this.state.searchValue, this.state.currentPage,
-          this.state.currentLimit);
+        let response = await searchUser(
+          this.state.searchValue,
+          this.state.currentPage,
+          this.state.currentLimit
+        );
 
         if (response && +response.EC === 0) {
           this.setState({ totalPage: response.DT.totalPages });
           this.setState({ listUser: response.DT.users });
         }
-      }
-      else {
+      } else {
         this.fetchUser();
       }
-
-
     }
-  }
+  };
   render() {
-    console.log("check fillertable>> ", this.state.tableFillter)
+    console.log("check fillertable>> ", this.state.tableFillter);
     return (
       <>
         <div className="container">
@@ -205,15 +200,16 @@ class UserManage extends Component {
                   </button>
                 </div>
                 <div className="mt-3 table-role col-6">
-                  <input type="text" className="form-control" placeholder="Search"
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Search"
                     value={this.state.searchValue}
                     onChange={(event) => this.fillerData(event)}
                     onKeyPress={this.searchUser}
                   />
-
                 </div>
               </div>
-
             </div>
 
             <div className="user-body">
@@ -222,49 +218,61 @@ class UserManage extends Component {
                   <tr>
                     <th scope="col">No</th>
                     <th scope="col">Email</th>
-                    <th scope="col">Username</th>
-                    <th scope="col">Phone</th>
+                    <th scope="col">Họ tên</th>
+                    <th scope="col">Số điện thoại</th>
+                    <th scope="col">Phòng khám</th>
                     <th scope="col">Group</th>
                   </tr>
                 </thead>
                 <tbody>
                   {this.state.listUser && this.state.listUser.length > 0 ? (
                     <>
-                      {this.state.listUser.map((item, index) => {
-                        let admin = process.env.REACT_APP_EMAIL_ADMIN;
-                        if (admin === item.email || item.id === this.state.userData.id) return;
-                        return (
-                          <tr key={`row-${index}`}>
-                            <td>
-                              {(this.state.currentPage - 1) *
-                                this.state.currentLimit +
-                                index +
-                                1}
-                            </td>
-                            <td>{item.email}</td>
-                            <td>{item.username}</td>
-                            <td>{item.phone}</td>
-                            <td>{item.groupId ? item.Group.name : ""}</td>
-                            <td>
-                              <button
-                                className="btn btn-warning m-2"
-                                onClick={() => this.handShowUpdateUser(item)}
-                              >
-                                <i
-                                  className="fa fa-pencil"
-                                  aria-hidden="true"
-                                ></i>
-                              </button>
-                              <button
-                                className="btn btn-danger"
-                                onClick={() => this.handleDeleteUser(item)}
-                              >
-                                <i className="fa fa-trash"></i>
-                              </button>
-                            </td>
-                          </tr>
-                        );
-                      })}
+                      {
+                        this.state.listUser.map((item, index) => {
+                          let admin = process.env.REACT_APP_EMAIL_ADMIN;
+                          console.log("check item >>", item)
+                          if (
+                            admin === item.email ||
+                            item.id === this.state.userData.id
+                          )
+                            return;
+                          return (
+                            <tr key={`row-${index}`}>
+                              <td>
+                                {(this.state.currentPage - 1) *
+                                  this.state.currentLimit +
+                                  index +
+                                  1}
+                              </td>
+                              <td>{item.email}</td>
+                              <td>{item.username}</td>
+                              <td>{item.phone}</td>
+                              <td>{item.Clinic ? item.Clinic.nameVI : ""}
+                                <span style={{ color: "green" }}>
+                                  {item.groupId && item.Group && +item.Group.id === 5 ? ' * Quản lý' : ""}
+                                </span>
+                              </td>
+                              <td>{item.groupId && item.Group ? item.Group.name : ""}</td>
+                              <td>
+                                <button
+                                  className="btn btn-warning m-2"
+                                  onClick={() => this.handShowUpdateUser(item)}
+                                >
+                                  <i
+                                    className="fa fa-pencil"
+                                    aria-hidden="true"
+                                  ></i>
+                                </button>
+                                <button
+                                  className="btn btn-danger"
+                                  onClick={() => this.handleDeleteUser(item)}
+                                >
+                                  <i className="fa fa-trash"></i>
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        })}
                     </>
                   ) : (
                     <>

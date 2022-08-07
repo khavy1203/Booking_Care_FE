@@ -13,23 +13,37 @@ import { createBooking } from "../../../../services/bookingService";
 import { toast } from "react-toastify";
 import validator from "validator";
 
+//Cấu trúc Bookings[
+//doctorId
+//patientId
+//schedule_detailId
+//date
+//reason
+//]
+
 class BookingModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      //Các biến lấy ra cookie, chỉ hiển thị để bệnh nhân kiểm tra
+      patientId: "", //id của bệnh nhân để tạo booking
       username: "",
       phone: "",
       email: "",
       address: "",
-      // reason: "",
-      // birthday: "",
       genderId: 1,
-      doctorId: "",
-      schedule_detail_id: "",
-      date: "",
+
+      //Các biến lấy từ props
+      doctorId: "", //lấy từ props DetailDoctor, để tạo booking
+      scheduleDetailId: "", //lấy từ props selectedSchedule, để tạo booking
+      date: "", //lấy từ props selectedSchedule, để tạo booking
+      clinicId: "", //lấy từ props DetailDoctor, để tạo booking
+
+      //lý do khám bệnh
+      reason: "",
     };
   }
-  async componentDidMount() { }
+  componentDidMount() {}
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.props.selectedSchedule !== prevProps.selectedSchedule) {
@@ -37,12 +51,28 @@ class BookingModal extends Component {
         this.props.selectedSchedule &&
         !_.isEmpty(this.props.selectedSchedule)
       ) {
-        let { doctorId, date, id } = this.props.selectedSchedule;
+        let { date, id } = this.props.selectedSchedule;
+        let doctorId = this.props.DetailDoctor.id;
+        let clinicId = this.props.DetailDoctor.clinicId;
         this.setState({
           doctorId: doctorId,
           date: date,
-          schedule_detail_id: id,
+          scheduleDetailId: id,
+          clinicId: clinicId,
         });
+      }
+    }
+    if (this.props.PatientData !== prevProps.PatientData) {
+      if (this.props.PatientData && !_.isEmpty(this.props.PatientData)) {
+        this.setState({
+          patientId: this.props.PatientData.id,
+          username: this.props.PatientData.username,
+          phone: this.props.PatientData.phone,
+          email: this.props.PatientData.email,
+          address: this.props.PatientData.address,
+          genderId: this.props.PatientData.genderId,
+        });
+        console.log(this.props.PatientData);
       }
     }
   }
@@ -64,32 +94,42 @@ class BookingModal extends Component {
 
   handleBookingConfirm = async () => {
     try {
-      let {
-        username,
-        phone,
-        email,
-        address,
-        genderId,
+      // let {
+      //   username,
+      //   phone,
+      //   email,
+      //   address,
+      //   genderId,
+      //   doctorId,
+      //   date,
+      //   scheduleDetailId,
+      // } = this.state;
+
+      // if (!this.checkName(username)) return;
+      // if (!this.checkEmail(email)) return;
+
+      // let obj = {
+      //   ...this.state,
+      // };
+
+      let { patientId, doctorId, scheduleDetailId, reason, date, clinicId } =
+        this.state;
+      let bookingData = {
+        patientId,
         doctorId,
+        scheduleDetailId,
+        reason,
         date,
-        schedule_detail_id,
-      } = this.state;
-
-      if (!this.checkName(username)) return;
-      if (!this.checkEmail(email)) return;
-
-      let obj = {
-        ...this.state,
+        clinicId,
       };
-
-      let res = await createBooking(obj);
+      let res = await createBooking(bookingData);
       if (res && +res.EC === 0) {
         toast.success(res.EM);
-        this.props.closeBookingModal();
+        this.props.handleClose();
       } else {
         toast.error(res.EM);
       }
-      console.log(obj);
+      console.log(bookingData);
     } catch (error) {
       console.log(error);
     }
@@ -120,19 +160,12 @@ class BookingModal extends Component {
   };
 
   render() {
-    let {
-      isOpenModal,
-      closeBookingModal,
-      selectedSchedule,
-      language,
-      // doctorIdFromDoctorSchedule,
-    } = this.props;
-    let { doctorId } = this.state;
-    // console.log(this.state);
+    let { DetailDoctor, selectedSchedule, language } = this.props;
+    //let { doctorId } = this.state;
+    //console.log(DetailDoctor);
     return (
       <Modal
-        isOpen={isOpenModal}
-        // toggle={}
+        show={this.props.show}
         className={"booking-modal-container"}
         size="lg"
         centered
@@ -142,22 +175,22 @@ class BookingModal extends Component {
             <span className="left">
               <FormattedMessage id="patient.booking-modal.title" />
             </span>
-            <span className="right" onClick={closeBookingModal}>
+            <span className="right" onClick={this.props.handleClose}>
               <i className="fas fa-times"></i>
             </span>
           </div>
           <div className="booking-modal-body">
             <div className="doctor-info">
               <ProfileDoctor
-                doctorId={doctorId}
+                DetailDoctor={DetailDoctor}
                 selectedSchedule={selectedSchedule}
-                isShowDescriptionDoctor={false}
-                isShowLinkDetail={false}
-                isShowPrice={true}
+                // isShowDescriptionDoctor={false}
+                // isShowLinkDetail={false}
+                // isShowPrice={true}
               />
             </div>
 
-            <div className="row">
+            <div className="row mt-3">
               <div className="col-6 form-group">
                 <label>
                   <FormattedMessage id="patient.booking-modal.name" />
@@ -165,6 +198,7 @@ class BookingModal extends Component {
                 <input
                   className="form-control"
                   type="text"
+                  // value={PatientData.username}
                   value={this.state.username}
                   onChange={(event) => {
                     this.handleOnchangeInput(event, "username");
@@ -176,8 +210,9 @@ class BookingModal extends Component {
                   <FormattedMessage id="patient.booking-modal.phone" />
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   className="form-control"
+                  //value={PatientData.phone}
                   value={this.state.phone}
                   onChange={(event) => {
                     this.handleOnchangeInput(event, "phone");
@@ -191,6 +226,7 @@ class BookingModal extends Component {
                 <input
                   type="text"
                   className="form-control"
+                  //value={PatientData.email}
                   value={this.state.email}
                   onChange={(event) => {
                     this.handleOnchangeInput(event, "email");
@@ -204,31 +240,13 @@ class BookingModal extends Component {
                 <input
                   type="text"
                   className="form-control"
+                  //value={PatientData.address}
                   value={this.state.address}
                   onChange={(event) => {
                     this.handleOnchangeInput(event, "address");
                   }}
                 />
               </div>
-              {/* <div className="col-12 form-group">
-                <label>Lý do khám</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={this.state.reason}
-                  onChange={(event) => {
-                    this.handleOnchangeInput(event, "reason");
-                  }}
-                />
-              </div>
-              <div className="col-6 form-group">
-                <label>Ngày sinh</label>
-                <DatePicker
-                  className="form-control"
-                  onChange={this.handleOnchangeDatePicker}
-                  value={this.state.birthday}
-                />
-              </div> */}
               <div className="col-6 form-group">
                 <label>
                   <FormattedMessage id="patient.booking-modal.gender" />
@@ -251,6 +269,28 @@ class BookingModal extends Component {
                   </option>
                 </select>
               </div>
+              <div className="col-12 form-group">
+                <label>Lý do khám</label>
+                <div className="form-outline">
+                  <textarea
+                    className="form-control"
+                    id="textAreaExample1"
+                    rows="4"
+                    value={this.state.reason}
+                    onChange={(event) => {
+                      this.handleOnchangeInput(event, "reason");
+                    }}
+                  ></textarea>
+                </div>
+              </div>
+              {/* <div className="col-6 form-group">
+                <label>Ngày sinh</label>
+                <DatePicker
+                  className="form-control"
+                  onChange={this.handleOnchangeDatePicker}
+                  value={this.state.birthday}
+                />
+              </div> */}
             </div>
           </div>
           <div className="booking-modal-footer">
@@ -260,7 +300,10 @@ class BookingModal extends Component {
             >
               <FormattedMessage id="patient.booking-modal.confirm" />
             </button>
-            <button className="btn-booking-cancel" onClick={closeBookingModal}>
+            <button
+              className="btn-booking-cancel"
+              onClick={this.props.handleClose}
+            >
               <FormattedMessage id="patient.booking-modal.cancel" />
             </button>
           </div>

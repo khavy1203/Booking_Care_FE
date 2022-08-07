@@ -78,6 +78,8 @@ class NewPassword extends Component {
                 const { navigate } = this.props;
                 const redirectPath = "/login";
                 navigate(`${redirectPath}`);
+            } else {
+                toast.error(res.EM)
             }
         }
 

@@ -5,8 +5,8 @@ import HomeHeader from "./HomeHeader";
 import Specialty from "./Section/Specialty";
 import MedicalFacility from "./Section/MedicalFacility";
 import OutstandingDoctor from "./Section/OutstandingDoctor";
-import Handbook from "./Section/Handbook";
-import About from "./Section/About";
+// import Handbook from "./Section/Handbook";
+// import About from "./Section/About";
 import HomeFooter from "./HomeFooter";
 import "./HomePage.scss";
 
@@ -17,14 +17,13 @@ class HomePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userData: {}
+      userData: {},
     };
   }
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   render() {
-    console.log("check user data >>>", this.state.userData)
+    console.log("check user data >>>", this.state.userData);
     let settings = {
       dots: false,
       infinite: false,
@@ -38,9 +37,9 @@ class HomePage extends Component {
         <Specialty settings={settings} />
         <MedicalFacility settings={settings} />
         <OutstandingDoctor settings={settings} />
-        <Handbook settings={settings} />
-        <About />
-        
+        {/* <Handbook settings={settings} />
+        <About /> */}
+
         <HomeFooter />
       </div>
     );

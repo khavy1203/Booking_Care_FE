@@ -373,7 +373,7 @@ class ListClinicPage extends Component {
             ) : (
               <>
                 <tr>
-                  <td>Không có Bác sĩ nào</td>
+                  <td>Không có Phòng khám nào nào</td>
                 </tr>
               </>
             )}

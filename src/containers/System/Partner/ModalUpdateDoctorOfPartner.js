@@ -31,6 +31,7 @@ class ModalUpdateDoctorOfPartner extends Component {
       doctorDataDefault: {
         username: "", //yêu cầu cần thêm họ và tên của Bác sĩ
         idUser: "",
+        phone: "",
         specialIdUser: "",
         idDoctorInfo: "",
         introductionVI: "",
@@ -53,6 +54,7 @@ class ModalUpdateDoctorOfPartner extends Component {
       validInputDefault: {
         username: true, //yêu cầu cần thêm họ và tên của Bác sĩ
         idUser: true,
+        phone: true,
         specialIdUser: true,
         idDoctorInfo: true,
         introductionVI: true,
@@ -90,6 +92,7 @@ class ModalUpdateDoctorOfPartner extends Component {
       let _doctorData = _.cloneDeep(this.state.doctorData);
       _doctorData["username"] = dataUpdate["Users.username"];
       _doctorData["idUser"] = dataUpdate["Users.id"];
+      _doctorData["phone"] = dataUpdate["Users.phone"];
       _doctorData["idDoctorInfo"] = dataUpdate["Users.Doctorinfo.id"];
       _doctorData["specialIdUser"] = dataUpdate["Users.Specialty.id"];
       _doctorData["introductionVI"] =
@@ -209,7 +212,7 @@ class ModalUpdateDoctorOfPartner extends Component {
 
   checkValidateInput = () => {
     this.setState({ validInput: this.state.validInputDefault });
-    let array = ["specialIdUser", "active", "username"];
+    let array = ["specialIdUser", "active", "username", "phone"];
 
     for (let i = 0; i < array.length; i++) {
       if (!this.state.doctorData[array[i]]) {
@@ -350,6 +353,24 @@ class ModalUpdateDoctorOfPartner extends Component {
                     }}
                   />
                 </div>
+                <div className="intro-doctor-vi col-6">
+                  <label>
+                    {/* <FormattedMessage id="admin.manage-doctor.intro" /> */}
+                    Số điện thoại
+                  </label>
+                  <input
+                    className={
+                      this.state.validInput.phone
+                        ? "form-control"
+                        : "form-control is-invalid"
+                    }
+                    type="text"
+                    value={this.state.doctorData.phone}
+                    onChange={(event) => {
+                      this.handleOnchangeInput(event.target.value, "phone");
+                    }}
+                  />
+                </div>
               </div>
               <div className="info-doctor row form-group">
                 <div className="intro-doctor-vi col-6">
@@ -360,11 +381,11 @@ class ModalUpdateDoctorOfPartner extends Component {
                   <textarea
                     className="form-control"
                     type="text"
-                    value={this.state.doctorData.descriptionHTLM_VI}
+                    value={this.state.doctorData.introductionVI}
                     onChange={(event) => {
                       this.handleOnchangeInput(
                         event.target.value,
-                        "descriptionHTLM_VI"
+                        "introductionVI"
                       );
                     }}
                   ></textarea>
@@ -377,11 +398,11 @@ class ModalUpdateDoctorOfPartner extends Component {
                   <textarea
                     className="form-control"
                     type="text"
-                    value={this.state.doctorData.descriptionHTLM_EN}
+                    value={this.state.doctorData.introductionEN}
                     onChange={(event) => {
                       this.handleOnchangeInput(
                         event.target.value,
-                        "descriptionHTLM_EN"
+                        "introductionEN"
                       );
                     }}
                   ></textarea>
@@ -399,6 +420,7 @@ class ModalUpdateDoctorOfPartner extends Component {
                       onChange={(event) => {
                         this.handleOnchangeInput(event.target.value, "price");
                       }}
+                      placeholder="Cần nhập giá khám"
                     />
                   </div>
                   <div className="col-3">

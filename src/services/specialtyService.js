@@ -32,6 +32,11 @@ const fetchAllSpecialOfSupport = async (page, limit) => {
     `/api/v1/specialty/fetchAllSpecialOfSupport?page=${page}&limit=${limit}`
   );
 };
+const searchSpecial = async (dt, page, limit) => {
+  return await axios.get(
+    `/api/v1/specialty/searchSpecial?search=${dt}&page=${page}&limit=${limit}`
+  );
+};
 export {
   createNewSpecialty,
   fetchAllSpecialties,
@@ -40,4 +45,5 @@ export {
   deleteSpecialty,
   fetchAllSpecialOfSupport,
   fetchTopSpecialtyHome,
+  searchSpecial,
 };

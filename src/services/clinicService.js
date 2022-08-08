@@ -34,7 +34,12 @@ const fetchDoctorOfCLinic = (clinicId, page, limit) => {
     `/api/v1/doctor-page?id=${clinicId}&page=${page}&limit=${limit}`
   );
 };
-//tìm kiếm clinic
+const searchClinic = async (dt, page, limit) => {
+  return await axios.get(
+    `/api/v1/clinic/searchClinic?search=${dt}&page=${page}&limit=${limit}`
+  );
+};
+//tìm kiếm clinic trên giao diện chính
 const getInforClininicOfUserOnPage = async (
   page,
   limit,
@@ -66,4 +71,5 @@ export {
   getInforClininicOfUserOnPage,
   getClinic,
   fetchAllClinicsOfSupport,
+  searchClinic,
 };

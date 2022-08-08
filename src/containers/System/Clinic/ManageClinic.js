@@ -10,6 +10,7 @@ import {
   fetchAllClinics,
   createNewClinic,
   fetchAllClinicsOfSupport,
+  searchClinic,
 } from "../../../services/clinicService";
 import ReactPaginate from "react-paginate";
 import ModalDeleteClinic from "./ModalDeleteClinic";
@@ -23,6 +24,7 @@ class ManageClinic extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      searchValue: "",
       currentPage: 1,
       currentLimit: 7,
       totalPage: 0, //phân trang
@@ -34,13 +36,41 @@ class ManageClinic extends Component {
 
       isShowModalDelete: false,
       dataModalDelete: {},
+      lstProvince: {},
     };
   }
 
   componentDidMount() {
     this.fetchClinics();
+    this.fetchProvince();
   }
 
+  async componentDidUpdate(prevProps, prevState) {}
+  fetchProvince = () => {
+    fetch("https://provinces.open-api.vn/api/", {
+      method: "GET", // or 'PUT'
+    })
+      .then((response) => response.json())
+      .then((actualData) => {
+        this.setState({
+          lstProvince: this.coverAPIAddressToList(actualData),
+        });
+      })
+      .catch((err) => {
+        console.log(err.message);
+      })
+      .finally(() => {
+        // setLoading(false);
+      });
+  };
+  coverAPIAddressToList = (lstAPI) => {
+    let lstcustom = {};
+    if (lstAPI && lstAPI.length > 0)
+      lstAPI.map((item, index) => {
+        lstcustom[item.code] = item.name;
+      });
+    return lstcustom;
+  };
   fetchClinics = async () => {
     let res = await fetchAllClinicsOfSupport(
       this.state.currentPage,
@@ -98,6 +128,65 @@ class ManageClinic extends Component {
     });
   };
 
+  fillerData = (e) => {
+    this.setState({ searchValue: e.target.value });
+
+    // if (e.target.value != "") {
+    //   // let isActive = 0;
+    //   let check = false;
+    //   let arrayFillter = [];
+
+    //   // if ("đang hoạt động".includes(e.target.value.toLowerCase())) isActive = 1;
+    //   // if ("tạm dừng".includes(e.target.value.toLowerCase())) isActive = 2;
+
+    //   this.setState({ searchValue: e.target.value })
+    //   if (this.state.listUser) {
+    //     Object.entries(this.state.listUser).map(([key1, child1], index) => {
+    //       Object.entries(child1).map(([key2, child2], index) => {
+    //         console.log("check key 2???", key2)
+    //         if (String(child2).toLowerCase().includes(e.target.value.toLowerCase())) {
+    //           console.log("child2 .", child2)
+    //           check = true;
+    //         }
+    //         else {
+    //           check = false;
+    //         };
+    //         if (check) {
+    //           arrayFillter[key1] = child1;
+    //         }
+    //       })
+    //     })
+    //     console.log("check arrayFillter", arrayFillter)
+
+    //     this.setState({ tableFillter: arrayFillter })
+    //   }
+    // } else {
+    //   if (this.state.listUser) {
+    //     this.setState({
+    //       tableFillter: this.state.listUser,
+    //       searchValue: e.target.value
+    //     })
+    //   }
+    // }
+  };
+  searchClinic = async (event) => {
+    if (event.key === "Enter") {
+      if (this.state.searchValue != "") {
+        let response = await searchClinic(
+          this.state.searchValue,
+          this.state.currentPage,
+          this.state.currentLimit
+        );
+
+        if (response && +response.EC === 0) {
+          this.setState({ totalPage: response.DT.totalPages });
+          this.setState({ listClinics: response.DT.clinics });
+        }
+      } else {
+        this.fetchClinics();
+      }
+    }
+  };
   render() {
     console.log("check isloggin in manageClinicU ", this.props.isLoggedIn);
 
@@ -105,6 +194,20 @@ class ManageClinic extends Component {
       <>
         <div className="manage-specialty-container">
           <div className="ms-title">Quản lý phòng khám</div>
+          <div className="row">
+            <div className="col-6"></div>
+
+            <div className="mt-3 table-role col-6">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search"
+                value={this.state.searchValue}
+                onChange={(event) => this.fillerData(event)}
+                onKeyPress={this.searchClinic}
+              />
+            </div>
+          </div>
 
           <div className="Clinic-body">
             <table className="table table-bordered table-hover">
@@ -131,7 +234,11 @@ class ManageClinic extends Component {
                           </td>
                           <td>{item.nameVI}</td>
                           <td>{item.addressVI}</td>
-                          <td>{item.provinceId ? item.provinceId : ""}</td>
+                          <td>
+                            {item.provinceId && this.state.lstProvince
+                              ? this.state.lstProvince[item.provinceId]
+                              : ""}
+                          </td>
                           <td>
                             <div
                               className={
@@ -140,9 +247,9 @@ class ManageClinic extends Component {
                                 (item.status === 2 && "pause-status")
                               }
                             >
-                              {(item.status === 0 && "pending") ||
-                                (item.status === 1 && "active") ||
-                                (item.status === 2 && "pause")}
+                              {(item.status === 0 && "Chờ đợi duyệt") ||
+                                (item.status === 1 && "Đang hoạt động") ||
+                                (item.status === 2 && "Tạm dừng")}
                             </div>
                           </td>
                           <td>

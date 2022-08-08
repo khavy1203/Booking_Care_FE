@@ -78,6 +78,10 @@ const searchUser = async (dt, page, limit) => {
     `/api/v1/user/searchUser?search=${dt}&page=${page}&limit=${limit}`
   );
 };
+
+const createNewGroup = (data) => {
+  return axios.post("/api/v1/group/createGroup", data);
+};
 export {
   handleLoginApi,
   fetchAllUser,
@@ -94,4 +98,5 @@ export {
   updatePassword,
   getUserById,
   searchUser,
+  createNewGroup,
 };

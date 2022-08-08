@@ -15,6 +15,7 @@ import {
 import _ from "lodash";
 
 import { toast } from "react-toastify";
+import ModalCreateGroup from "./ModalCreateGroup";
 
 const mdParser = new MarkdownIt(/* Markdown-it options */);
 
@@ -26,6 +27,7 @@ class ManageGroupRole extends Component {
       listRoles: [],
       selectGroup: "",
       assignRolesByGroup: [],
+      isShowModalCreateGroup: false,
     };
   }
   componentDidMount() {
@@ -121,13 +123,31 @@ class ManageGroupRole extends Component {
       toast.error(res.EM);
     }
   };
+  createGroup = async () => {
+    this.setState({ isShowModalCreateGroup: true });
+  };
+
+  handleModalCreateGroupClose = async () => {
+    this.setState({ isShowModalCreateGroup: false });
+    await this.getGroups();
+  };
   render() {
     console.log("check this.state.userGroups", this.state.userGroups);
     return (
       <div className="group-role-container">
         <div className="container">
           <div className="container mt-3">
-            <h4>Group Roles : </h4>
+            <div className="row col-12 d-flex justify-content-between ">
+              <h4 className="col-6">Group Roles : </h4>
+              <div className="col-2">
+                <button
+                  className="btn btn-success"
+                  onClick={() => this.createGroup()}
+                >
+                  <i className="fa fa-plus"></i>Tạo Nhóm quyền mới
+                </button>
+              </div>
+            </div>
             <div className="assign-group-role">
               <div className="col-12 col-sm-6 form-group">
                 <label>
@@ -141,9 +161,9 @@ class ManageGroupRole extends Component {
                 >
                   <option value="">Please select your group</option>
                   {this.state.userGroups.length > 0 &&
-                    this.state.userGroups.id !== 1 &&
                     this.state.userGroups.map((item, index) => {
                       return (
+                        // item.id !== 1 &&
                         <option key={`group-${index}`} value={item.id}>
                           {item.name}
                         </option>
@@ -191,6 +211,10 @@ class ManageGroupRole extends Component {
             </div>
           </div>
         </div>
+        <ModalCreateGroup
+          show={this.state.isShowModalCreateGroup}
+          handleClose={this.handleModalCreateGroupClose}
+        />
       </div>
     );
   }

@@ -110,7 +110,6 @@ class App extends Component {
                     path={path.BOOKING_HISTORY}
                     component={BookingHistory}
                   />
-                  {/* <Route path={path.BOOKING_RESULT} component={BookingResult} /> */}
                   <Route
                     path={path.DETAIL_SPECIALTY}
                     component={DetailSpecialty}

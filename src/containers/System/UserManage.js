@@ -218,8 +218,9 @@ class UserManage extends Component {
                   <tr>
                     <th scope="col">No</th>
                     <th scope="col">Email</th>
-                    <th scope="col">Username</th>
-                    <th scope="col">Phone</th>
+                    <th scope="col">Họ tên</th>
+                    <th scope="col">Số điện thoại</th>
+                    <th scope="col">Phòng khám</th>
                     <th scope="col">Group</th>
                   </tr>
                 </thead>
@@ -228,6 +229,7 @@ class UserManage extends Component {
                     <>
                       {this.state.listUser.map((item, index) => {
                         let admin = process.env.REACT_APP_EMAIL_ADMIN;
+                        console.log("check item >>", item);
                         if (
                           admin === item.email ||
                           item.id === this.state.userData.id
@@ -244,7 +246,21 @@ class UserManage extends Component {
                             <td>{item.email}</td>
                             <td>{item.username}</td>
                             <td>{item.phone}</td>
-                            <td>{item.groupId ? item.Group.name : ""}</td>
+                            <td>
+                              {item.Clinic ? item.Clinic.nameVI : ""}
+                              <span style={{ color: "green" }}>
+                                {item.groupId &&
+                                item.Group &&
+                                +item.Group.id === 5
+                                  ? " * Quản lý"
+                                  : ""}
+                              </span>
+                            </td>
+                            <td>
+                              {item.groupId && item.Group
+                                ? item.Group.name
+                                : ""}
+                            </td>
                             <td>
                               <button
                                 className="btn btn-warning m-2"

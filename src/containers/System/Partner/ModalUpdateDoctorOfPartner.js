@@ -37,13 +37,13 @@ class ModalUpdateDoctorOfPartner extends Component {
         introductionVI: "",
         noteVI: "",
         paymentVI: "",
-        descriptionHTLM_VI: "",
+        descriptionHTML_VI: "",
         descriptionMarkdown_VI: "",
         degree_VI: "",
         introductionEN: "",
         noteEN: "",
         paymentEN: "",
-        descriptionHTLM_EN: "",
+        descriptionHTML_EN: "",
         descriptionMarkdown_EN: "",
         degree_EN: "",
         price: "",
@@ -60,13 +60,13 @@ class ModalUpdateDoctorOfPartner extends Component {
         introductionVI: true,
         noteVI: true,
         paymentVI: true,
-        descriptionHTLM_VI: true,
+        descriptionHTML_VI: true,
         descriptionMarkdown_VI: true,
         degree_VI: true,
         introductionEN: true,
         noteEN: true,
         paymentEN: true,
-        descriptionHTLM_EN: true,
+        descriptionHTML_EN: true,
         descriptionMarkdown_EN: true,
         degree_EN: true,
         price: true,
@@ -99,8 +99,8 @@ class ModalUpdateDoctorOfPartner extends Component {
         dataUpdate["Users.Doctorinfo.introductionVI"];
       _doctorData["noteVI"] = dataUpdate["Users.Doctorinfo.noteVI"];
       _doctorData["paymentVI"] = dataUpdate["Users.Doctorinfo.paymentVI"];
-      _doctorData["descriptionHTLM_VI"] =
-        dataUpdate["Users.Doctorinfo.descriptionHTLM_VI"];
+      _doctorData["descriptionHTML_VI"] =
+        dataUpdate["Users.Doctorinfo.descriptionHTML_VI"];
       _doctorData["descriptionMarkdown_VI"] =
         dataUpdate["Users.Doctorinfo.descriptionMarkdown_VI"];
       _doctorData["degree_VI"] = dataUpdate["Users.Doctorinfo.degree_VI"];
@@ -108,8 +108,8 @@ class ModalUpdateDoctorOfPartner extends Component {
         dataUpdate["Users.Doctorinfo.introductionEN"];
       _doctorData["noteEN"] = dataUpdate["Users.Doctorinfo.noteEN"];
       _doctorData["paymentEN"] = dataUpdate["Users.Doctorinfo.paymentEN"];
-      _doctorData["descriptionHTLM_EN"] =
-        dataUpdate["Users.Doctorinfo.descriptionHTLM_EN"];
+      _doctorData["descriptionHTML_EN"] =
+        dataUpdate["Users.Doctorinfo.descriptionHTML_EN"];
       _doctorData["descriptionMarkdown_EN"] =
         dataUpdate["Users.Doctorinfo.descriptionMarkdown_EN"];
       _doctorData["degree_EN"] = dataUpdate["Users.Doctorinfo.degree_EN"];
@@ -183,10 +183,12 @@ class ModalUpdateDoctorOfPartner extends Component {
   };
 
   handleEditorChangeVI = ({ html, text }) => {
+    //console.log(html, text);
     let _doctorData = _.cloneDeep(this.state.doctorData);
     _doctorData["descriptionMarkdown_VI"] = text;
     _doctorData["descriptionHTML_VI"] = html;
     this.setState({ doctorData: _doctorData });
+    console.log("VI", this.state.doctorData);
   };
 
   handleEditorChangeEN = ({ html, text }) => {
@@ -194,6 +196,7 @@ class ModalUpdateDoctorOfPartner extends Component {
     _doctorData["descriptionMarkdown_EN"] = text;
     _doctorData["descriptionHTML_EN"] = html;
     this.setState({ doctorData: _doctorData });
+    console.log("EN", this.state.doctorData);
   };
 
   handleOnchangImage = (event) => {

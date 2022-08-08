@@ -1,0 +1,156 @@
+.select-province {
+    margin-left: 0!important;
+}
+
+.img-avatar {
+    width: 100px;
+    height: 100px;
+}
+
+.img-avatar>img {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    width: 100%;
+    height: 100%;
+}
+
+.red {
+    border: none;
+    color: red;
+}
+
+.active-status {
+    text-align: center;
+    width: 50%;
+    height: 100%;
+    color: #08f563;
+    border: solid 1px none;
+}
+
+.pause-status {
+    color: blue;
+    text-align: center;
+    width: 50%;
+    height: 100%;
+    border: solid 1px none;
+}
+
+.pending-status {
+    color: red;
+    text-align: center;
+    width: 50%;
+    height: 100%;
+    border: solid 1px none;
+}
+
+.address {
+    padding-left: 0 !important;
+}
+
+.noice-dowload {
+    color: red;
+}
+
+.contact-input {
+    padding-left: 0 !important;
+}
+
+.content-body {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.add-new-specialty {
+    margin-left: 0!important;
+    margin-right: 0 !important;
+}
+
+.pending-clinic {
+    margin-top: 10px;
+    align-items: center;
+    appearance: none;
+    background-image: radial-gradient(100% 100% at 100% 0, #3bc2e7 0, #f37623 100%);
+    border: 0;
+    border-radius: 6px;
+    box-shadow: rgb(45 35 66 / 40%) 0 2px 4px, rgb(45 35 66 / 30%) 0 7px 13px -3px, rgb(58 65 111 / 50%) 0 -3px 0 inset;
+    box-sizing: border-box;
+    color: rgb(201, 242, 89);
+    cursor: pointer;
+    display: inline-flex;
+    font-family: "JetBrains Mono", monospace;
+    height: 48px;
+    justify-content: center;
+    line-height: 1;
+    list-style: none;
+    overflow: hidden;
+    padding-left: 16px;
+    padding-right: 16px;
+    position: relative;
+    text-align: left;
+    text-decoration: none;
+    transition: box-shadow .15s, transform .15s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    will-change: box-shadow, transform;
+    font-size: 18px;
+}
+
+.pending-clinic:active {
+    box-shadow: #3c4fe0 0 3px 7px inset;
+    transform: translateY(2px);
+}
+
+.pending-clinic:hover {
+    box-shadow: rgb(45 35 66 / 40%) 0 4px 8px, rgb(45 35 66 / 30%) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
+    transform: translateY(-2px);
+}
+
+.active-clinic {
+    margin-top: 10px;
+    align-items: center;
+    appearance: none;
+    background-image: radial-gradient(100% 100% at 100% 0, #3bc2e7 0, #08f563 100%);
+    border: 0;
+    border-radius: 6px;
+    box-shadow: rgb(45 35 66 / 40%) 0 2px 4px, rgb(45 35 66 / 30%) 0 7px 13px -3px, rgb(58 65 111 / 50%) 0 -3px 0 inset;
+    box-sizing: border-box;
+    color: rgb(26, 18, 18);
+    cursor: pointer;
+    display: inline-flex;
+    font-family: "JetBrains Mono", monospace;
+    height: 48px;
+    justify-content: center;
+    line-height: 1;
+    list-style: none;
+    overflow: hidden;
+    padding-left: 16px;
+    padding-right: 16px;
+    position: relative;
+    text-align: left;
+    text-decoration: none;
+    transition: box-shadow .15s, transform .15s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    will-change: box-shadow, transform;
+    font-size: 18px;
+}
+
+.active-clinic:active {
+    box-shadow: #3c4fe0 0 3px 7px inset;
+    transform: translateY(2px);
+}
+
+.active-clinic:hover {
+    box-shadow: rgb(45 35 66 / 40%) 0 4px 8px, rgb(45 35 66 / 30%) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
+    transform: translateY(-2px);
+}
+
+.red {
+    color: red;
+    border: none;
+}

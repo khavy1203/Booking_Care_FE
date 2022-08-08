@@ -1,0 +1,35 @@
+.red {
+    border: 1px solid red;
+}
+
+.green {
+    border: 1px solid green;
+}
+
+.yellow {
+    border: 1px solid yellow;
+}
+
+.register-container {
+    min-height: 100vh;
+    .content-right {
+        border-radius: 5px;
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+        .forgot-password {
+            text-decoration: none;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+    @media (min-width: 37.5em) {
+        .content-left {
+            margin-top: 69px;
+        }
+    }
+    .brand {
+        text-transform: uppercase;
+        color: rgb(38, 127, 243);
+        font-weight: bold;
+    }
+}

@@ -169,17 +169,20 @@ class ModalUpdateUser extends Component {
     };
 
     handleUpdateSpecialty = async () => {
-        console.log("check data>>>", this.state.userData)
-        let res = await updateCurrentUser(this.state.userData)
-        if (res && +res.EC === 0) {
-            toast.success(res.EM);
-            this.setState({
-                userData: this.state.userDataDefault
-            })
+        if (this.checkValidateInput()) {
+            console.log("check data>>>", this.state.userData)
+            let res = await updateCurrentUser(this.state.userData)
+            if (res && +res.EC === 0) {
+                toast.success(res.EM);
+                this.setState({
+                    userData: this.state.userDataDefault
+                })
 
-            this.props.handleClose();
-        } else {
-            toast.error(res.EM);
+                this.props.handleClose();
+            } else {
+                toast.error(res.EM);
+            }
+
         }
 
     };
@@ -231,6 +234,24 @@ class ModalUpdateUser extends Component {
                 );
             }
         );
+    };
+    checkValidateInput = () => {
+
+        this.setState({ validInput: this.state.validInputDefault });
+        let array = ["groupId"];
+
+        for (let i = 0; i < array.length; i++) {
+            if (!this.state.userData[array[i]]) {
+                //set lai gia tri input bang false khi gia tri trong
+                let _validInput = _.cloneDeep(this.state.validInputDefault);
+                _validInput[array[i]] = false;
+                this.setState({ validInput: _validInput });
+                return false;
+
+            }
+        }
+        return true;
+
     };
 
     render() {
@@ -387,12 +408,24 @@ class ModalUpdateUser extends Component {
                                     >
                                         <option value="">Chọn nhóm quyền</option>
                                         {this.state.lstGroup.length > 0 && this.state.lstGroup.map((item, index) => {
-                                            return (
-                                                <option
-                                                    key={`special-${index}`}
-                                                    value={item.id}
-                                                >{item.name}</option>
-                                            )
+                                            if (this.state.userData?.groupId === 1) {
+                                                return (
+                                                    <option
+                                                        key={`group-${index}`}
+                                                        value={item.id}
+                                                    >{item.name}</option>
+                                                )
+                                            } else {
+                                                if (item.id != 1 && item.id != 4) {
+                                                    return (
+                                                        <option
+                                                            key={`group-${index}`}
+                                                            value={item.id}
+                                                        >{item.name}</option>
+                                                    )
+                                                }
+
+                                            }
                                         })}
                                     </select>
                                 </div>
@@ -458,7 +491,7 @@ class ModalUpdateUser extends Component {
                     }>
                         Close
                     </Button>
-                    <Button variant="primary" disabled={this.state.userData.image === undefined} onClick={() => this.handleUpdateSpecialty()}>
+                    <Button variant="primary" disabled={this.state.per > 0 && this.state.per < 100} onClick={() => this.handleUpdateSpecialty()}>
                         Update
                     </Button>
                 </Modal.Footer>

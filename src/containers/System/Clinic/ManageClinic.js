@@ -10,7 +10,7 @@ import {
   fetchAllClinics,
   createNewClinic,
   fetchAllClinicsOfSupport,
-  searchClinic
+  searchClinic,
 } from "../../../services/clinicService";
 import ReactPaginate from "react-paginate";
 import ModalDeleteClinic from "./ModalDeleteClinic";
@@ -36,7 +36,7 @@ class ManageClinic extends Component {
 
       isShowModalDelete: false,
       dataModalDelete: {},
-      lstProvince: {}
+      lstProvince: {},
     };
   }
 
@@ -45,9 +45,7 @@ class ManageClinic extends Component {
     this.fetchProvince();
   }
 
-  async componentDidUpdate(prevProps, prevState) {
-
-  }
+  async componentDidUpdate(prevProps, prevState) { }
   fetchProvince = () => {
     fetch("https://provinces.open-api.vn/api/", {
       method: "GET", // or 'PUT'
@@ -197,8 +195,7 @@ class ManageClinic extends Component {
         <div className="manage-specialty-container">
           <div className="ms-title">Quản lý phòng khám</div>
           <div className="row">
-            <div className="col-6">
-            </div>
+            <div className="col-6"></div>
 
             <div className="mt-3 table-role col-6">
               <input
@@ -237,7 +234,11 @@ class ManageClinic extends Component {
                           </td>
                           <td>{item.nameVI}</td>
                           <td>{item.addressVI}</td>
-                          <td>{item.provinceId && this.state.lstProvince ? this.state.lstProvince[item.provinceId] : ""}</td>
+                          <td>
+                            {item.provinceId && this.state.lstProvince
+                              ? this.state.lstProvince[item.provinceId]
+                              : ""}
+                          </td>
                           <td>
                             <div
                               className={

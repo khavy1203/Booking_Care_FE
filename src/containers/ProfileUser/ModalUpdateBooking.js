@@ -41,36 +41,41 @@ class ModalUpdateBooking extends Component {
   }
   componentDidMount() {}
 
+  getBookingFromBookingHistory = async (booking) => {
+    await this.setState({
+      bookingId: booking.id,
+      bookingDate: booking.date,
+      reason: booking.reason,
+      createdAt: booking.createdAt,
+      //timeId: selectedBooking.Schedule_Detail.Timeframe.id,
+      timeEN: booking.Schedule_Detail.Timeframe.nameEN,
+      timeVI: booking.Schedule_Detail.Timeframe.nameVI,
+
+      //Thông tin bác sĩ
+      doctorId: booking.Doctor.id,
+      doctorName: booking.Doctor.username,
+      degree_VI: booking.Doctor.Doctorinfo.degree_VI,
+      degree_EN: booking.Doctor.Doctorinfo.degree_EN,
+
+      clinicId: booking.Clinic.id,
+      clinicVI: booking.Clinic.nameVI,
+      clinicEN: booking.Clinic.nameEN,
+      specialtyEN: booking.Doctor.Specialty.nameVI,
+      specialtyVI: booking.Doctor.Specialty.nameEN,
+    });
+  };
+
   async componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.props.language === prevProps.language) {
     }
     if (this.props.selectedBooking !== prevProps.selectedBooking) {
-      let { selectedBooking } = this.props;
-      //console.log(selectedBooking);
-      await this.setState({
-        bookingId: selectedBooking.id,
-        bookingDate: selectedBooking.date,
-        reason: selectedBooking.reason,
-        createdAt: selectedBooking.createdAt,
-        //timeId: selectedBooking.Schedule_Detail.Timeframe.id,
-        timeEN: selectedBooking.Schedule_Detail.Timeframe.nameEN,
-        timeVI: selectedBooking.Schedule_Detail.Timeframe.nameVI,
-
-        //Thông tin bác sĩ
-        doctorId: selectedBooking.Doctor.id,
-        doctorName: selectedBooking.Doctor.username,
-        degree_VI: selectedBooking.Doctor.Doctorinfo.degree_VI,
-        degree_EN: selectedBooking.Doctor.Doctorinfo.degree_EN,
-
-        clinicId: selectedBooking.Clinic.id,
-        clinicVI: selectedBooking.Clinic.nameVI,
-        clinicEN: selectedBooking.Clinic.nameEN,
-        specialtyEN: selectedBooking.Doctor.Specialty.nameVI,
-        specialtyVI: selectedBooking.Doctor.Specialty.nameEN,
-      });
-
-      let { doctorId, clinicId } = this.state;
-      await this.loadSchedule(doctorId, clinicId);
+      let { show, selectedBooking } = this.props;
+      console.log(selectedBooking);
+      if (show === true) {
+        await this.getBookingFromBookingHistory(selectedBooking);
+        let { doctorId, clinicId } = this.state;
+        await this.loadSchedule(doctorId, clinicId);
+      }
     }
   }
 
@@ -128,9 +133,9 @@ class ModalUpdateBooking extends Component {
     await this.setState({
       selectedScheduleId: "",
       selectedTimeId: "",
-      bookingDate: "",
-      timeVI: "",
-      reason: "",
+      // bookingDate: "",
+      // timeVI: "",
+      // reason: "",
     });
   };
 
@@ -212,7 +217,7 @@ class ModalUpdateBooking extends Component {
       selectedTimeId,
       chosenDate,
     } = this.state;
-    //console.log(prevScheduleId, prevScheduleDate);
+    // console.log(this.props.selectedBooking, bookingDate);
     return (
       <Modal
         show={this.props.show}

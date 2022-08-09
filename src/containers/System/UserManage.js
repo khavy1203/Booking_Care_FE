@@ -227,52 +227,60 @@ class UserManage extends Component {
                 <tbody>
                   {this.state.listUser && this.state.listUser.length > 0 ? (
                     <>
-                      {
-                        this.state.listUser.map((item, index) => {
-                          let admin = process.env.REACT_APP_EMAIL_ADMIN;
-                          console.log("check item >>", item)
-                          if (
-                            admin === item.email ||
-                            item.id === this.state.userData.id
-                          )
-                            return;
-                          return (
-                            <tr key={`row-${index}`}>
-                              <td>
-                                {(this.state.currentPage - 1) *
-                                  this.state.currentLimit +
-                                  index +
-                                  1}
-                              </td>
-                              <td>{item.email}</td>
-                              <td>{item.username}</td>
-                              <td>{item.phone}</td>
-                              <td>{item.Clinic ? item.Clinic.nameVI : ""}
-                                <span style={{ color: "green" }}>
-                                  {item.groupId && item.Group && +item.Group.id === 5 ? ' * Quản lý' : ""}
-                                </span>
-                              </td>
-                              <td>{item.groupId && item.Group ? item.Group.name : ""}</td>
-                              <td>
-                                <button
-                                  className="btn btn-warning m-2"
-                                  onClick={() => this.handShowUpdateUser(item)}
-                                >
-                                  <i
-                                    className="fa fa-pencil"
-                                    aria-hidden="true"
-                                  ></i>
-                                </button>
-                                <button
-                                  className="btn btn-danger"
-                                  onClick={() => this.handleDeleteUser(item)}
-                                >
-                                  <i className="fa fa-trash"></i>
-                                </button>
-                              </td>
-                            </tr>
-                          );
-                        })}
+                      {this.state.listUser.map((item, index) => {
+                        let admin = process.env.REACT_APP_EMAIL_ADMIN;
+                        console.log("check item >>", item);
+                        if (
+                          admin === item.email ||
+                          item.id === this.state.userData.id
+                        )
+                          return;
+                        return (
+                          <tr key={`row-${index}`}>
+                            <td>
+                              {(this.state.currentPage - 1) *
+                                this.state.currentLimit +
+                                index +
+                                1}
+                            </td>
+                            <td>{item.email}</td>
+                            <td>{item.username}</td>
+                            <td>{item.phone}</td>
+                            <td>
+                              {item.Clinic ? item.Clinic.nameVI : ""}
+                              <span style={{ color: "green" }}>
+                                {item.groupId &&
+                                item.Group &&
+                                +item.Group.id === 5
+                                  ? " * Quản lý"
+                                  : ""}
+                              </span>
+                            </td>
+                            <td>
+                              {item.groupId && item.Group
+                                ? item.Group.name
+                                : ""}
+                            </td>
+                            <td>
+                              <button
+                                className="btn btn-warning m-2"
+                                onClick={() => this.handShowUpdateUser(item)}
+                              >
+                                <i
+                                  className="fa fa-pencil"
+                                  aria-hidden="true"
+                                ></i>
+                              </button>
+                              <button
+                                className="btn btn-danger"
+                                onClick={() => this.handleDeleteUser(item)}
+                              >
+                                <i className="fa fa-trash"></i>
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </>
                   ) : (
                     <>

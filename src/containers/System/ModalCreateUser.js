@@ -426,7 +426,7 @@ class ModalCreateUser extends Component {
                     }>
                         Close
                     </Button>
-                    <Button variant="primary" disabled={this.state.userData.image === undefined} onClick={() => this.handleCreateUser()}>
+                    <Button variant="primary" disabled={this.state.per > 0 && this.state.per < 100} onClick={() => this.handleCreateUser()}>
                         Create new user
                     </Button>
                 </Modal.Footer>

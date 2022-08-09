@@ -28,7 +28,6 @@ class ManageGroupRole extends Component {
       selectGroup: "",
       assignRolesByGroup: [],
       isShowModalCreateGroup: false,
-
     };
   }
   componentDidMount() {
@@ -126,12 +125,12 @@ class ManageGroupRole extends Component {
   };
   createGroup = async () => {
     this.setState({ isShowModalCreateGroup: true });
-  }
+  };
 
   handleModalCreateGroupClose = async () => {
     this.setState({ isShowModalCreateGroup: false });
     await this.getGroups();
-  }
+  };
   render() {
     console.log("check this.state.userGroups", this.state.userGroups);
     return (
@@ -162,7 +161,6 @@ class ManageGroupRole extends Component {
                 >
                   <option value="">Please select your group</option>
                   {this.state.userGroups.length > 0 &&
-
                     this.state.userGroups.map((item, index) => {
                       return (
                         // item.id !== 1 &&
@@ -218,7 +216,6 @@ class ManageGroupRole extends Component {
           handleClose={this.handleModalCreateGroupClose}
         />
       </div>
-
     );
   }
 }

@@ -280,7 +280,7 @@ class ModalCreateSpecialty extends Component {
                     }>
                         Close
                     </Button>
-                    <Button variant="primary" disabled={this.state.specialtyData.image === undefined} onClick={() => this.handleCreateNewSpecialty()}>
+                    <Button variant="primary" disabled={this.state.per > 0 && this.state.per < 100} onClick={() => this.handleCreateNewSpecialty()}>
                         Create
                     </Button>
                 </Modal.Footer>

@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 // import { Redirect } from "react-router-dom";
 import { push } from "connected-react-router";
-import {
-  Link
-} from "react-router-dom";
-import Dropdown from 'react-bootstrap/Dropdown'
+import { Link } from "react-router-dom";
+import Dropdown from "react-bootstrap/Dropdown";
 import { connect } from "react-redux";
 import "./HomeHeader.scss";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -18,14 +16,14 @@ import { toast } from "react-toastify";
 import { RiUser3Fill } from "react-icons/ri";
 
 import * as actions from "../../store/actions";
+import Button from "react-bootstrap/esm/Button";
 class HomeHeader extends Component {
   changeLanguage = (language) => {
     // alert(language);
     //fire redux action(event)
     this.props.changeLanguageAppRedux(language);
   };
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   processLogoutHomeHeader = async () => {
     let data = await logoutUser();
@@ -40,7 +38,7 @@ class HomeHeader extends Component {
     } else {
       toast.error(data.EM);
     }
-  }
+  };
   returnToHome = () => {
     if (this.props.history) {
       this.props.history.push(`/home`);
@@ -49,7 +47,6 @@ class HomeHeader extends Component {
   render() {
     let language = this.props.language;
     return (
-
       <React.Fragment>
         <div className="home-header-container">
           <div className="home-header-content">
@@ -59,8 +56,30 @@ class HomeHeader extends Component {
                   <MenuIcon className="bars-icon" />
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  <Dropdown.Item href="/register-clinic">Đăng ký phòng khám</Dropdown.Item>
-                  <Dropdown.Item href="/system/partner-clinic">Dành cho đối tác</Dropdown.Item>
+                  <Dropdown.Item>
+                    <Link
+                      style={{ color: "black", textDecoration: "none" }}
+                      to={"/register-clinic"}
+                    >
+                      Đăng ký phòng khám
+                    </Link>
+                  </Dropdown.Item>
+                  <Dropdown.Item>
+                    <Link
+                      style={{ color: "black", textDecoration: "none" }}
+                      to={"/system/partner-clinic"}
+                    >
+                      Dành cho đối tác
+                    </Link>
+                  </Dropdown.Item>
+                  <Dropdown.Item>
+                    <Link
+                      style={{ color: "black", textDecoration: "none" }}
+                      to={"/system/manage-patient"}
+                    >
+                      Dành cho bác sĩ
+                    </Link>
+                  </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
 
@@ -79,9 +98,13 @@ class HomeHeader extends Component {
               <div className="child-content">
                 <div>
                   <b>
-                    <Link to="/doctorall-page"
-                      style={{ textDecoration: 'none' }}
-                    > <FormattedMessage id="homeheader.specialty" /></Link>
+                    <Link
+                      to="/doctorall-page"
+                      style={{ textDecoration: "none" }}
+                    >
+                      {" "}
+                      <FormattedMessage id="homeheader.specialty" />
+                    </Link>
                   </b>
                 </div>
                 <div className="subs-title">
@@ -93,9 +116,7 @@ class HomeHeader extends Component {
               <div className="child-content">
                 <div>
                   <b>
-                    <Link to="/clinic-page"
-                      style={{ textDecoration: 'none' }}
-                    >
+                    <Link to="/clinic-page" style={{ textDecoration: "none" }}>
                       <FormattedMessage id="homeheader.health-facilities" />
                     </Link>
                   </b>
@@ -107,12 +128,12 @@ class HomeHeader extends Component {
               <div className="child-content">
                 <div>
                   <b>
-                    <Link to="/doctorall-page"
-                      style={{ textDecoration: 'none' }}
+                    <Link
+                      to="/doctorall-page"
+                      style={{ textDecoration: "none" }}
                     >
                       <FormattedMessage id="homeheader.doctor" />
                     </Link>
-
                   </b>
                 </div>
 
@@ -129,7 +150,6 @@ class HomeHeader extends Component {
                 <div className="subs-title">
                   <FormattedMessage id="homeheader.general-examination" />
                 </div>
-
               </div>
             </div>
             <div className="right-content">
@@ -167,100 +187,107 @@ class HomeHeader extends Component {
                   EN
                 </span>
               </div>
-              {
-                this.props.isLoggedIn ?
-                  <>
-
-                    <div id="account" className="btn btn-logout mt-2">
-                      <Link to="/user-profile">
-                        <RiUser3Fill style={{ fontSize: '20px' }} />
-                      </Link>
-                    </div>
-                    <div
-                      className="btn btn-logout mt-3"
-                      onClick={() => this.processLogoutHomeHeader()}
-                      title="Log out"
-                    >
-                      <i className="fas fa-sign-out-alt"></i>
-                    </div>
-                  </>
-                  :
-                  <a href="/login">Login</a>
-              }
+              {this.props.isLoggedIn ? (
+                <>
+                  <div id="account" className="btn btn-logout mt-2">
+                    <Link to="/user-profile">
+                      <RiUser3Fill style={{ fontSize: "20px" }} />
+                    </Link>
+                  </div>
+                  <div
+                    className="btn btn-logout mt-3"
+                    onClick={() => this.processLogoutHomeHeader()}
+                    title="Log out"
+                  >
+                    <i className="fas fa-sign-out-alt"></i>
+                  </div>
+                </>
+              ) : (
+                <div>
+                  <span className="mx-1">
+                    <Link style={{ textDecoration: "none" }} to="/login">
+                      Login
+                    </Link>
+                  </span>
+                  <span className="mx-1">
+                    <Link style={{ textDecoration: "none" }} to="/register">
+                      Regist{" "}
+                    </Link>
+                  </span>
+                </div>
+              )}
             </div>
           </div>
         </div>
-        {
-          this.props.isShowBanner === true && (
-            <div className="home-header-banner">
-              <div className="content-up">
-                <div className="title1">
-                  <FormattedMessage id="banner.title1" />
-                </div>
-                <div className="title2">
-                  <FormattedMessage id="banner.title2" />
-                </div>
-                <div className="search">
-                  <i className="fas fa-search"></i>
-                  <input type="text" placeholder="Tìm chuyên khoa khám bệnh" />
-                </div>
+        {this.props.isShowBanner === true && (
+          <div className="home-header-banner">
+            <div className="content-up">
+              <div className="title1">
+                <FormattedMessage id="banner.title1" />
               </div>
-              <div className="content-down">
-                <div className="options">
-                  <div className="option-child">
-                    <div className="icon-child">
-                      <i className="fas fa-hospital-alt"></i>
-                    </div>
-                    <div className="text-child">
-                      <FormattedMessage id="banner.specialist-examination" />
-                    </div>
+              <div className="title2">
+                <FormattedMessage id="banner.title2" />
+              </div>
+              <div className="search">
+                <i className="fas fa-search"></i>
+                <input type="text" placeholder="Tìm chuyên khoa khám bệnh" />
+              </div>
+            </div>
+            <div className="content-down">
+              <div className="options">
+                <div className="option-child">
+                  <div className="icon-child">
+                    <i className="fas fa-hospital-alt"></i>
                   </div>
-                  <div className="option-child">
-                    <div className="icon-child">
-                      <i className="fas fa-mobile-alt"></i>
-                    </div>
-                    <div className="text-child">
-                      <FormattedMessage id="banner.telemedicine" />
-                    </div>
+                  <div className="text-child">
+                    <FormattedMessage id="banner.specialist-examination" />
                   </div>
-                  <div className="option-child">
-                    <div className="icon-child">
-                      <i className="fas fa-notes-medical"></i>
-                    </div>
-                    <div className="text-child">
-                      <FormattedMessage id="banner.general-examination" />
-                    </div>
+                </div>
+                <div className="option-child">
+                  <div className="icon-child">
+                    <i className="fas fa-mobile-alt"></i>
                   </div>
-                  <div className="option-child">
-                    <div className="icon-child">
-                      <i className="fas fa-briefcase-medical"></i>
-                    </div>
-                    <div className="text-child">
-                      <FormattedMessage id="banner.medical-test" />
-                    </div>
+                  <div className="text-child">
+                    <FormattedMessage id="banner.telemedicine" />
                   </div>
-                  <div className="option-child">
-                    <div className="icon-child">
-                      <i className="fas fa-first-aid"></i>
-                    </div>
-                    <div className="text-child">
-                      <FormattedMessage id="banner.mental-health" />
-                    </div>
+                </div>
+                <div className="option-child">
+                  <div className="icon-child">
+                    <i className="fas fa-notes-medical"></i>
                   </div>
-                  <div className="option-child">
-                    <div className="icon-child">
-                      <i className="fas fa-user-md"></i>
-                    </div>
-                    <div className="text-child">
-                      <FormattedMessage id="banner.dental-examination" />
-                    </div>
+                  <div className="text-child">
+                    <FormattedMessage id="banner.general-examination" />
+                  </div>
+                </div>
+                <div className="option-child">
+                  <div className="icon-child">
+                    <i className="fas fa-briefcase-medical"></i>
+                  </div>
+                  <div className="text-child">
+                    <FormattedMessage id="banner.medical-test" />
+                  </div>
+                </div>
+                <div className="option-child">
+                  <div className="icon-child">
+                    <i className="fas fa-first-aid"></i>
+                  </div>
+                  <div className="text-child">
+                    <FormattedMessage id="banner.mental-health" />
+                  </div>
+                </div>
+                <div className="option-child">
+                  <div className="icon-child">
+                    <i className="fas fa-user-md"></i>
+                  </div>
+                  <div className="text-child">
+                    <FormattedMessage id="banner.dental-examination" />
                   </div>
                 </div>
               </div>
             </div>
-          )
-        }
-      </React.Fragment >
+          </div>
+        )}
+      </React.Fragment>
     );
   }
 }
@@ -269,7 +296,6 @@ const mapStateToProps = (state) => {
   return {
     isLoggedIn: state.user.isLoggedIn,
     language: state.app.language,
-
   };
 };
 

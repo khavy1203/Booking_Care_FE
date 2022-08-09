@@ -9,6 +9,7 @@ import {
 import moment from "moment";
 import { Button, Modal } from "react-bootstrap";
 import { LANGUAGES } from "../../../utils";
+import { toast } from "react-toastify";
 
 class ManageAppointment extends Component {
   constructor(props) {
@@ -43,6 +44,8 @@ class ManageAppointment extends Component {
       listBooking: [],
       selectedBooking: {},
       updatedBooking: {},
+
+      note: "",
     };
   }
 
@@ -81,11 +84,13 @@ class ManageAppointment extends Component {
   //hàm cập nhật trạng thái booking
   updateStatusBooking = async (data) => {
     try {
-      console.log("check dât", data);
+      //console.log("check dât", data);
       let res = await updateBooking(data);
-      console.log("check updated booking", res.DT);
+      //console.log("check updated booking", res.DT);
       if (res && +res.EC === 0) {
         this.setState({ updatedBooking: res.DT });
+      } else {
+        toast.warn(res.EM);
       }
     } catch (error) {
       console.log(error);
@@ -98,13 +103,30 @@ class ManageAppointment extends Component {
   };
 
   //Mở modal hủy lịch hẹn
-  handleOpenCancelModal = (booking) => {
-    this.setState({ selectedBooking: booking, isOpenCancelModal: true });
+  handleOpenCancelModal = async (booking) => {
+    await this.handleSetState(booking);
+    await this.setState({ isOpenCancelModal: true });
   };
   //Hàm chuyển trạng thái booking sang hủy
-  handleCancel = async (bookingId, reqCode) => {
-    await this.updateStatusBooking({ bookingId: bookingId, reqCode: reqCode });
-    this.closeCancelModal();
+  handleCancel = async (bookingId, reqCode, note) => {
+    if (!this.state.note) {
+      toast.warn("Vui lòng nhập lý do hủy lịch hẹn");
+      return;
+    }
+
+    let res = await updateBooking({
+      bookingId: bookingId,
+      reqCode: reqCode,
+      note: note,
+    });
+    //console.log("handleClickCancel", res.DT);
+    if (res && +res.EC === 0) {
+      toast.success(res.EM);
+      this.loadBooking();
+      this.closeCancelModal();
+    } else {
+      toast.error(res.EM);
+    }
   };
   //Đóng model hủy lịch hẹn
   closeCancelModal = () => {
@@ -113,9 +135,8 @@ class ManageAppointment extends Component {
     });
   };
 
-  //Mở Modal xem thông tin
-  handleOpenReviewModal = (booking) => {
-    this.setState({
+  handleSetState = async (booking) => {
+    await this.setState({
       selectedBooking: booking,
       //Thông tin bệnh nhân
       patientName: booking.Patient.username,
@@ -137,9 +158,18 @@ class ManageAppointment extends Component {
       specialtyEN: booking.Doctor.Specialty.nameVI,
       specialtyVI: booking.Doctor.Specialty.nameEN,
 
+      note: booking.note,
+    });
+  };
+
+  //Mở Modal xem thông tin
+  handleOpenReviewModal = async (booking) => {
+    await this.handleSetState(booking);
+    await this.setState({
       isOpenReviewModal: true,
     });
   };
+
   //Đóng Modal xem thông tin
   closeReviewModal = () => {
     this.setState({
@@ -264,7 +294,7 @@ class ManageAppointment extends Component {
                   <th>Họ tên</th>
                   <th>Số điện thoại</th>
                   <th>Email</th>
-                  <th>Ngày cập nhật</th>
+                  <th>Ngày tạo</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -272,8 +302,10 @@ class ManageAppointment extends Component {
                 {listBooking &&
                   listBooking.length > 0 &&
                   listBooking.map((item, index) => {
-                    let bookDate = moment(item.updatedAt).format("DD/MM/YYYY");
-                    let bookHour = moment(item.updatedAt).format("HH:mm");
+                    let bookDate = moment(item.createdAt).format(
+                      "dddd - DD/MM/YYYY"
+                    );
+                    let bookHour = moment(item.createdAt).format("HH:mm");
                     return (
                       <tr key={index}>
                         <td>{item.id}</td>
@@ -318,7 +350,7 @@ class ManageAppointment extends Component {
                                 className="btn btn-primary m-2"
                                 onClick={() => this.handleOpenReviewModal(item)}
                               >
-                                Xem thông tin
+                                Thông tin
                               </button>
 
                               <button
@@ -335,7 +367,7 @@ class ManageAppointment extends Component {
                                 className="btn btn-primary"
                                 onClick={() => this.handleOpenReviewModal(item)}
                               >
-                                Xem thông tin
+                                Thông tin
                               </button>
                             </>
                           )}
@@ -352,33 +384,11 @@ class ManageAppointment extends Component {
         <Modal
           show={this.state.isOpenCancelModal}
           onHide={this.closeCancelModal}
-        >
-          {/* <Modal.Header closeButton>
-            <Modal.Title>Thông tin lịch hẹn</Modal.Title>
-          </Modal.Header> */}
-          <Modal.Body>Xác nhận hủy lịch hẹn này?</Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={this.closeCancelModal}>
-              Thoát
-            </Button>
-            <Button
-              variant="primary"
-              onClick={() => this.handleCancel(selectedBooking.id, 2)}
-            >
-              Xác nhận
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
-        {/* Modal xem thông tin */}
-        <Modal
-          show={this.state.isOpenReviewModal}
-          onHide={this.closeReviewModal}
           centered
           size="lg"
         >
           <Modal.Header closeButton>
-            <Modal.Title>Thông tin lịch hẹn</Modal.Title>
+            <Modal.Title>Hủy lịch hẹn</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div className="appointment-info container">
@@ -408,26 +418,6 @@ class ManageAppointment extends Component {
                     className="form-control"
                     type="text"
                     value={patientEmail}
-                    disabled
-                  />
-                </div>
-                <div className="patient-address col-4 form-group">
-                  <label>Địa chỉ:</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    value={address}
-                    disabled
-                  />
-                </div>
-                <div className="patient-createdAt col-4 form-group">
-                  <label>Ngày tạo lịch hẹn :</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    value={`${moment(createdAt).format(
-                      "DD/MM/YYYY"
-                    )} - ${moment(createdAt).format("HH:mm")}`}
                     disabled
                   />
                 </div>
@@ -488,18 +478,170 @@ class ManageAppointment extends Component {
                     disabled
                   />
                 </div>
-                <div className="patient-phone col-6 form-group">
-                  <label>Khám tại:</label>
+              </div>
+              <hr />
+              <div className="row">
+                <h5>Lý do hủy</h5>
+                <div className="col-12 form-group">
+                  <textarea
+                    className="form-control"
+                    placeholder="Xin vui lòng nhập lý do hủy lịch hẹn..."
+                    value={this.state.note}
+                    onChange={(event) => {
+                      this.setState({ note: event.target.value });
+                    }}
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="danger"
+              onClick={() =>
+                this.handleCancel(selectedBooking.id, 2, this.state.note)
+              }
+            >
+              Hủy
+            </Button>
+            <Button variant="secondary" onClick={this.closeCancelModal}>
+              Thoát
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+        {/* Modal xem thông tin */}
+        <Modal
+          show={this.state.isOpenReviewModal}
+          onHide={this.closeReviewModal}
+          centered
+          size="lg"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Thông tin lịch hẹn</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="appointment-info container">
+              <div className="patient-info row">
+                <h5>Thông tin bệnh nhân</h5>
+                <div className="patient-name col-4 form-group">
+                  <label>Họ tên:</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    value={patientName}
+                    disabled
+                  />
+                </div>
+                <div className="patient-phone col-4 form-group">
+                  <label>Số điện thoại:</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    value={patientPhone}
+                    disabled
+                  />
+                </div>
+                <div className="patient-email col-4 form-group">
+                  <label>Email liên hệ:</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    value={patientEmail}
+                    disabled
+                  />
+                </div>
+                <div className="patient-address col-4 form-group">
+                  <label>Địa chỉ:</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    value={address}
+                    disabled
+                  />
+                </div>
+                <div className="patient-createdAt col-4 form-group">
+                  <label>Ngày tạo lịch hẹn:</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    value={`${moment(createdAt).format("dddd - DD/MM/YYYY")}`}
+                    disabled
+                  />
+                </div>
+                <div className="patient-reason col-12 form-group">
+                  <label>Lý do khám bệnh:</label>
+                  <textarea
+                    className="form-control"
+                    type="text"
+                    value={reason}
+                    disabled
+                  ></textarea>
+                </div>
+              </div>
+              <hr />
+              <div className="doctor-info row">
+                <h5>Thông tin khám bệnh</h5>
+                <div className="patient-booking-date col-3 form-group">
+                  <label>Ngày hẹn khám bệnh: </label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    value={moment(bookingDate).format("dddd - DD/MM/YYYY")}
+                    disabled
+                  />
+                </div>
+                <div className="patient-time col-3 form-group">
+                  <label>Giờ hẹn: </label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    value={language === LANGUAGES.VI ? timeVI : timeEN}
+                    disabled
+                  />
+                </div>
+                <div className="doctor-specialty col-6 form-group">
+                  <label>Khám chuyên khoa:</label>
                   <input
                     className="form-control"
                     type="text"
                     value={
-                      language === LANGUAGES.VI ? `${clinicVI}` : `${clinicEN}`
+                      language === LANGUAGES.VI
+                        ? `${specialtyVI}`
+                        : `${specialtyEN}`
+                    }
+                    disabled
+                  />
+                </div>
+                <div className="doctor-name col-6 form-group">
+                  <label>Bác sĩ:</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    value={
+                      language === LANGUAGES.VI
+                        ? `${degree_VI} ${doctorName}`
+                        : `${degree_EN} ${doctorName}`
                     }
                     disabled
                   />
                 </div>
               </div>
+              {this.state.selectedTab === 3 ? (
+                <div className="row">
+                  <h5>Lý do hủy</h5>
+                  <div className="col-12 form-group">
+                    <textarea
+                      className="form-control"
+                      placeholder="Xin vui lòng nhập lý do hủy lịch hẹn..."
+                      value={this.state.note}
+                      disabled
+                    ></textarea>
+                  </div>
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
           </Modal.Body>
           <Modal.Footer>
@@ -560,13 +702,11 @@ class ManageAppointment extends Component {
                   />
                 </div>
                 <div className="patient-createdAt col-4 form-group">
-                  <label>Ngày tạo lịch hẹn :</label>
+                  <label>Ngày tạo lịch hẹn:</label>
                   <input
                     className="form-control"
                     type="text"
-                    value={`${moment(createdAt).format(
-                      "DD/MM/YYYY"
-                    )} - ${moment(createdAt).format("HH:mm")}`}
+                    value={`${moment(createdAt).format("dddd - DD/MM/YYYY")}`}
                     disabled
                   />
                 </div>
@@ -589,7 +729,7 @@ class ManageAppointment extends Component {
                   <input
                     className="form-control"
                     type="text"
-                    value={bookingDate}
+                    value={moment(bookingDate).format("dddd - DD/MM/YYYY")}
                     disabled
                   />
                 </div>
@@ -628,29 +768,18 @@ class ManageAppointment extends Component {
                     disabled
                   />
                 </div>
-                <div className="patient-phone col-6 form-group">
-                  <label>Khám tại:</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    value={
-                      language === LANGUAGES.VI ? `${clinicVI}` : `${clinicEN}`
-                    }
-                    disabled
-                  />
-                </div>
               </div>
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={this.closeConfirmModal}>
-              Hủy
-            </Button>
             <Button
               variant="primary"
               onClick={() => this.handleConfirm(selectedBooking.id, 3)}
             >
               Xác nhận
+            </Button>
+            <Button variant="secondary" onClick={this.closeConfirmModal}>
+              Thoát
             </Button>
           </Modal.Footer>
         </Modal>

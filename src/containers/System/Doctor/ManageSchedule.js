@@ -210,7 +210,8 @@ class ManageSchedule extends Component {
   }
 
   render() {
-    let yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
+    // let yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
+    let yesterday = new Date(new Date().setDate(new Date().getDate()));
     let { language } = this.props;
     let { times, maxNumber, listSchedule } = this.state;
 

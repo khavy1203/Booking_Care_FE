@@ -24,8 +24,23 @@ class Login extends Component {
         isInvalidAccount: true,
         isInvalidPassword: true,
       },
+
+      query: "",
     };
   }
+
+  async componentDidMount() {
+    let query = await this.getQueryFromURL();
+    if (query) this.setState({ query: query });
+    //console.log(this.state.query);
+  }
+
+  getQueryFromURL = async () => {
+    const params = new Proxy(new URLSearchParams(window.location.search), {
+      get: (searchParams, prop) => searchParams.get(prop),
+    });
+    return params.redirectTo;
+  };
 
   loginGoogle = async () => {
     window.open("http://localhost:5000/api/v1/google", "_self");
@@ -34,11 +49,11 @@ class Login extends Component {
     window.open("http://localhost:5000/api/v1/github", "_self");
   };
   handleOnChangeUsername = (event) => {
-    this.setState({ username: event.target.value });
+    this.setState({ username: event.target.value.trim() });
     // console.log(event.target.value);
   };
   handleOnChangePassword = (event) => {
-    this.setState({ password: event.target.value });
+    this.setState({ password: event.target.value.trim() });
   };
   handleLogin = async () => {
     if (!this.state.username) {
@@ -62,14 +77,20 @@ class Login extends Component {
       return false;
     }
     let response = await handleLoginApi(
-      this.state.username,
-      this.state.password
+      this.state.username.trim(),
+      this.state.password.trim()
     );
     if (response && +response.EC === 0) {
-
       await this.props.userloginSuccess(response.DT.access_token);
       const { navigate } = this.props;
-      const redirectPath = "/home";
+      //Huyên:
+      let { query } = this.state;
+      //console.log(query);
+      // const redirectPath = "/home";
+      let redirectPath = "/home";
+      if (query) {
+        redirectPath = query;
+      }
       navigate(`${redirectPath}`);
     }
     if (response && +response.EC !== 0) {
@@ -85,7 +106,7 @@ class Login extends Component {
     const { navigate } = this.props;
     const redirectPath = "/forgot-password";
     navigate(`${redirectPath}`);
-  }
+  };
   render() {
     return (
       <div className="login-backround">
@@ -145,7 +166,12 @@ class Login extends Component {
               </button>
             </div>
             <div className="col-12">
-              <span className="forgot-password" onClick={() => this.forgotPassword()}>Forgot your password?</span>
+              <span
+                className="forgot-password"
+                onClick={() => this.forgotPassword()}
+              >
+                Forgot your password?
+              </span>
             </div>
             <div className="col-12 text-center  mt-3">
               <span className="text-other-login">Or Login with:</span>
@@ -185,7 +211,6 @@ const mapDispatchToProps = (dispatch) => {
     //   dispatch(actions.userloginSuccess(userInfo)),
     userloginSuccess: (userInfo) =>
       dispatch(actions.userloginSuccess(userInfo)),
-
   };
 };
 

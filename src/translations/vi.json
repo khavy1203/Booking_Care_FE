@@ -91,6 +91,19 @@
             "cancel": "Hủy",
             "priceBooking": "Miễn phí đặt lịch",
             "price": "Giá khám:"
+        },
+        "booking-history":{
+            "appointment-date": "Ngày hẹn",
+            "appointment-time": "Giờ hẹn",
+            "booking-status": "Trạng thái",
+            "created-at":"Ngày tạo",
+            "view-info": "Xem thông tin",
+            "change-booking": "Thay đổi lịch hẹn",
+            "cancel-booking": "Hủy",
+            "personal-info": "Thông tin cá nhân",
+            "reason-booking": "Lý do khám bệnh",
+            "note-booking": "Ghi chú",
+            "medical-examination-information": "Thông tin khám bệnh"
         }
     },
     "admin": {

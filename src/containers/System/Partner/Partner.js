@@ -457,7 +457,7 @@ class Partner extends Component {
                 <tbody>
                   {/* thay this.state.lstDoctorOfClinic thành danh sách lọc thành table fillter */}
                   {this.state.tableFillter &&
-                  this.state.tableFillter.length > 0 ? (
+                    this.state.tableFillter.length > 0 ? (
                     <>
                       {Object.entries(this.state.tableFillter).map(
                         ([key, child], index) => {

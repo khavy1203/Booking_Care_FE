@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "react-router";
 import "./DoctorSchedule.scss";
 import moment from "moment";
 import "moment/locale/vi";
@@ -7,9 +8,7 @@ import { LANGUAGES } from "../../../utils";
 import { FormattedMessage } from "react-intl";
 import BookingModal from "./Modal/BookingModal";
 import { fetchSchedule } from "../../../services/scheduleService";
-import { dateFormat } from "../../../utils";
 import { Button, Modal } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import {
   getUserAccount,
   logoutUser,
@@ -175,7 +174,7 @@ class DoctorSchedule extends Component {
 
   //Hàm này dùng để khi bệnh nhân chọn ngày thì sẽ gọi lấy các giờ khám trong ngày đó
   handleOnChangeSelect = async (event) => {
-    console.log("handleOnChangeSelect", event.target.value);
+    //console.log("handleOnChangeSelect", event.target.value);
     if (this.props.DetailDoctor && this.props.DetailDoctor.id) {
       let doctorId = this.props.DetailDoctor.id;
       let date = event.target.value;
@@ -217,6 +216,13 @@ class DoctorSchedule extends Component {
     this.setState({
       isOpenCheckLoginModal: false,
     });
+  };
+
+  goToLogin = () => {
+    if (this.props.history) {
+      const prevLocation = window.location.pathname;
+      this.props.history.push(`/login?redirectTo=${prevLocation}`);
+    }
   };
 
   render() {
@@ -318,21 +324,18 @@ class DoctorSchedule extends Component {
 
         {/* Modal yêu cầu đăng nhập */}
         <Modal show={isOpenCheckLoginModal} onHide={this.closeCheckModal}>
-          {/* <Modal.Header closeButton>
-            <Modal.Title>Đăng nhập đặt lịch</Modal.Title>
-          </Modal.Header> */}
-          <Modal.Body>Vui lòng đăng nhập để đặt lịch khám bệnh</Modal.Body>
+          <Modal.Header closeButton>
+            <Modal.Title>Thông báo đăng nhập</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Bạn vui lòng đăng nhập tài khoản để đặt lịch khám bệnh</p>
+          </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={this.closeCheckModal}>
-              <Link
-                to="/login"
-                style={{ textDecoration: "none", color: "white" }}
-              >
-                Đăng nhập
-              </Link>
+            <Button variant="primary" onClick={() => this.goToLogin()}>
+              Đăng nhập
             </Button>
             <Button variant="secondary" onClick={this.closeCheckModal}>
-              Hủy
+              Thoát
             </Button>
           </Modal.Footer>
         </Modal>
@@ -352,4 +355,6 @@ const mapDispatchToProps = (dispatch) => {
   return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DoctorSchedule);
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(DoctorSchedule)
+);

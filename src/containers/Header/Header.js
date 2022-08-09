@@ -11,27 +11,21 @@ import { FormattedMessage } from "react-intl";
 import { logoutUser, getUserAccount } from "../../services/userService";
 import { toast } from "react-toastify";
 
-
 class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      userData: {},
-    };
-  };
+    this.state = {};
+  }
   handleChangeLanguage = (language) => {
-
     this.props.changeLanguageAppRedux(language);
   };
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   processLogoutHeader = async () => {
     let data = await logoutUser();
 
     if (data && +data.EC === 0) {
-
       const { navigate } = this.props;
       this.props.processLogout();
       const redirectPath = "/home";
@@ -39,10 +33,10 @@ class Header extends Component {
     } else {
       toast.error(data.EM);
     }
-  }
+  };
   render() {
-    console.log("check login >>>", this.props.isLoggedIn)
-    const { language, userData } = this.props;
+    console.log("check login >>>", this.props.isLoggedIn);
+    const { language } = this.props;
 
     return (
       <div className="header-container">
@@ -52,10 +46,9 @@ class Header extends Component {
         </div>
 
         <div className="languages">
-          <span className="welcome">
+          {/* <span className="welcome">
             <FormattedMessage id="homeheader.welcome" />,{" "}
-            {userData && userData.username}
-          </span>
+          </span> */}
           <span
             className={
               language === LANGUAGES.VI ? "language-vi active" : "language-vi"
@@ -94,7 +87,6 @@ const mapStateToProps = (state) => {
   return {
     isLoggedIn: state.user.isLoggedIn,
     language: state.app.language,
-
   };
 };
 
@@ -107,7 +99,6 @@ const mapDispatchToProps = (dispatch) => {
     },
     userloginSuccess: (userInfo) =>
       dispatch(actions.userloginSuccess(userInfo)),
-
   };
 };
 

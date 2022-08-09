@@ -13,6 +13,7 @@ import {
 import moment from "moment";
 import { toast } from "react-toastify";
 import ModalUpdateBooking from "./ModalUpdateBooking";
+import ModalCancelBooking from "./ModalCancelBooking";
 
 class BookingHistory extends Component {
   constructor(props) {
@@ -20,6 +21,7 @@ class BookingHistory extends Component {
     this.state = {
       isOpenReviewModal: false,
       isOpenUpdateModal: false,
+      isOpenCancelModal: false,
 
       selectedBooking: {},
       listBooking: [],
@@ -40,6 +42,9 @@ class BookingHistory extends Component {
       clinicEN: "",
       specialtyEN: "",
       specialtyVI: "",
+
+      bookingStatusId: "",
+      note: "",
     };
   }
   async componentDidMount() {
@@ -88,27 +93,48 @@ class BookingHistory extends Component {
       specialtyEN: booking.Doctor.Specialty.nameVI,
       specialtyVI: booking.Doctor.Specialty.nameEN,
 
+      bookingStatusId: booking.Bookingstatus.id,
+      note: booking.note,
+
       isOpenReviewModal: true,
     });
   };
 
-  handleClickCancel = async (booking) => {
-    let choose = window.confirm(`Bạn có muốn hủy lịch hẹn ${booking.id} này?`);
-    if (choose === true) {
-      let res = await updateBooking({ bookingId: booking.id, reqCode: 2 });
-      //console.log("handleClickCancel", res.DT);
-      if (res && +res.EC === 0) {
-        toast.success(res.EM);
-        await this.loadBooking();
-      } else {
-        toast.error(res.EM);
-      }
+  handleOpenCancelModal = async (booking) => {
+    await this.setState({
+      selectedBooking: booking,
+      isOpenCancelModal: true,
+    });
+  };
+
+  handleCloseCancelModal = async (resultFromModal) => {
+    await this.setState({
+      isOpenCancelModal: false,
+      //selectedBooking: {},
+    });
+    if (resultFromModal) {
+      await this.loadBooking();
     }
   };
+
+  // handleClickCancel = async (booking) => {
+  //   let choose = window.confirm(`Bạn có muốn hủy lịch hẹn ${booking.id} này?`);
+  //   if (choose === true) {
+  //     let res = await updateBooking({ bookingId: booking.id, reqCode: 2 });
+  //     //console.log("handleClickCancel", res.DT);
+  //     if (res && +res.EC === 0) {
+  //       toast.success(res.EM);
+  //       await this.loadBooking();
+  //     } else {
+  //       toast.error(res.EM);
+  //     }
+  //   }
+  // };
 
   handleCloseUpdateModal = async (updatedBookingFromModal) => {
     await this.setState({
       isOpenUpdateModal: false,
+      //selectedBooking: {},
     });
     if (updatedBookingFromModal) {
       await this.loadBooking();
@@ -146,6 +172,8 @@ class BookingHistory extends Component {
       clinicEN,
       specialtyEN,
       specialtyVI,
+      bookingStatusId,
+      note,
     } = this.state;
     return (
       <div>
@@ -174,10 +202,10 @@ class BookingHistory extends Component {
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Ngày tạo</th>
-                    <th>Trạng thái lịch hẹn</th>
                     <th>Ngày hẹn</th>
                     <th>Giờ hẹn</th>
+                    <th>Trạng thái</th>
+                    <th>Ngày tạo</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -205,21 +233,21 @@ class BookingHistory extends Component {
                       return (
                         <tr key={index}>
                           <th>{item.id}</th>
-                          <th>{`${createDate}`}</th>
-                          <th>{item.Bookingstatus.nameVI}</th>
 
                           <th>{`${bookDate}`}</th>
                           <th>{item.Schedule_Detail.Timeframe.nameVI}</th>
+
+                          <th>{item.Bookingstatus.nameVI}</th>
+                          <th>{`${createDate}`}</th>
 
                           <td>
                             <button
                               className="btn btn-primary m-2"
                               onClick={() => this.handleOpenReviewModal(item)}
                             >
-                              Xem thông tin
+                              Thông tin
                             </button>
-                            {item.Bookingstatus.id === 1 ||
-                            item.Bookingstatus.id === 2 ? (
+                            {item.Bookingstatus.id < 3 ? (
                               <>
                                 <button
                                   className="btn btn-warning m-2"
@@ -227,15 +255,20 @@ class BookingHistory extends Component {
                                     this.handleOpenUpdateModal(item)
                                   }
                                 >
-                                  Cập nhật lịch hẹn
-                                </button>
-                                <button
-                                  className="btn btn-danger m-2"
-                                  onClick={() => this.handleClickCancel(item)}
-                                >
-                                  Hủy
+                                  Cập nhật
                                 </button>
                               </>
+                            ) : (
+                              <></>
+                            )}
+                            {item.Bookingstatus.id < 3 ||
+                            item.Bookingstatus.id === 4 ? (
+                              <button
+                                className="btn btn-danger m-2"
+                                onClick={() => this.handleOpenCancelModal(item)}
+                              >
+                                Hủy
+                              </button>
                             ) : (
                               <></>
                             )}
@@ -344,6 +377,16 @@ class BookingHistory extends Component {
                       disabled
                     />
                   </div>
+                  <div className="patient-phone col-12 form-group">
+                    <label>
+                      {bookingStatusId === 3 ? "Lý do hủy:" : "Ghi chú:"}
+                    </label>
+                    <textarea
+                      className="form-control"
+                      value={note}
+                      disabled
+                    ></textarea>
+                  </div>
                 </div>
               </div>
             </Modal.Body>
@@ -358,6 +401,11 @@ class BookingHistory extends Component {
             handleClose={this.handleCloseUpdateModal}
             selectedBooking={selectedBooking}
           ></ModalUpdateBooking>
+          <ModalCancelBooking
+            showModalCancel={this.state.isOpenCancelModal}
+            closeModalCancel={this.handleCloseCancelModal}
+            selectedBooking={selectedBooking}
+          />
         </div>
       </div>
     );

@@ -79,8 +79,6 @@ const searchUser = async (dt, page, limit) => {
   );
 };
 
-
-
 const createNewGroup = (data) => {
   return axios.post("/api/v1/group/createGroup", data);
 };
@@ -100,5 +98,5 @@ export {
   updatePassword,
   getUserById,
   searchUser,
-  createNewGroup
+  createNewGroup,
 };

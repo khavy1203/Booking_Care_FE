@@ -135,7 +135,7 @@ class ListDoctorPage extends Component {
         listDoctor: res.DT.doctors,
         totalPage: res.DT.totalPages,
         inforClinic: res.DT.clinic,
-        lstSpecialOfClinic: res.DT.lstSpecialOfClinic
+        lstSpecialOfClinic: res.DT.lstSpecialOfClinic,
       });
     } else {
       toast.error(res.EM);
@@ -249,8 +249,10 @@ class ListDoctorPage extends Component {
                           lstProvince &&
                           lstDistrict &&
                           lstWard &&
-                          `${inforClinic.addressVI} - ${lstWard[inforClinic.wardId]
-                          } - ${lstDistrict[inforClinic.districtId]} -  ${lstProvince[inforClinic.provinceId]
+                          `${inforClinic.addressVI} - ${
+                            lstWard[inforClinic.wardId]
+                          } - ${lstDistrict[inforClinic.districtId]} -  ${
+                            lstProvince[inforClinic.provinceId]
                           }`}
                       </div>
                     </div>
@@ -337,25 +339,24 @@ class ListDoctorPage extends Component {
                 <form className="Feedback_Feedback__17vAI ClinicDetail_block_item__3B88u">
                   <div className="Feedback_text__2XSC4 mb-3 description-clinic">
                     <h2>Phòng Khám điều trị các chuyên khoa</h2>
-                    {
-                      this.state.lstSpecialOfClinic && this.state.lstSpecialOfClinic.length > 0 ?
-
-                        <>
-                          {
-                            this.state.lstSpecialOfClinic.map((item, index) => {
-                              if (+item.userCount > 0)
-                                return (
-                                  <>
-                                    <h3>{item.nameVI}</h3>
-                                    <div>{ReactHtmlParser(item.descriptionHTML_VI)}</div>
-                                  </>
-                                )
-                            })
-                          }
-                        </>
-                        :
-                        ""
-                    }
+                    {this.state.lstSpecialOfClinic &&
+                    this.state.lstSpecialOfClinic.length > 0 ? (
+                      <>
+                        {this.state.lstSpecialOfClinic.map((item, index) => {
+                          if (+item.userCount > 0)
+                            return (
+                              <>
+                                <h3>{item.nameVI}</h3>
+                                <div>
+                                  {ReactHtmlParser(item.descriptionHTML_VI)}
+                                </div>
+                              </>
+                            );
+                        })}
+                      </>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   {this.state.listDoctor && this.state.listDoctor.length > 0 ? (
                     <>

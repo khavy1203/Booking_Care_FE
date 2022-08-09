@@ -17,6 +17,7 @@ export const path = {
   GROUP_ROLE: "/manage-group-role",
   USER_PROFILE: "/user-profile",
   BOOKING_HISTORY: "/booking-history",
+  //BOOKING_RESULT: "/booking-result",
   FORGOT_PASSWORD: "/forgot-password",
   NEW_PASSWORD: "/reset-password",
   LIST_CLINIC_PAGE: "/clinic-page",

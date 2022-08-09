@@ -71,5 +71,5 @@ export {
   getInforClininicOfUserOnPage,
   getClinic,
   fetchAllClinicsOfSupport,
-  searchClinic
+  searchClinic,
 };

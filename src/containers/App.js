@@ -89,7 +89,6 @@ class App extends Component {
                     path={path.REGISTER}
                     component={userIsNotAuthenticated(Register)}
                   />
-                  {/* video bài 36 chưa làm đăng nhập vì chưa có api nên cmt lại Rout dưới */}
                   {/* <Route
                     path={path.SYSTEM}
                     component={userIsAuthenticated(System)}

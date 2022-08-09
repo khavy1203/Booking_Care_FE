@@ -45,5 +45,5 @@ export {
   deleteSpecialty,
   fetchAllSpecialOfSupport,
   fetchTopSpecialtyHome,
-  searchSpecial
+  searchSpecial,
 };

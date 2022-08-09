@@ -18,7 +18,7 @@ class ManagePatient extends Component {
     super(props);
     this.state = {
       // currentDate: moment(new Date()).startOf("day").valueOf(),
-      currentDate: new Date().toISOString(),
+      currentDate: new Date(),
 
       listBooking: [],
       isOpenConfirmModal: false,
@@ -28,12 +28,15 @@ class ManagePatient extends Component {
       bookingStatusId: "",
       bookingStatusEN: "",
       bookingStatusVI: "",
-      patientName: 1,
-      patientGender: "",
+      patientName: "",
+      patientGender: 1,
       patientPhone: "",
       patientEmail: "",
       patientAddress: "",
       reason: "",
+      time: "",
+
+      note: "",
     };
   }
   componentDidMount() {
@@ -41,7 +44,8 @@ class ManagePatient extends Component {
     //let formatedDate = moment(currentDate).format("DD/MM/YYYY");
     // console.log("currentDate", currentDate);
     // console.log("formatedDate", formatedDate);
-    this.loadBooking(currentDate);
+    let formatedDate = currentDate.toISOString();
+    this.loadBooking(formatedDate);
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -96,20 +100,31 @@ class ManagePatient extends Component {
       patientEmail: booking.Patient.email,
       patientAddress: booking.Patient.address,
       reason: booking.reason,
+      time: booking.Schedule_Detail.Timeframe.nameVI,
+      note: booking.note,
     });
   };
 
   handleConfirm = async (bookingId, reqCode) => {
-    let res = await updateBooking({
-      bookingId: bookingId,
-      reqCode: reqCode,
-    });
-    if (res && +res.EC === 0) {
-      this.setState({ updatedBooking: res.DT });
-      toast.success(res.EM);
-      this.closeConfirmModal();
-    } else {
-      toast.warn(res.EM);
+    try {
+      if (!this.state.note) {
+        toast.warn("Vui lòng nhập ghi chú");
+        return;
+      }
+      let res = await updateBooking({
+        bookingId: bookingId,
+        reqCode: reqCode,
+        note: this.state.note,
+      });
+      if (res && +res.EC === 0) {
+        this.setState({ updatedBooking: res.DT });
+        toast.success(res.EM);
+        this.closeConfirmModal();
+      } else {
+        toast.warn(res.EM);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -125,7 +140,16 @@ class ManagePatient extends Component {
     });
   };
 
+  handleOnChangeNote = (note) => {
+    this.setState({
+      note: note,
+    });
+  };
+
   render() {
+    let today = moment(new Date()).format("DD/MM/YYYY");
+    let seletedDate = moment(this.state.currentDate).format("DD/MM/YYYY");
+    console.log();
     let {
       listBooking,
 
@@ -139,9 +163,11 @@ class ManagePatient extends Component {
       patientEmail,
       patientAddress,
       reason,
+      time,
+      note,
     } = this.state;
     let { language } = this.props;
-    //console.log("bookingStatusId", bookingStatusId);
+    console.log("booking", bookingStatusId);
     let gender = "Nam";
     if (+patientGender === 1) {
       gender = "Nam";
@@ -212,12 +238,13 @@ class ManagePatient extends Component {
                                     this.handleOpenConfirmModal(item)
                                   }
                                 >
-                                  {item.Bookingstatus.id === 4
+                                  {item.Bookingstatus.id === 4 &&
+                                  today === seletedDate
                                     ? "Xác nhận"
                                     : "Xem thông tin"}
                                 </button>
-                                {item.Bookingstatus.id !== 5 &&
-                                item.Bookingstatus.id !== 6 ? (
+                                {item.Bookingstatus.id === 4 &&
+                                today === seletedDate ? (
                                   <button
                                     className="btn btn-danger m-2"
                                     onClick={() =>
@@ -261,8 +288,14 @@ class ManagePatient extends Component {
                     disabled
                   />
                 </div>
-                <div className="patient-gender col-8 form-group">
-                  <label>Giới tính: {gender}</label>
+                <div className="patient-gender col-4 form-group">
+                  <label>Giới tính:</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    value={gender}
+                    disabled
+                  />
                 </div>
                 <div className="patient-phone col-4 form-group">
                   <label>Số điện thoại:</label>
@@ -282,12 +315,30 @@ class ManagePatient extends Component {
                     disabled
                   />
                 </div>
-                <div className="patient-address col-4 form-group">
+                <div className="patient-address col-8 form-group">
                   <label>Địa chỉ:</label>
                   <input
                     className="form-control"
                     type="text"
                     value={patientAddress}
+                    disabled
+                  />
+                </div>
+                <div className="booking-time col-4 form-group">
+                  <label>Ngày khám:</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    value={moment(this.state.date).format("dddd - DD/MM/YYYY")}
+                    disabled
+                  />
+                </div>
+                <div className="booking-time col-4 form-group">
+                  <label>Giờ khám:</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    value={time}
                     disabled
                   />
                 </div>
@@ -300,7 +351,7 @@ class ManagePatient extends Component {
                     disabled
                   ></textarea>
                 </div>
-                <div className="booking-status col-3 form-group">
+                <div className="booking-status col-4 form-group">
                   <label>Trạng thái lịch hẹn:</label>
                   <input
                     className="form-control"
@@ -312,16 +363,16 @@ class ManagePatient extends Component {
                     }
                     disabled
                   />
-                  {/* <select
-                    onChange={(event) =>
-                      this.handleOnchangeStatus(event.target.value, "statusId")
-                    }
-                    value={bookingStatusId}
-                  >
-                    <option value="4">Chưa khám bệnh</option>
-                    <option value="5">Đã khám bệnh</option>
-                    <option value="6">Không đi khám bệnh</option>
-                  </select> */}
+                </div>
+                <div className="booking-note col-12 form-group">
+                  <label>Ghi chú:</label>
+                  <textarea
+                    className="form-control"
+                    value={note}
+                    onChange={(event) => {
+                      this.handleOnChangeNote(event.target.value);
+                    }}
+                  ></textarea>
                 </div>
               </div>
             </div>
@@ -330,7 +381,7 @@ class ManagePatient extends Component {
             <Button variant="secondary" onClick={this.closeConfirmModal}>
               Thoát
             </Button>
-            {bookingStatusId === 4 ? (
+            {bookingStatusId === 4 && today === seletedDate ? (
               <Button
                 variant="primary"
                 onClick={() => this.handleConfirm(bookingId, 4)}

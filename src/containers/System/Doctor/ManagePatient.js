@@ -220,11 +220,7 @@ class ManagePatient extends Component {
                                   : item.Schedule_Detail.Timeframe.nameEN}
                               </td>
                               <td>{item.Patient.username}</td>
-                              <td>
-                                {language === LANGUAGES.VI
-                                  ? item.Patient.Gender.nameVI
-                                  : item.Patient.Gender.nameEN}
-                              </td>
+                              <td>{gender}</td>
                               <td>
                                 {language === LANGUAGES.VI
                                   ? item.Bookingstatus.nameVI

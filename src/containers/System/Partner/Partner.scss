@@ -1,0 +1,28 @@
+.role-container {
+    .role-child {
+        border: 1px solid yellowgreen;
+        padding: 10px;
+        margin-top: 5px;
+        border-radius: 5px
+    }
+    .actions {
+        i {
+            padding-top: 7px;
+            padding-right: 7px;
+            font-size: 22px;
+            cursor: pointer;
+        }
+        .add {
+            color: green;
+        }
+        .delete {
+            color: red;
+        }
+    }
+    .table-role {
+        .delete {
+            cursor: pointer;
+            color: red;
+        }
+    }
+}
